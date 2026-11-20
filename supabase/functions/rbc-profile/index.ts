@@ -95,7 +95,12 @@ async function askClaude(prompt: string): Promise<string> {
     headers: { "x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json" },
     body: JSON.stringify({ model: MODEL, max_tokens: 2500, messages: [{ role: "user", content: prompt }] }),
   });
-  if (!res.ok) throw new Error(`Claude API ${res.status}: ${(await res.text()).slice(0, 200)}`);
+  if (!res.ok) {
+    const t = await res.text();
+    let msg = t.slice(0, 300);
+    try { msg = JSON.parse(t)?.error?.message || msg; } catch { /* keep raw */ }
+    throw new Error(`Claude API ${res.status} (model ${MODEL}): ${msg}`);
+  }
   const data = await res.json();
   return (data.content || []).filter((c: { type: string }) => c.type === "text").map((c: { text: string }) => c.text).join("");
 }
@@ -206,7 +211,8 @@ async function analyze(req: Request, body: Record<string, unknown>) {
     steps.push("Claude로 RBC·카카오톡 채널 신청 정보 작성 완료");
   } catch (e) {
     application = ruleApplication(ex);
-    steps.push(`규칙 기반으로 제안 (AI 미사용: ${(e as Error).message.slice(0, 80)})`);
+    console.error("claude", (e as Error).message);
+    steps.push(`규칙 기반으로 제안 (AI 미사용: ${(e as Error).message.slice(0, 400)})`);
   }
   if (input.includes("example.invalid")) { // manual input without any URL
     application.rbc.website = { value: "", source: "", verified: false };
@@ -217,6 +223,25 @@ async function analyze(req: Request, body: Record<string, unknown>) {
   const extracted = { ...ex, text: ex.text.slice(0, 3000) };
   const requestId = await log({ mode: manual?.name ? "manual" : "crawl", ok: true, engine: application.engine, application, extracted });
   return json(req, { requestId, extracted, application, steps });
+}
+
+/** Image proxy so the page can redraw a site's logo on a canvas (cross-origin images can't be exported). */
+async function proxyImage(req: Request, body: Record<string, unknown>) {
+  const url = String(body.url || "");
+  if (!isSafeUrl(url) || !(await resolvesPublic(new URL(url).hostname))) return json(req, { error: "허용되지 않는 주소예요." }, 400);
+  try {
+    const res = await fetch(url, {
+      signal: AbortSignal.timeout(8000),
+      headers: { "User-Agent": "Mozilla/5.0 SureM-RBC-Profiler", Accept: "image/*" },
+    });
+    const ct = res.headers.get("content-type") || "";
+    if (!res.ok || !/^image\//i.test(ct)) return json(req, { error: "이미지를 가져오지 못했어요." }, 422);
+    const buf = new Uint8Array(await res.arrayBuffer());
+    if (buf.length > 5_000_000) return json(req, { error: "이미지가 너무 커요(5MB 초과)." }, 422);
+    return new Response(buf, { headers: { ...cors(req), "Content-Type": ct, "Cache-Control": "public, max-age=86400" } });
+  } catch {
+    return json(req, { error: "이미지를 가져오지 못했어요." }, 422);
+  }
 }
 
 async function saveLead(req: Request, body: Record<string, unknown>) {
@@ -245,6 +270,7 @@ Deno.serve(async (req) => {
   try { body = await req.json(); } catch { /* empty */ }
   try {
     if (body.action === "lead") return await saveLead(req, body);
+    if (body.action === "image") return await proxyImage(req, body);
     return await analyze(req, body);
   } catch (e) {
     console.error(e);

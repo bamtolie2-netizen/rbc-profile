@@ -85,6 +85,19 @@ details{font-size:12.5px;color:var(--sub)}details pre{white-space:pre-wrap;backg
 .modal label.l{display:block;font-weight:600;font-size:13px;margin:10px 0 5px}
 .lead{border:2px solid var(--brand);background:linear-gradient(180deg,#f5f8ff,#fff)}
 .lead .chk{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--sub);margin-top:10px}.lead .chk input{width:auto;margin-top:3px}
+.maker{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
+@media(max-width:1100px){.maker{grid-template-columns:1fr 1fr}}
+.maker .out.wide img{aspect-ratio:16/9}
+.spec{margin-top:4px;font-size:11.5px;line-height:1.5}.spec .ok{color:var(--ok)}.spec .bad{color:var(--err)}
+@media(max-width:700px){.maker{grid-template-columns:1fr}}
+.maker .out{border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center;font-size:12px;color:var(--sub)}
+.maker .out img{width:100%;aspect-ratio:1;object-fit:contain;border-radius:8px;background:repeating-conic-gradient(#f1f2f6 0 25%,#fff 0 50%) 50%/12px 12px}
+.maker .out.circle img{border-radius:50%}
+.maker .out b{display:block;color:var(--ink);font-size:12.5px;margin:6px 0 2px}
+.maker .out a{display:inline-block;margin-top:6px;font-weight:700;color:var(--brand-d);text-decoration:none}
+.ctrl{display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:13px}
+.ctrl label{display:flex;gap:6px;align-items:center}.ctrl input[type=radio]{width:auto}
+.ctrl input[type=range]{width:140px;padding:0}.ctrl input[type=color]{width:40px;height:30px;padding:2px}
 .demo{background:#fff4dc;color:#7a5a12;font-size:12.5px;padding:8px 14px;border-radius:10px;margin-bottom:12px}
 .legend{font-size:12px;color:var(--sub);display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 .actions{display:flex;gap:8px;flex-wrap:wrap}
@@ -130,12 +143,12 @@ details{font-size:12.5px;color:var(--sub)}details pre{white-space:pre-wrap;backg
           </div>
           <div class="card">
             <h2>프로필 이미지</h2>
-            <p class="desc">브랜드 심벌 · 정사각형 · 배경색(흰색 포함) 필수 · 원형으로 잘려도 안 잘릴 것 · PNG 388~1080px · 1MB 이하</p>
+            <p class="desc">브랜드 심벌 · 1:1 · 388~1080px · PNG만 · 1MB 이하 · 배경색 필수 · 원형으로 잘려도 안 잘릴 것 (아래 🪄에서 자동으로 맞춰요)</p>
             <div class="imgs" data-img="rbc.profileImage"></div>
           </div>
           <div class="card">
             <h2>퀵 메뉴 / 탭 <span class="tag" style="background:#eef1f8;color:var(--sub)">삼성 단말 노출</span></h2>
-            <p class="desc">백그라운드 이미지 (배경색 있는 브랜드 이미지 · 388~1080px)</p>
+            <p class="desc">백그라운드 이미지 (대표 상품·서비스 이미지 · 1:1 · 388~1080px · PNG/JPG · 1MB 이하)</p>
             <div class="imgs" data-img="rbc.backgroundImage"></div>
             <p class="desc" style="margin-top:14px">퀵 버튼 메뉴</p>
             <div id="qm"></div>
@@ -177,7 +190,7 @@ details{font-size:12.5px;color:var(--sub)}details pre{white-space:pre-wrap;backg
           </div>
           <div class="card">
             <h2>프로필 사진</h2>
-            <p class="desc">권장 640×640px 정사각형</p>
+            <p class="desc">권장 640×640px · JPG/PNG · 10MB 이하 (아래 🪄에서 자동으로 맞춰요)</p>
             <div class="imgs" data-img="kakao.profileImage"></div>
           </div>
           <div class="card check">
@@ -201,6 +214,31 @@ details{font-size:12.5px;color:var(--sub)}details pre{white-space:pre-wrap;backg
             </div>
           </div>
         </section>
+
+        <div class="card" id="makerCard">
+          <h2>🪄 이미지 자동 만들기 <span class="tag" style="background:#eef1f8;color:var(--sub)">RBC·카카오 공통</span></h2>
+          <p class="desc">고른 로고(또는 직접 올린 로고)의 여백을 자르고, 원형으로 잘려도 안 잘리게 가운데 맞춰 규격 이미지로 만들어요.</p>
+          <div class="ctrl">
+            <span>로고: <b id="mkSrc">RBC 프로필에서 고른 이미지</b></span>
+            <label class="btn g" style="padding:6px 10px;font-size:12.5px;cursor:pointer">로고 파일 올리기<input type="file" id="mkFile" accept="image/*" hidden></label>
+          </div>
+          <div class="ctrl" style="margin-top:10px">
+            <span>배경</span>
+            <label><input type="radio" name="mkBg" value="auto" checked> 자동</label>
+            <label><input type="radio" name="mkBg" value="white"> 흰색</label>
+            <label><input type="radio" name="mkBg" value="brand"> 브랜드 컬러</label>
+            <label><input type="radio" name="mkBg" value="custom"> 직접 <input type="color" id="mkColor" value="#ffffff"></label>
+            <span>로고 크기 <input type="range" id="mkScale" min="50" max="100" value="80"></span>
+          </div>
+          <div class="ctrl" style="margin-top:10px" id="mkPhotoRow">
+            <span>RBC 백그라운드 · 카카오 브랜드카드</span>
+            <label><input type="radio" name="mkCover" value="photo" checked> 사이트 대표 사진</label>
+            <label><input type="radio" name="mkCover" value="logo"> 로고 배너</label>
+            <label class="btn g" style="padding:6px 10px;font-size:12.5px;cursor:pointer">사진 파일 올리기<input type="file" id="mkPhotoFile" accept="image/*" hidden></label>
+          </div>
+          <div class="maker" id="mkOut"><div class="src">로고를 고르거나 올리면 여기에 만들어져요.</div></div>
+          <div class="src" id="mkMsg"></div>
+        </div>
 
         <div class="card lead" id="leadCard">
           <h2>📮 슈어엠이 무료로 개설해 드려요</h2>
@@ -334,7 +372,8 @@ async function analyze(payload) {
     A = data.application; EX = data.extracted; STEPS = data.steps || []; REQ_ID = data.requestId || null;
     searchId = A.kakao.searchIds[0] || "";
     $("manual").classList.add("hidden");
-    $("result").classList.remove("hidden"); render(); measureImages();
+    Object.keys(GEN).forEach(k => delete GEN[k]); mkFor = ""; mkPhotoFor = ""; if (mkUpload) { URL.revokeObjectURL(mkUpload); mkUpload = null; } if (mkPhotoUpload) { URL.revokeObjectURL(mkPhotoUpload); mkPhotoUpload = null; }
+    $("result").classList.remove("hidden"); render(); measureImages(); makeImages();
     if (!$("ldCompany").value) $("ldCompany").value = A.business.companyName.value || A.rbc.brandName.value;
     $("ldMsg").textContent = ""; $("ldSend").disabled = false;
   } catch (err) {
@@ -428,6 +467,7 @@ function renderImgs() {
       const u = imgs[+el.dataset.i].url;
       set(path, cur === u ? { value: "", source: "" } : { value: u, source: imgs[+el.dataset.i].source, verified: true });
       renderImgs(); refresh();
+      if ((path === "rbc.profileImage" && !mkUpload) || path === "rbc.backgroundImage") makeImages();
     });
   });
 }
@@ -459,6 +499,138 @@ function renderIds() {
 }
 $("idCustom").oninput = e => { const v = e.target.value.replace(/^@/, "").replace(/\s/g, ""); if (v) searchId = v; else searchId = A.kakao.searchIds[0] || ""; renderIds(); refresh(); };
 
+
+/* ---------- image maker (official specs) ----------
+   RBC 프로필:     1:1, 388~1080px, ≤1MB, PNG만, 원형 크롭 안전 여백, 배경색 필수(투명 X)
+   RBC 백그라운드: 1:1, 388~1080px, ≤1MB, PNG/JPG, 삼성 단말 노출, 배경색 있는 브랜드 이미지
+   카카오 프로필:  640×640 권장, ≤10MB, JPG/PNG
+   카카오 브랜드카드(선택): 16:9·1:1·3:4, ≤10MB, JPG/PNG */
+const GEN = {};            // key -> {url, w, h, kb, fmt}
+let mkUpload = null, mkPhotoUpload = null;
+const OUTS = [
+  { key: "rbcProfile", label: "RBC 프로필", w: 1080, h: 1080, min: 388, src: "logo", circle: true, fmts: ["png"], maxKB: 1024, file: "RBC_profile" },
+  { key: "rbcBg", label: "RBC 백그라운드", w: 1080, h: 1080, min: 388, src: "cover", fmts: ["png", "jpeg"], maxKB: 1024, file: "RBC_background" },
+  { key: "kakao", label: "카카오 프로필", w: 640, h: 640, min: 640, src: "logo", circle: true, fmts: ["png", "jpeg"], maxKB: 10240, file: "Kakao_profile" },
+  { key: "kakaoCard", label: "카카오 브랜드카드 16:9 (선택)", w: 1280, h: 720, min: 640, src: "cover", wide: true, fmts: ["jpeg", "png"], maxKB: 10240, file: "Kakao_brandcard" },
+];
+async function loadImage(src) {
+  let url = src;
+  if (!/^(data|blob):/.test(src) && !DEMO) {
+    const res = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "application/json", ...(ANON_KEY ? { Authorization: `Bearer ${ANON_KEY}`, apikey: ANON_KEY } : {}) }, body: JSON.stringify({ action: "image", url: src }) });
+    if (!res.ok) throw new Error("이미지를 가져오지 못했어요. 파일로 올려 주세요.");
+    url = URL.createObjectURL(await res.blob());
+  }
+  return await new Promise((ok, bad) => { const i = new Image(); if (!/^(data|blob):/.test(url)) i.crossOrigin = "anonymous"; i.onload = () => ok(i); i.onerror = () => bad(new Error("이미지를 열 수 없어요. 파일로 올려 주세요.")); i.src = url; });
+}
+function trimLogo(img) {
+  const w = img.naturalWidth || 256, h = img.naturalHeight || 256, c = document.createElement("canvas");
+  c.width = w; c.height = h; const x = c.getContext("2d"); x.drawImage(img, 0, 0, w, h);
+  const d = x.getImageData(0, 0, w, h).data, px = (i, j) => { const k = (j * w + i) * 4; return [d[k], d[k + 1], d[k + 2], d[k + 3]]; };
+  const corners = [px(0, 0), px(w - 1, 0), px(0, h - 1), px(w - 1, h - 1)];
+  const transparent = corners.some(p => p[3] < 20);
+  const bg = transparent ? null : corners[0];
+  const empty = p => p[3] < 20 || (bg && Math.abs(p[0] - bg[0]) + Math.abs(p[1] - bg[1]) + Math.abs(p[2] - bg[2]) < 40);
+  let x0 = w, y0 = h, x1 = -1, y1 = -1;
+  for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) if (!empty(px(i, j))) { if (i < x0) x0 = i; if (i > x1) x1 = i; if (j < y0) y0 = j; if (j > y1) y1 = j; }
+  if (x1 < 0) { x0 = 0; y0 = 0; x1 = w - 1; y1 = h - 1; }
+  const cw = x1 - x0 + 1, ch = y1 - y0 + 1, out = document.createElement("canvas");
+  out.width = cw; out.height = ch; out.getContext("2d").drawImage(c, x0, y0, cw, ch, 0, 0, cw, ch);
+  // luminance of the logo ink, to keep contrast against the chosen background
+  let lum = 0, n = 0; const od = out.getContext("2d").getImageData(0, 0, cw, ch).data;
+  for (let k = 0; k < od.length; k += 16) if (od[k + 3] > 120) { lum += 0.299 * od[k] + 0.587 * od[k + 1] + 0.114 * od[k + 2]; n++; }
+  return { canvas: out, bgColor: bg ? `rgb(${bg[0]},${bg[1]},${bg[2]})` : null, transparent, inkLum: n ? lum / n : 0, src: cw * ch };
+}
+const lumOf = c => { const m = c.match(/\d+/g) || []; let r, g, b; if (c[0] === "#") { const v = parseInt(c.slice(1), 16); r = v >> 16; g = v >> 8 & 255; b = v & 255; } else [r, g, b] = m.map(Number); return 0.299 * r + 0.587 * g + 0.114 * b; };
+function bgFor(logo) {
+  const mode = document.querySelector("input[name=mkBg]:checked").value;
+  if (mode === "white") return "#ffffff";
+  if (mode === "brand") return A?.rbc.brandColor.value || "#2f5bff";
+  if (mode === "custom") return $("mkColor").value;
+  if (logo.bgColor) return logo.bgColor;
+  // transparent logo: white for dark ink, brand color (or dark) for light ink → visible in dark mode too
+  return logo.inkLum > 200 ? (A?.rbc.brandColor.value || "#1b2c7a") : "#ffffff";
+}
+function drawLogo(o, logo, bg) {
+  const c = document.createElement("canvas"); c.width = o.w; c.height = o.h; const x = c.getContext("2d");
+  x.fillStyle = bg; x.fillRect(0, 0, o.w, o.h);
+  const w = logo.canvas.width, h = logo.canvas.height, k = (+$("mkScale").value) / 100;
+  // circle-safe: logo diagonal inside the inscribed circle with margin; banners keep the logo in a central band
+  const s = o.circle ? (o.w * 0.80 * k) / Math.hypot(w, h) : Math.min((o.w * 0.6 * k) / w, (o.h * 0.4 * k) / h);
+  x.imageSmoothingQuality = "high";
+  x.drawImage(logo.canvas, (o.w - w * s) / 2, (o.h - h * s) / 2, w * s, h * s);
+  return c;
+}
+function drawCover(o, img, bg) { // center-crop a photo to the target ratio (object-fit: cover)
+  const c = document.createElement("canvas"); c.width = o.w; c.height = o.h; const x = c.getContext("2d");
+  x.fillStyle = bg; x.fillRect(0, 0, o.w, o.h);
+  const iw = img.naturalWidth, ih = img.naturalHeight, s = Math.max(o.w / iw, o.h / ih);
+  x.imageSmoothingQuality = "high";
+  x.drawImage(img, (o.w - iw * s) / 2, (o.h - ih * s) / 2, iw * s, ih * s);
+  return c;
+}
+function resize(c, w, h) { const r = document.createElement("canvas"); r.width = w; r.height = h; const x = r.getContext("2d"); x.imageSmoothingQuality = "high"; x.drawImage(c, 0, 0, w, h); return r; }
+const kbOf = u => Math.round((u.length - u.indexOf(",") - 1) * 0.75 / 1024);
+/** Encode within the size limit: allowed formats in order, JPEG quality steps, then downscale (never below the spec minimum). */
+function encode(c, o) {
+  let cur = c;
+  while (true) {
+    for (const f of o.fmts) {
+      if (f === "png") { const u = cur.toDataURL("image/png"); if (kbOf(u) <= o.maxKB) return { url: u, w: cur.width, h: cur.height, kb: kbOf(u), fmt: "PNG" }; }
+      else for (const q of [0.92, 0.85, 0.78, 0.7]) { const u = cur.toDataURL("image/jpeg", q); if (kbOf(u) <= o.maxKB) return { url: u, w: cur.width, h: cur.height, kb: kbOf(u), fmt: "JPG" }; }
+    }
+    const nw = Math.round(cur.width * 0.85), nh = Math.round(cur.height * 0.85);
+    if (nw < o.min || nh < o.min * (o.h / o.w)) { const u = cur.toDataURL(o.fmts.includes("jpeg") ? "image/jpeg" : "image/png", 0.7); return { url: u, w: cur.width, h: cur.height, kb: kbOf(u), fmt: o.fmts.includes("jpeg") ? "JPG" : "PNG" }; }
+    cur = resize(cur, nw, nh);
+  }
+}
+function specLine(o, g) {
+  const ratio = (g.w / g.h).toFixed(2) === (o.w / o.h).toFixed(2), size = g.w >= o.min && g.w <= Math.max(o.w, 1080), kb = g.kb <= o.maxKB, fmt = o.fmts.map(f => f === "jpeg" ? "JPG" : "PNG").includes(g.fmt);
+  const t = (ok, s) => `<span class="${ok ? "ok" : "bad"}">${ok ? "✓" : "✗"} ${s}</span>`;
+  return `<div class="spec">${t(ratio, o.wide ? "16:9" : "1:1")} · ${t(size, `${g.w}×${g.h}`)}<br>${t(fmt, g.fmt)} · ${t(kb, `${g.kb}KB / ${o.maxKB >= 1024 ? o.maxKB / 1024 + "MB" : o.maxKB + "KB"}`)}${o.circle ? `<br>${t(true, "원형 크롭 안전")}` : ""}</div>`;
+}
+let mkLogo = null, mkFor = "", mkPhoto = null, mkPhotoFor = "";
+function coverSrc() {
+  if (mkPhotoUpload) return mkPhotoUpload;
+  const og = A?.rbc.backgroundImage.value || (EX?.images || []).find(i => i.kind === "og")?.url;
+  return og || "";
+}
+async function makeImages() {
+  const src = mkUpload || A?.rbc.profileImage.value;
+  $("mkSrc").textContent = mkUpload ? "직접 올린 파일" : (src ? "RBC 프로필에서 고른 이미지" : "없음 — 로고를 고르거나 올려 주세요");
+  if (!src) { $("mkOut").innerHTML = '<div class="src">로고를 고르거나 올리면 여기에 만들어져요.</div>'; return; }
+  const msgs = [];
+  try {
+    if (mkFor !== src) { $("mkMsg").textContent = "로고를 불러오는 중…"; mkLogo = trimLogo(await loadImage(src)); mkFor = src; }
+    const useCover = document.querySelector("input[name=mkCover]:checked").value === "photo" && coverSrc();
+    if (useCover && mkPhotoFor !== coverSrc()) {
+      try { mkPhoto = await loadImage(coverSrc()); mkPhotoFor = coverSrc(); } catch { mkPhoto = null; mkPhotoFor = ""; msgs.push("대표 사진을 못 불러와 로고 배너로 만들었어요."); }
+    }
+    const bg = bgFor(mkLogo);
+    if (mkLogo.canvas.width < 200 && mkLogo.canvas.height < 200) msgs.push(`원본 로고가 작아요(${mkLogo.canvas.width}×${mkLogo.canvas.height}). 확대하면 흐릴 수 있으니 큰 로고 파일을 올려 주세요.`);
+    for (const o of OUTS) {
+      const c = o.src === "cover" && useCover && mkPhoto ? drawCover(o, mkPhoto, bg) : drawLogo(o, mkLogo, o.src === "cover" ? tint(bg) : bg);
+      GEN[o.key] = encode(c, o);
+    }
+    const base = (A?.rbc.brandName.value || "brand").replace(/[\\/:*?"<>|\s]/g, "");
+    $("mkOut").innerHTML = OUTS.map(o => { const g = GEN[o.key]; return `<div class="out ${o.circle ? "circle" : ""} ${o.wide ? "wide" : ""}"><img src="${g.url}"><b>${o.label}</b>${specLine(o, g)}<a href="${g.url}" download="${base}_${o.file}_${g.w}x${g.h}.${g.fmt === "PNG" ? "png" : "jpg"}">⬇ 다운로드</a></div>`; }).join("");
+    if (mkLogo.transparent) msgs.push("투명 로고라 배경색을 채웠어요(RBC는 배경색 필수, 다크모드에서도 보이게).");
+    if (lumOf(bg) > 200 && mkLogo.inkLum > 200) msgs.push("배경과 로고가 둘 다 밝아요. 배경을 '브랜드 컬러'로 바꿔 보세요.");
+    msgs.push("여백을 자동으로 잘랐고, 미리보기에도 적용됐어요.");
+    $("mkMsg").textContent = msgs.join(" ");
+    refresh();
+  } catch (e) { $("mkMsg").textContent = e.message; $("mkOut").innerHTML = ""; }
+}
+function tint(c) { // light background for logo banners so most logos stay readable
+  const v = c[0] === "#" ? parseInt(c.slice(1), 16) : null; if (v === null) return c;
+  const mix = ch => Math.round(ch + (255 - ch) * 0.85);
+  return `rgb(${mix(v >> 16)},${mix(v >> 8 & 255)},${mix(v & 255)})`;
+}
+$("mkFile").onchange = e => { const f = e.target.files[0]; if (!f) return; if (mkUpload) URL.revokeObjectURL(mkUpload); mkUpload = URL.createObjectURL(f); makeImages(); };
+$("mkPhotoFile").onchange = e => { const f = e.target.files[0]; if (!f) return; if (mkPhotoUpload) URL.revokeObjectURL(mkPhotoUpload); mkPhotoUpload = URL.createObjectURL(f); document.querySelector("input[name=mkCover][value=photo]").checked = true; makeImages(); };
+document.querySelectorAll("input[name=mkBg],input[name=mkCover]").forEach(r => r.onchange = makeImages);
+$("mkColor").oninput = () => { document.querySelector("input[name=mkBg][value=custom]").checked = true; makeImages(); };
+$("mkScale").oninput = makeImages;
+
 /* ---------- live checks + preview ---------- */
 function liveWarnings() {
   const w = { rbc: [...A.warnings.rbc], kakao: [...A.warnings.kakao], common: [...A.warnings.common] };
@@ -466,8 +638,8 @@ function liveWarnings() {
   if (PROMO_RE.test(d) && !w.rbc.some(x => x.includes("홍보성"))) w.rbc.push(`브랜드 소개에 홍보성 문구("${PROMO_RE.exec(d)[0]}")가 있어요. RBC 심사에서 반려돼요.`);
   if (!PROMO_RE.test(d)) w.rbc = w.rbc.filter(x => !x.includes("홍보성"));
   if (d) w.rbc = w.rbc.filter(x => !x.includes("브랜드 소개는 필수"));
-  const pf = dims[A.rbc.profileImage.value]; if (pf && !dimOk("rbc.profileImage", pf)) w.rbc.push(`RBC 프로필 이미지가 ${pf.w}×${pf.h}예요. 정사각형 388~1080px로 다시 만들어 주세요.`);
-  const kp = dims[A.kakao.profileImage.value]; if (kp && !dimOk("kakao.profileImage", kp)) w.kakao.push(`카카오 프로필 사진이 ${kp.w}×${kp.h}예요. 640×640 정사각형을 권장해요.`);
+  const pf = !GEN.rbcProfile && dims[A.rbc.profileImage.value]; if (pf && !dimOk("rbc.profileImage", pf)) w.rbc.push(`RBC 프로필 이미지가 ${pf.w}×${pf.h}예요. 정사각형 388~1080px로 다시 만들어 주세요.`);
+  const kp = !GEN.kakao && dims[A.kakao.profileImage.value]; if (kp && !dimOk("kakao.profileImage", kp)) w.kakao.push(`카카오 프로필 사진이 ${kp.w}×${kp.h}예요. 640×640 정사각형을 권장해요.`);
   if (searchId.length > LIMITS.kakaoSearchId) w.kakao.push(`검색용 아이디가 ${LIMITS.kakaoSearchId}자를 넘어요.`);
   if (/[^가-힣a-zA-Z0-9]/.test(searchId)) w.kakao.push("검색용 아이디에는 한글·영문·숫자만 쓰는 게 안전해요.");
   if (needMismatch() && !A.kakao.mismatchNote.value) w.kakao.push("채널 이름과 사업자등록증 상 업체명이 달라요. 소명을 작성해 주세요.");
@@ -484,7 +656,7 @@ function refresh() {
   const hasBiz = A.business.bizNo.verified || A.business.companyName.verified;
   $("rbcBizCheck").innerHTML = hasBiz ? `<span class="tag ok">사이트에서 확인됨</span>` : `<span class="tag chk">사이트에서 못 찾음</span>`;
   // RBC preview
-  const r = A.rbc, name = r.brandName.value || "브랜드명", pf = r.profileImage.value, bg = r.backgroundImage.value, col = r.brandColor.value || "#2f5bff";
+  const r = A.rbc, name = r.brandName.value || "브랜드명", pf = GEN.rbcProfile?.url || r.profileImage.value, bg = GEN.rbcBg?.url || r.backgroundImage.value, col = r.brandColor.value || "#2f5bff";
   $("pvBg").style.backgroundImage = bg ? `url("${bg}")` : `linear-gradient(135deg,${col},#1b2c7a)`;
   $("pvPf").style.backgroundImage = pf ? `url("${pf}")` : ""; $("pvPf").textContent = pf ? "" : name.charAt(0); $("pvPf").style.color = col;
   $("pvName").textContent = name; $("pvCat").textContent = r.category.value; $("pvDesc").textContent = r.description.value;
@@ -492,7 +664,7 @@ function refresh() {
   const info = [["📞", r.phone.value], ["🌐", r.website.value], ["✉️", r.email.value], ["📍", r.address.value]].filter(x => x[1]);
   $("pvInfo").innerHTML = info.map(([i, v]) => `<div>${i} ${esc(v)}</div>`).join(""); $("pvInfo").classList.toggle("hidden", !info.length);
   // Kakao preview
-  const k = A.kakao, kn = k.channelName.value || "채널 이름", kpf = k.profileImage.value;
+  const k = A.kakao, kn = k.channelName.value || "채널 이름", kpf = GEN.kakao?.url || k.profileImage.value;
   $("kPf").style.backgroundImage = kpf ? `url("${kpf}")` : ""; $("kPf").textContent = kpf ? "" : kn.charAt(0);
   $("kName").textContent = kn; $("kId").textContent = searchId ? "@" + searchId : ""; $("kDesc").textContent = k.description.value;
   const ki = [["🏷", k.category.value], ["📞", k.csPhone.value], ["🌐", k.website.value], ["📍", A.business.hasStore ? k.storeAddress.value : ""]].filter(x => x[1]);
@@ -520,9 +692,9 @@ function rbcText() {
 이메일: ${r.email.value}
 주소: ${r.address.value}
 브랜드 컬러: ${r.brandColor.value}
-프로필 이미지: ${r.profileImage.value || "(준비 필요: 정사각형, 배경색 있는 PNG 388~1080px)"}
+프로필 이미지: ${GEN.rbcProfile ? `자동 생성 ${GEN.rbcProfile.fmt} ${GEN.rbcProfile.w}×${GEN.rbcProfile.h} ${GEN.rbcProfile.kb}KB (다운로드한 파일 사용)` : r.profileImage.value || "(준비 필요: 정사각형, 배경색 있는 PNG 388~1080px)"}
 ■ 퀵 메뉴/탭 (삼성 단말)
-백그라운드 이미지: ${r.backgroundImage.value || "(준비 필요)"}
+백그라운드 이미지: ${GEN.rbcBg ? `자동 생성 ${GEN.rbcBg.fmt} ${GEN.rbcBg.w}×${GEN.rbcBg.h} ${GEN.rbcBg.kb}KB (다운로드한 파일 사용)` : r.backgroundImage.value || "(준비 필요)"}
 퀵 버튼: ${r.quickMenu.map(b => `${b.label}(${BT[b.type] || b.type}: ${b.value})`).join(" / ")}`;
 }
 function kakaoText() {
@@ -533,7 +705,7 @@ function kakaoText() {
 검색용 아이디: @${searchId} (변경 불가 · 다른 후보: ${A.kakao.searchIds.filter(x => x !== searchId).map(x => "@" + x).join(", ") || "-"})
 카테고리: ${v(k.category)}
 채널 소개: ${v(k.description)}
-프로필 사진: ${k.profileImage.value || "(준비 필요: 640×640)"}
+프로필 사진: ${GEN.kakao ? `자동 생성 ${GEN.kakao.fmt} ${GEN.kakao.w}×${GEN.kakao.h} (다운로드한 파일 사용)` : k.profileImage.value || "(준비 필요: 640×640)"}
 고객센터 연락처: ${v(k.csPhone)}
 웹사이트: ${k.website.value}${A.business.hasStore ? `\n매장 주소: ${v(k.storeAddress)}` : ""}${k.mismatchNote.value ? `\n사업자정보 불일치 소명: ${k.mismatchNote.value}` : ""}`;
 }

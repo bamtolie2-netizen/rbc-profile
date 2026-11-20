@@ -239,7 +239,7 @@ export function mergeInto(ex: Extracted, html: string, url: string, label: strin
       pushUniq(ex.emails, e, src);
     }
     for (const a of body.match(ADDR_RE) || []) {
-      const cut = a.split(/\s*(?:\||\/|·|고객\s*센터|대표\s*번호|대표|tel|전화|팩스|fax|사업자|이메일|e-?mail|copyright|ⓒ|©)/i)[0];
+      const cut = a.split(/\s*(?:\||\/|·|고객\s*센터|대표\s*번호|대표|tel|전화|팩스|fax|사업자|이메일|e-?mail|copyright|ⓒ|©|건강기능식품|판매업|통신판매|신고\s*번호|허가|개인정보|호스팅|영업\s*신고)/i)[0];
       pushUniq(ex.addresses, cut.replace(/\s+/g, " ").replace(/[,.\s]+$/, "").trim(), src, 4);
     }
     for (const h of body.match(HOURS_RE) || []) pushUniq(ex.hours, h.trim(), src, 3);
@@ -273,7 +273,7 @@ function addBizNo(ex: Extracted, raw: string, source: string) {
   if (d.length === 10) pushUniq(ex.bizNos, `${d.slice(0, 3)}-${d.slice(3, 5)}-${d.slice(5)}`, source, 3);
 }
 const COMPANY_LABEL_RE = /(?:상호(?:명)?|회사명|법인명|업체명|사업자명)\s*[:：]?\s*([^\n|,/·]{2,30})/g;
-const CORP_RE = /(?:\(주\)|㈜|주식회사|\(유\)|유한회사)\s*[가-힣A-Za-z0-9&]{2,20}|[가-힣A-Za-z0-9&]{2,20}\s*(?:\(주\)|㈜|주식회사)/g;
+const CORP_RE = /(?:\(주\)|㈜|주식회사|\(유\)|유한회사)\s*[가-힣A-Za-z0-9&]{2,20}|[가-힣][가-힣0-9&]{1,19}\s*(?:\(주\)|㈜|주식회사)/g;
 const CEO_RE = /대표\s*(?:자|이사)?\s*(?:명|성명)?(?!\s*(?:번호|전화|메일|이메일|홈|문의|상품|이미지))\s*[:：]?\s*([가-힣]{2,4}|[A-Z][a-z]+ [A-Z][a-z]+)(?=[\s|,/·)]|$)/g;
 const BIZNO_RE = /사업자\s*(?:등록)?\s*(?:번호)?\s*[:：]?\s*(\d{3}\s*-?\s*\d{2}\s*-?\s*\d{5})/g;
 
