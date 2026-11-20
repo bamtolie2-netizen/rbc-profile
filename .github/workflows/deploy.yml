@@ -18,12 +18,12 @@ jobs:
   function:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: supabase/setup-cli@v1
         with:
           version: latest
       - name: Deploy edge function
-        run: supabase functions deploy rbc-profile --project-ref "${{ vars.SUPABASE_PROJECT_ID }}" --no-verify-jwt
+        run: supabase functions deploy rbc-profile --project-ref "${{ vars.SUPABASE_PROJECT_ID }}" --no-verify-jwt --yes
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
 
@@ -34,7 +34,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Point the page at the function
         run: |
           sed -i 's#const API_URL = "";#const API_URL = "https://${{ vars.SUPABASE_PROJECT_ID }}.supabase.co/functions/v1/rbc-profile";#' web/index.html
