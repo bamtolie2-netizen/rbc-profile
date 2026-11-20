@@ -1,0 +1,3 @@
+# Minimal config for `supabase functions deploy`
+[functions.rbc-profile]
+verify_jwt = false   # 공개 화면에서 로그인 없이 호출 (레이트리밋은 함수 안에서 DB로 처리)
