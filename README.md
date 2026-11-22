@@ -23,6 +23,10 @@ supabase/config.toml                        함수 JWT 검사 끔(공개 화면�
    - `ANTHROPIC_API_KEY` = Claude API 키 (없으면 규칙 기반으로만 작성)
    - `ALLOWED_ORIGINS` = `https://<깃허브아이디>.github.io` (선택, 다른 사이트에서 호출 차단)
    - `HOURLY_LIMIT` = `20` (선택, IP당 시간당 분석 횟수)
+   - `GLOBAL_HOURLY_LIMIT` = `300` (선택, 전체 방문자 합산 시간당 분석 횟수 — IP를 속여도 넘을 수 없는 Claude 비용 상한)
+   - `IMAGE_HOURLY_LIMIT` = `120` (선택, IP당 시간당 이미지 프록시 횟수)
+   - `IP_FROM` = `first` | `last` (선택, `x-forwarded-for`에서 어느 값을 IP로 쓸지. 배포 후 `DEBUG_IP=1`로 로그를 한 번 보고 정하세요)
+   - Anthropic 콘솔에서 **월 사용 한도**도 꼭 걸어 두세요.
 3. **Account → Access Tokens**에서 토큰 하나 발급 (GitHub 자동 배포용)
 
 ### 2. GitHub

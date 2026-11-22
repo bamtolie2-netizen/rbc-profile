@@ -362,10 +362,14 @@ export function isSafeUrl(raw: string): boolean {
 export function isPrivateIp(h: string): boolean {
   const v4 = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(h);
   if (v4) {
-    const [a, b] = [+v4[1], +v4[2]];
+    const [a, b, c] = [+v4[1], +v4[2], +v4[3]];
     return a === 10 || a === 127 || a === 0 || (a === 169 && b === 254) || (a === 172 && b >= 16 && b <= 31) ||
-      (a === 192 && b === 168) || (a === 100 && b >= 64 && b <= 127) || a >= 224;
+      (a === 192 && b === 168) || (a === 100 && b >= 64 && b <= 127) || a >= 224 ||
+      (a === 198 && (b === 18 || b === 19)) || (a === 192 && b === 0 && c === 0); // benchmark, IETF special-use
   }
-  if (h.includes(":")) return h === "::1" || h === "::" || /^f[cd]/.test(h) || /^fe80/.test(h) || /^::ffff:/.test(h);
+  if (h.includes(":")) {
+    // ::/x (loopback, unspecified, v4-mapped/compatible), ULA, link-local, NAT64 and 6to4 can all reach private v4.
+    return h.startsWith("::") || /^f[cd]/.test(h) || /^fe[89ab]/.test(h) || /^64:ff9b:/.test(h) || /^2002:/.test(h);
+  }
   return false;
 }

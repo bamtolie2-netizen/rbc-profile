@@ -7,7 +7,7 @@
 import { addImage, decodeHtml, extract, isKakaoChannelUrl, isPrivateIp, isSafeUrl, mergeInto, normalizeKakao, normalizePhone, parseKakaoChannel, pickSubpages } from "./extract.ts";
 import type { Extracted } from "./extract.ts";
 import { buildPrompt, parseClaude, ruleApplication } from "./profile.ts";
-import { insert, recentCount, sha256 } from "./db.ts";
+import { countRows, dbEnabled, insert, recentCount, sha256, sinceParam, update } from "./db.ts";
 
 const ALLOWED_ORIGINS = (Deno.env.get("ALLOWED_ORIGINS") || "*").split(",").map((s) => s.trim());
 const MODEL = Deno.env.get("CLAUDE_MODEL") || "claude-sonnet-5-5";
@@ -26,64 +26,92 @@ function cors(req: Request): HeadersInit {
 const json = (req: Request, body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { ...cors(req), "Content-Type": "application/json; charset=utf-8" } });
 
-/* --- tiny in-memory rate limit (per instance) --- */
+/* --- in-memory rate limit (per instance): fallback when the DB count is unavailable --- */
 const hits = new Map<string, number[]>();
-function limited(ip: string, max = 20, windowMs = 60 * 60 * 1000) {
+function limited(key: string, max = 20, windowMs = 60 * 60 * 1000) {
   const now = Date.now();
-  const arr = (hits.get(ip) || []).filter((t) => now - t < windowMs);
+  if (hits.size > 5000) for (const [k, ts] of hits) if (!ts.length || now - ts[ts.length - 1] >= windowMs) hits.delete(k);
+  const arr = (hits.get(key) || []).filter((t) => now - t < windowMs);
   arr.push(now);
-  hits.set(ip, arr);
+  hits.set(key, arr);
   return arr.length > max;
 }
 
-async function resolvesPublic(host: string): Promise<boolean> {
-  if (/^[\d.]+$/.test(host) || host.includes(":")) return !isPrivateIp(host);
-  try {
-    const ips = [...(await Deno.resolveDns(host, "A").catch(() => [])), ...(await Deno.resolveDns(host, "AAAA").catch(() => []))];
-    return ips.length === 0 || ips.every((ip) => !isPrivateIp(ip.toLowerCase()));
-  } catch {
-    return true; // DNS API unavailable: hostname checks already applied
-  }
+const IP_FROM = Deno.env.get("IP_FROM") === "last" ? "last" : "first";
+const DEBUG_IP = Deno.env.get("DEBUG_IP") === "1";
+/** Client IP for per-IP limits. x-forwarded-for may be client-supplied, so the global cap is the real cost guard. */
+function clientIp(req: Request): string {
+  const xff = (req.headers.get("x-forwarded-for") || "").split(",").map((s) => s.trim()).filter(Boolean);
+  if (DEBUG_IP) console.log("ip headers", { xff, realIp: req.headers.get("x-real-ip"), cf: req.headers.get("cf-connecting-ip") });
+  return (IP_FROM === "last" ? xff[xff.length - 1] : xff[0]) || req.headers.get("x-real-ip") || "unknown";
 }
 
-/** Fetch a page safely: http(s) only, public hosts only, manual redirects (max 4), size + time limits. */
-async function fetchPage(raw: string): Promise<{ url: string; html: string }> {
+let dnsWarned = false;
+/** Every resolved address must be public. Unresolvable hosts are refused (fail closed). */
+async function resolvesPublic(rawHost: string): Promise<boolean> {
+  const host = rawHost.toLowerCase().replace(/^\[|\]$/g, "");
+  if (/^[\d.]+$/.test(host) || host.includes(":")) return !isPrivateIp(host);
+  if (typeof Deno.resolveDns !== "function") {
+    if (!dnsWarned) { console.warn("Deno.resolveDns unavailable: DNS-based SSRF check skipped"); dnsWarned = true; }
+    return true;
+  }
+  const errs: unknown[] = [];
+  const look = (t: "A" | "AAAA") => Deno.resolveDns(host, t).catch((e) => { errs.push(e); return [] as string[]; });
+  const ips = [...(await look("A")), ...(await look("AAAA"))];
+  if (!ips.length) { console.error("dns: no address", host, errs.map(String)); return false; }
+  return ips.every((ip) => !isPrivateIp(ip.toLowerCase()));
+}
+
+/** fetch with the SSRF guard re-applied on every hop: http(s) + public hosts only, manual redirects (max 4). */
+async function safeFetch(raw: string, init: { accept: string; timeoutMs: number; ua: string }): Promise<{ url: string; res: Response }> {
   let url = raw;
   for (let i = 0; i < 5; i++) {
     if (!isSafeUrl(url) || !(await resolvesPublic(new URL(url).hostname))) throw new Error("허용되지 않는 주소예요.");
     const res = await fetch(url, {
       redirect: "manual",
-      signal: AbortSignal.timeout(9000),
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130 Safari/537.36 SureM-RBC-Profiler",
-        "Accept": "text/html,application/xhtml+xml",
-        "Accept-Language": "ko-KR,ko;q=0.9,en;q=0.5",
-      },
+      signal: AbortSignal.timeout(init.timeoutMs),
+      headers: { "User-Agent": init.ua, "Accept": init.accept, "Accept-Language": "ko-KR,ko;q=0.9,en;q=0.5" },
     });
-    if (res.status >= 300 && res.status < 400 && res.headers.get("location")) {
-      url = new URL(res.headers.get("location")!, url).href;
+    const loc = res.headers.get("location");
+    if (res.status >= 300 && res.status < 400 && loc) {
+      url = new URL(loc, url).href;
       await res.body?.cancel();
       continue;
     }
-    if (!res.ok) throw new Error(`사이트가 응답하지 않아요 (HTTP ${res.status}).`);
-    const ct = res.headers.get("content-type");
-    if (ct && /^(image|video|audio|font)\/|application\/(pdf|zip|json)/i.test(ct)) throw new Error("HTML 페이지가 아니에요.");
-    const reader = res.body!.getReader();
-    const chunks: Uint8Array[] = [];
-    let size = 0;
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      size += value.length;
-      chunks.push(value);
-      if (size > MAX_BYTES) { await reader.cancel(); break; }
-    }
-    const buf = new Uint8Array(size > MAX_BYTES ? MAX_BYTES : size);
-    let off = 0;
-    for (const c of chunks) { const n = Math.min(c.length, buf.length - off); buf.set(c.subarray(0, n), off); off += n; if (off >= buf.length) break; }
-    return { url, html: decodeHtml(buf, ct) };
+    return { url, res };
   }
   throw new Error("리다이렉트가 너무 많아요.");
+}
+
+/** Read at most `max` bytes. `truncated` is true when the body was longer. */
+async function readLimited(res: Response, max: number): Promise<{ buf: Uint8Array<ArrayBuffer>; truncated: boolean }> {
+  if (!res.body) return { buf: new Uint8Array(0), truncated: false };
+  const reader = res.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let size = 0, truncated = false;
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    size += value.length;
+    chunks.push(value);
+    if (size > max) { truncated = true; await reader.cancel(); break; }
+  }
+  const buf = new Uint8Array(Math.min(size, max));
+  let off = 0;
+  for (const c of chunks) { const n = Math.min(c.length, buf.length - off); buf.set(c.subarray(0, n), off); off += n; if (off >= buf.length) break; }
+  return { buf, truncated };
+}
+
+const PAGE_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130 Safari/537.36 SureM-RBC-Profiler";
+
+/** Fetch an HTML page safely (see safeFetch), keeping the first MAX_BYTES. */
+async function fetchPage(raw: string): Promise<{ url: string; html: string }> {
+  const { url, res } = await safeFetch(raw, { accept: "text/html,application/xhtml+xml", timeoutMs: 9000, ua: PAGE_UA });
+  if (!res.ok) { await res.body?.cancel(); throw new Error(`사이트가 응답하지 않아요 (HTTP ${res.status}).`); }
+  const ct = res.headers.get("content-type");
+  if (ct && /^(image|video|audio|font)\/|application\/(pdf|zip|json)/i.test(ct)) { await res.body?.cancel(); throw new Error("HTML 페이지가 아니에요."); }
+  const { buf } = await readLimited(res, MAX_BYTES);
+  return { url, html: decodeHtml(buf, ct) };
 }
 
 async function askClaude(prompt: string): Promise<string> {
@@ -114,7 +142,13 @@ function applyKakao(ex: Extracted, k: ReturnType<typeof parseKakaoChannel>, sour
 }
 
 const HOURLY_LIMIT = Number(Deno.env.get("HOURLY_LIMIT") || 20);
+// Cap across all visitors: bounds Claude cost even if per-IP limits are bypassed with spoofed headers.
+const GLOBAL_HOURLY_LIMIT = Number(Deno.env.get("GLOBAL_HOURLY_LIMIT") || 300);
+const IMAGE_HOURLY_LIMIT = Number(Deno.env.get("IMAGE_HOURLY_LIMIT") || 120);
+const LEADS_PER_REQUEST = 3;
 const SALT = Deno.env.get("IP_SALT") || "surem-rbc";
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const tooMany = (req: Request) => json(req, { error: "요청이 너무 많아요. 잠시 후 다시 시도해 주세요." }, 429);
 
 function manualExtract(url: string, m: { name?: string; description?: string; phone?: string; email?: string; address?: string }): Extracted {
   const ex = extract("<html><body></body></html>", url);
@@ -174,21 +208,31 @@ async function crawl(input: string, steps: string[]): Promise<Extracted> {
 }
 
 async function analyze(req: Request, body: Record<string, unknown>) {
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() || "unknown";
-  const ipHash = await sha256(ip + SALT);
-  const n = await recentCount(ipHash);
-  if ((n >= 0 && n >= HOURLY_LIMIT) || (n < 0 && limited(ip, HOURLY_LIMIT))) {
-    return json(req, { error: "요청이 너무 많아요. 잠시 후 다시 시도해 주세요." }, 429);
-  }
-
   let input = String(body.url || "").trim();
   const manual = body.manual as Record<string, string> | undefined;
   if (!input && !manual?.name) return json(req, { error: "url을 보내 주세요." }, 400);
   if (input && !/^https?:\/\//i.test(input)) input = "https://" + input;
   if (!input) input = "https://example.invalid/";
 
+  // Reserve the row BEFORE counting, so concurrent requests all see each other (the count includes this row).
+  const ip = clientIp(req);
+  const ipHash = await sha256(ip + SALT);
+  const mode = manual?.name ? "manual" : "crawl";
+  const reqId = await insert("rbc_requests", { input_url: input, ip_hash: ipHash, mode });
+  const [mine, all] = reqId ? await Promise.all([recentCount(ipHash), recentCount()]) : [-1, -1];
+  const overDb = (mine >= 0 && mine > HOURLY_LIMIT) || (all >= 0 && all > GLOBAL_HOURLY_LIMIT);
+  const overMem = (mine < 0 && limited(`an:${ip}`, HOURLY_LIMIT)) || (all < 0 && limited("an:*", GLOBAL_HOURLY_LIMIT));
+  if (overDb || overMem) {
+    if (reqId) await update("rbc_requests", reqId, { error: "rate_limited" });
+    if (all > GLOBAL_HOURLY_LIMIT) console.warn("global hourly limit reached", all);
+    return tooMany(req);
+  }
+
   const steps: string[] = [];
-  const log = (row: Record<string, unknown>) => insert("rbc_requests", { input_url: input, ip_hash: ipHash, ...row });
+  const log = async (row: Record<string, unknown>) => {
+    if (reqId) return (await update("rbc_requests", reqId, row)) ? reqId : null;
+    return insert("rbc_requests", { input_url: input, ip_hash: ipHash, mode, ...row });
+  };
   let ex: Extracted;
   try {
     if (manual?.name) {
@@ -200,7 +244,7 @@ async function analyze(req: Request, body: Record<string, unknown>) {
   } catch (e) {
     const raw = (e as Error).message || "";
     const msg = /[가-힣]/.test(raw) ? raw : "사이트에 접속하지 못했어요(자동 접속 차단 또는 주소 오류).";
-    await log({ mode: "crawl", ok: false, error: raw.slice(0, 300) });
+    await log({ ok: false, error: raw.slice(0, 300) });
     // code "unreadable": the screen offers manual input (brand name + 소개) instead of a dead end
     return json(req, { error: msg, code: "unreadable", steps }, 422);
   }
@@ -221,26 +265,26 @@ async function analyze(req: Request, body: Record<string, unknown>) {
     application.rbc.quickMenu = application.rbc.quickMenu.filter((b) => !b.value.includes("example.invalid"));
   }
   const extracted = { ...ex, text: ex.text.slice(0, 3000) };
-  const requestId = await log({ mode: manual?.name ? "manual" : "crawl", ok: true, engine: application.engine, application, extracted });
+  const requestId = await log({ ok: true, engine: application.engine, application, extracted });
   return json(req, { requestId, extracted, application, steps });
 }
 
 /** Image proxy so the page can redraw a site's logo on a canvas (cross-origin images can't be exported). */
 async function proxyImage(req: Request, body: Record<string, unknown>) {
+  if (limited(`img:${clientIp(req)}`, IMAGE_HOURLY_LIMIT)) return tooMany(req);
   const url = String(body.url || "");
-  if (!isSafeUrl(url) || !(await resolvesPublic(new URL(url).hostname))) return json(req, { error: "허용되지 않는 주소예요." }, 400);
+  if (!isSafeUrl(url)) return json(req, { error: "허용되지 않는 주소예요." }, 400);
   try {
-    const res = await fetch(url, {
-      signal: AbortSignal.timeout(8000),
-      headers: { "User-Agent": "Mozilla/5.0 SureM-RBC-Profiler", Accept: "image/*" },
-    });
+    // safeFetch re-checks every redirect hop, so a public URL can't bounce us into the private network.
+    const { res } = await safeFetch(url, { accept: "image/*", timeoutMs: 8000, ua: "Mozilla/5.0 SureM-RBC-Profiler" });
     const ct = res.headers.get("content-type") || "";
-    if (!res.ok || !/^image\//i.test(ct)) return json(req, { error: "이미지를 가져오지 못했어요." }, 422);
-    const buf = new Uint8Array(await res.arrayBuffer());
-    if (buf.length > 5_000_000) return json(req, { error: "이미지가 너무 커요(5MB 초과)." }, 422);
+    if (!res.ok || !/^image\//i.test(ct)) { await res.body?.cancel(); return json(req, { error: "이미지를 가져오지 못했어요." }, 422); }
+    const { buf, truncated } = await readLimited(res, 5_000_000);
+    if (truncated) return json(req, { error: "이미지가 너무 커요(5MB 초과)." }, 422);
     return new Response(buf, { headers: { ...cors(req), "Content-Type": ct, "Cache-Control": "public, max-age=86400" } });
-  } catch {
-    return json(req, { error: "이미지를 가져오지 못했어요." }, 422);
+  } catch (e) {
+    const msg = (e as Error).message;
+    return json(req, { error: msg === "허용되지 않는 주소예요." ? msg : "이미지를 가져오지 못했어요." }, msg === "허용되지 않는 주소예요." ? 400 : 422);
   }
 }
 
@@ -249,8 +293,23 @@ async function saveLead(req: Request, body: Record<string, unknown>) {
   const phone = String(body.phone || "").replace(/[^\d-]/g, "").slice(0, 20);
   if (!company || phone.replace(/\D/g, "").length < 9) return json(req, { error: "회사명과 연락처를 확인해 주세요." }, 400);
   if (body.agreed !== true) return json(req, { error: "개인정보 수집·이용에 동의해 주세요." }, 400);
+
+  // Leads ride on an analysis (already rate-limited): it must exist, be recent, and carry only a few leads.
+  const requestId = typeof body.requestId === "string" && UUID_RE.test(body.requestId) ? body.requestId.toLowerCase() : null;
+  if (limited(`lead:${clientIp(req)}`, 10)) return tooMany(req);
+  if (requestId && dbEnabled) {
+    const [found, leads] = await Promise.all([
+      countRows("rbc_requests", `id=eq.${requestId}&ok=is.true&created_at=gte.${sinceParam(24 * 60)}`),
+      countRows("rbc_leads", `request_id=eq.${requestId}`),
+    ]);
+    if (found === 0) return json(req, { error: "분석 결과가 만료됐어요. 홈페이지를 다시 분석한 뒤 신청해 주세요." }, 400);
+    if (leads >= LEADS_PER_REQUEST) return tooMany(req);
+  } else if (limited(`lead-noreq:${clientIp(req)}`, 3)) {
+    return tooMany(req);
+  }
+
   const id = await insert("rbc_leads", {
-    request_id: typeof body.requestId === "string" && /^[0-9a-f-]{36}$/.test(body.requestId) ? body.requestId : null,
+    request_id: requestId,
     company,
     contact_name: String(body.name || "").trim().slice(0, 50) || null,
     phone,
