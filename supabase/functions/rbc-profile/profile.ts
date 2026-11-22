@@ -27,6 +27,12 @@ export type Application = {
   };
   warnings: { rbc: string[]; kakao: string[]; common: string[] };
   engine: "claude" | "rule";
+  messages?: Sample[]; // AI-written message samples (rule-based templates live in the page)
+};
+export type Sample = {
+  purpose: string; kind: "info" | "ad";
+  rcs: { title: string; body: string; buttons: Button[] };
+  at: { body: string; button: { label: string; value: string } };
 };
 
 const F = (value = "", source = "", verified = false): Field => ({ value: String(value ?? "").trim(), source, verified });
@@ -106,6 +112,12 @@ GLOBAL RULES
 - mismatchNote: if channelName differs from the legal company name (companyNameCandidates), write a ≤${LIMITS.kakaoMismatch}-char 사업자정보 불일치 소명
   explaining that the channel name is the brand/service operated by that company, pointing to the website footer as evidence. Else "".
 
+(C) messages: 3 realistic message samples this business would send after opening the brand/channel:
+- two informational ("info": 예약·주문·배송·일정·접수 등 transactional) and one promotional ("ad").
+- rcs: title ≤40 chars, body ≤200 chars (do NOT add (광고) or 수신거부; the page adds them for "ad"), buttons ≤2 {label ≤17, type url|call|map, value from facts}.
+- at: 알림톡 template for "info" (≤1000 chars, starts with "[브랜드명] 제목", details as "■ 항목: #{변수}" lines) with one button {label ≤14, value url}; for "ad" write it as a 브랜드 메시지 starting with "(광고)".
+- Use #{변수} placeholders (e.g. #{고객명}, #{예약일시}) for per-customer values. Never invent prices, discounts or dates; use #{혜택} instead.
+
 FACTS (JSON)
 ${JSON.stringify(facts)}
 
@@ -114,6 +126,7 @@ Return ONLY JSON:
 "rbc":{"brandName":{},"description":{},"category":{},"phone":{},"email":{},"address":{},"brandColor":{},"profileImage":{},"backgroundImage":{},
 "quickMenu":[{"label":"","type":"url","value":""}]},
 "kakao":{"channelName":{},"searchIds":["","",""],"category":{},"description":{},"csPhone":{},"profileImage":{},"storeAddress":{},"mismatchNote":{}},
+"messages":[{"purpose":"","kind":"info","rcs":{"title":"","body":"","buttons":[{"label":"","type":"url","value":""}]},"at":{"body":"","button":{"label":"","value":""}}}],
 "notes":[]}`;
 }
 
@@ -140,7 +153,9 @@ export function parseClaude(text: string, ex: Extracted): Application {
     warnings: { rbc: [], kakao: [], common: (Array.isArray(j.notes) ? j.notes : []).map(String).slice(0, 4) },
     engine: "claude",
   };
-  return finalize(a, ex);
+  const done = finalize(a, ex);
+  done.messages = cleanMessages(j.messages, ex, done);
+  return done;
 }
 
 function buttons(raw: unknown, max: number): Button[] {
@@ -266,4 +281,30 @@ function cleanIds(ids: string[], name: string, host: string, ex: Extracted): str
   const region = /(서울|부산|대구|인천|광주|대전|울산|세종|경기|강원|제주|강남|분당|판교|홍대|해운대)/.exec(ex.addresses[0]?.value || "")?.[1];
   if (region && !name.includes(region)) add(region + name);
   return out.slice(0, 3);
+}
+
+
+/** Keep AI samples within limits; drop buttons whose link/number does not come from the business. */
+function cleanMessages(raw: unknown, ex: Extracted, a: Application): Sample[] | undefined {
+  if (!Array.isArray(raw)) return undefined;
+  const host = (u: string) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return ""; } };
+  const site = host(ex.url);
+  const okValue = (type: string, v: string) =>
+    type === "call" ? ex.phones.some((c) => digits(c.value) === digits(v)) :
+    type === "map" ? !!v :
+    !v || host(v) === site || ex.kakaoChannels.some((c) => v.startsWith(c.value));
+  const out = raw.slice(0, 4).filter((m) => m && m.rcs && m.purpose).map((m): Sample => ({
+    purpose: String(m.purpose).slice(0, 20),
+    kind: m.kind === "ad" ? "ad" : "info",
+    rcs: {
+      title: String(m.rcs.title || "").slice(0, 40),
+      body: String(m.rcs.body || "").replace(/^\(광고\)\s*/, "").slice(0, 200),
+      buttons: buttons(m.rcs.buttons, 2).filter((b) => b.label && okValue(b.type, b.value)),
+    },
+    at: {
+      body: String(m.at?.body || "").slice(0, 1000),
+      button: { label: String(m.at?.button?.label || "").slice(0, 14), value: okValue("url", String(m.at?.button?.value || "")) ? String(m.at?.button?.value || "") : a.rbc.website.value },
+    },
+  }));
+  return out.length ? out : undefined;
 }
