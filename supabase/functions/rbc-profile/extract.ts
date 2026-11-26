@@ -373,3 +373,21 @@ export function isPrivateIp(h: string): boolean {
   }
   return false;
 }
+
+/**
+ * Many Korean SMB sites land on a stub page that forwards with JavaScript, a meta refresh or a frameset
+ * (e.g. `<script>location.href = "main/main.html"</script>`). If the page has almost no text, return the target.
+ */
+export function softRedirect(html: string, url: string): string {
+  if (htmlToText(/<body[\s\S]*<\/body>/i.exec(html)?.[0] || "").length > 200) return "";
+  const pick = (re: RegExp) => { const m = re.exec(html); return m ? abs(decodeEntities(m[1].trim()), url) : ""; };
+  const target =
+    pick(/<meta[^>]+http-equiv\s*=\s*["']?refresh["']?[^>]*content\s*=\s*["']?\s*\d*\s*;?\s*url\s*=\s*["']?([^"'>\s]+)/i) ||
+    pick(/(?:window\.|document\.|top\.|self\.)?location(?:\.href)?\s*=\s*["']([^"']+)["']/) ||
+    pick(/location\.(?:replace|assign)\(\s*["']([^"']+)["']/) ||
+    pick(/<frame\b[^>]*\bsrc\s*=\s*["']([^"']+)["']/i) ||
+    pick(/<iframe\b[^>]*\bsrc\s*=\s*["']([^"']+)["'][^>]*(?:100%|height\s*=\s*["']?100)/i);
+  if (!target || target === url || /^javascript:/i.test(target)) return "";
+  try { if (new URL(target).hostname.replace(/^www\./, "") !== new URL(url).hostname.replace(/^www\./, "")) return ""; } catch { return ""; }
+  return target;
+}

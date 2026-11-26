@@ -4,7 +4,7 @@
 //   POST { action:"lead", requestId, company, phone, agreed:true, ... } → saves a 상담 신청
 // Reads a website (home + up to 2 about/contact pages, linked Kakao channel) and drafts
 // the RCS Biz Center brand application and the KakaoTalk channel application.
-import { addImage, decodeHtml, extract, isKakaoChannelUrl, isPrivateIp, isSafeUrl, mergeInto, normalizeKakao, normalizePhone, parseKakaoChannel, pickSubpages } from "./extract.ts";
+import { addImage, decodeHtml, extract, isKakaoChannelUrl, isPrivateIp, isSafeUrl, mergeInto, normalizeKakao, normalizePhone, parseKakaoChannel, pickSubpages, softRedirect } from "./extract.ts";
 import type { Extracted } from "./extract.ts";
 import { buildPrompt, parseClaude, ruleApplication } from "./profile.ts";
 import { countRows, dbEnabled, insert, recentCount, sha256, sinceParam, update } from "./db.ts";
@@ -168,10 +168,16 @@ function manualExtract(url: string, m: { name?: string; description?: string; ph
 }
 
 async function crawl(input: string, steps: string[]): Promise<Extracted> {
-  const home = await fetchPage(input).catch(async (e) => {
+  let home = await fetchPage(input).catch(async (e) => {
     if (input.startsWith("https://")) return await fetchPage(input.replace(/^https:/, "http:"));
     throw e;
   });
+  // follow JS / meta-refresh / frameset landing pages (up to 2 hops, same site only)
+  for (let hop = 0; hop < 2; hop++) {
+    const next = softRedirect(home.html, home.url);
+    if (!next) break;
+    try { home = await fetchPage(next); steps.push(`첫 화면이 다른 페이지로 넘겨서 따라감: ${home.url}`); } catch { break; }
+  }
   const inputIsKakao = isKakaoChannelUrl(input) || isKakaoChannelUrl(home.url);
   steps.push(`${inputIsKakao ? "카카오톡 채널" : "홈페이지"} 읽음: ${home.url}`);
   const ex = extract(home.html, home.url);
