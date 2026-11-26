@@ -25,6 +25,7 @@ export type Extracted = {
   ceos: Candidate[];
   bizNos: Candidate[]; // 사업자등록번호 000-00-00000
   themeColors: Candidate[];
+  categories?: Candidate[]; // 업종 (네이버 플레이스·카카오맵·명함에서)
   jsonLd: Record<string, unknown>[];
   text: string; // visible body text (trimmed)
   footer: string;
@@ -273,7 +274,9 @@ function addBizNo(ex: Extracted, raw: string, source: string) {
   if (d.length === 10) pushUniq(ex.bizNos, `${d.slice(0, 3)}-${d.slice(3, 5)}-${d.slice(5)}`, source, 3);
 }
 const COMPANY_LABEL_RE = /(?:상호(?:명)?|회사명|법인명|업체명|사업자명)\s*[:：]?\s*([^\n|,/·]{2,30})/g;
-const CORP_RE = /(?:\(주\)|㈜|주식회사|\(유\)|유한회사)\s*[가-힣A-Za-z0-9&]{2,20}|[가-힣][가-힣0-9&]{1,19}\s*(?:\(주\)|㈜|주식회사)/g;
+// [ \t]* (not \s*): a match must not run across a line break ("개인정보처리방침\n㈜…")
+const CORP_RE = /(?:\(주\)|㈜|주식회사|\(유\)|유한회사)[ \t]*[가-힣A-Za-z0-9&]{2,20}|[가-힣][가-힣0-9&]{1,19}[ \t]*(?:\(주\)|㈜|주식회사)/g;
+const NOT_CORP_RE = /방침|정책|약관|처리|개인정보|이용|저작권|copyright/i;
 const CEO_RE = /대표\s*(?:자|이사)?\s*(?:명|성명)?(?!\s*(?:번호|전화|메일|이메일|홈|문의|상품|이미지))\s*[:：]?\s*([가-힣]{2,4}|[A-Z][a-z]+ [A-Z][a-z]+)(?=[\s|,/·)]|$)/g;
 const BIZNO_RE = /사업자\s*(?:등록)?\s*(?:번호)?\s*[:：]?\s*(\d{3}\s*-?\s*\d{2}\s*-?\s*\d{5})/g;
 
@@ -283,7 +286,7 @@ function findBusiness(text: string, source: string, ex: Extracted) {
     const v = m[1].replace(/\s*(대표|사업자|주소|tel|전화).*$/i, "").trim();
     if (v.length >= 2) pushUniq(ex.companyNames, v, source, 4);
   }
-  for (const m of text.matchAll(CORP_RE)) pushUniq(ex.companyNames, m[0].trim(), source, 4);
+  for (const m of text.matchAll(CORP_RE)) if (!NOT_CORP_RE.test(m[0])) pushUniq(ex.companyNames, m[0].trim(), source, 4);
   for (const m of text.matchAll(CEO_RE)) {
     if (!/^(번호|전화|이사|메일)$/.test(m[1])) pushUniq(ex.ceos, m[1], source, 2);
   }

@@ -3,515 +3,546 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RBC 브랜드 · 카카오톡 채널 개설 정보 자동 완성 | SureM</title>
+<title>RCS 브랜드 · 카카오톡 채널 무료 개설 | SureM</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
-:root{--bg:#f4f6fb;--card:#fff;--ink:#151a2d;--sub:#5b6378;--line:#e3e7f0;--brand:#2f5bff;--brand-d:#1e3fd1;--brand-l:#eaf0ff;--ok:#12a26b;--warn:#b77300;--err:#d6334a;--kakao:#fee500;--kakao-d:#3c1e1e;--r:14px}
+:root{
+  --canvas:#f4f4f4;--card:#fff;--ink:#000;--ink2:#1d1d1f;--sub:#6e6e73;--line:#e4e4e7;--soft:#f7f7f8;
+  --blue:#1428a0;--blue-l:#e8ebfa;--ok:#0f8a5f;--ok-l:#e3f5ed;--warn:#b26a00;--warn-l:#fff3dc;--err:#d92d20;--err-l:#fde8e6;
+  --kakao:#fee500;--kakao-d:#3c1e1e;--r-xl:28px;--r-l:20px;--r-m:14px
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,sans-serif;font-size:14px;line-height:1.55}
-header{background:#0f1733;color:#fff;padding:18px 28px}
-header .logo{font-weight:800;font-size:18px}header .logo b{color:#7fa0ff}
-header p{margin:4px 0 0;color:#aab4d6;font-size:13px}
-.wrap{max-width:1220px;margin:0 auto;padding:22px 20px 60px}
-.search{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.search input{flex:1;min-width:240px;font-size:16px;padding:13px 14px}
-.grid{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:22px;margin-top:16px}
-@media(max-width:980px){.grid{grid-template-columns:1fr}.side{position:static!important}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:16px}
-.card h2{margin:0 0 4px;font-size:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.card .desc{margin:0 0 12px;color:var(--sub);font-size:13px}
-input,textarea,select{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;color:var(--ink);background:#fff}
-input:focus,textarea:focus,select:focus{outline:2px solid var(--brand-l);border-color:var(--brand)}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--canvas);color:var(--ink2);font-family:Pretendard,-apple-system,system-ui,sans-serif;font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;word-break:keep-all}
+:focus-visible{outline:3px solid #7b8cf0;outline-offset:2px}
+.hidden{display:none!important}
+a{color:inherit}
+button{font:inherit;color:inherit}
+input,textarea,select{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font:inherit;color:var(--ink2);background:#fff}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px rgba(0,0,0,.06)}
 textarea{resize:vertical}
-.btn{border:0;border-radius:10px;padding:12px 18px;font:inherit;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
-.btn.p{background:var(--brand);color:#fff}.btn.p:hover{background:var(--brand-d)}.btn:disabled{opacity:.5}
-.btn.s{background:var(--brand-l);color:var(--brand-d)}.btn.g{background:#fff;border:1px solid var(--line);color:var(--sub)}
-.btn.k{background:var(--kakao);color:var(--kakao-d)}
-.f{margin-bottom:14px}
-.f .lb{display:flex;align-items:center;gap:6px;font-weight:600;font-size:13px;margin-bottom:6px;flex-wrap:wrap}
-.f .lb .cnt{margin-left:auto;font-weight:400;color:var(--sub);font-size:12px}.cnt.over{color:var(--err)!important;font-weight:700!important}
-.f .help{font-size:12px;color:var(--sub);margin-top:4px}
-.tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;white-space:nowrap}
-.tag.ok{background:#e2f6ee;color:var(--ok)}.tag.ai{background:var(--brand-l);color:var(--brand-d)}.tag.chk{background:#fff4dc;color:var(--warn)}.tag.req{background:#fde7ea;color:var(--err)}
-.src{font-size:11.5px;color:var(--sub);margin-top:4px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.row3{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:12px}
-@media(max-width:640px){.row,.row3{grid-template-columns:1fr}}
-.tabs{display:flex;gap:8px;margin:4px 0 16px}
-.tabs button{flex:1;border:2px solid var(--line);background:#fff;border-radius:12px;padding:12px;font:inherit;font-weight:700;cursor:pointer;color:var(--sub);display:flex;align-items:center;justify-content:center;gap:8px}
-.tabs button.on.rbc{border-color:var(--brand);color:var(--brand-d);background:var(--brand-l)}
-.tabs button.on.kakao{border-color:#e6cf00;color:var(--kakao-d);background:#fffbd1}
-.tabs .n{font-size:11px;background:var(--err);color:#fff;border-radius:99px;padding:1px 7px}
-.imgs{display:flex;gap:10px;flex-wrap:wrap}
-.im{width:104px;border:2px solid var(--line);border-radius:12px;padding:6px;cursor:pointer;background:#fff;text-align:center;font-size:11px;color:var(--sub)}
-.im img{width:100%;height:64px;object-fit:contain;background:repeating-conic-gradient(#f1f2f6 0 25%,#fff 0 50%) 50%/12px 12px;border-radius:6px}
-.im.sel{border-color:var(--brand)}.im.sel2{border-color:var(--ok)}
-.im b{display:block;color:var(--ink);font-size:10.5px}.im .dim{font-size:10px}.im .dim.bad{color:var(--err)}
-.mb{display:grid;grid-template-columns:96px 1fr 1.4fr 30px;gap:8px;margin-bottom:8px}
-.mb button{border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer;color:var(--sub)}
-.ids{display:flex;flex-direction:column;gap:6px}
-.ids label{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:10px;padding:8px 12px;cursor:pointer}
-.ids label input[type=radio]{width:auto}
-.ids label.on{border-color:#e6cf00;background:#fffbd1}
-.warn{background:#fffaf0;border:1px solid #f4e2b8;border-radius:10px;padding:10px 14px;font-size:13px;color:#7a5a12;margin-bottom:14px}
+input[type=checkbox],input[type=radio]{width:auto}
+
+/* pills */
+.pill{border:0;border-radius:999px;padding:13px 24px;font-weight:700;font-size:15px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;white-space:nowrap;transition:background .15s}
+.pill.b{background:var(--ink);color:#fff}.pill.b:hover{background:#333}
+.pill.w{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}.pill.w:hover{background:var(--soft)}
+.pill.g{background:#ececee;color:var(--ink)}.pill.g:hover{background:#e2e2e5}
+.pill.k{background:var(--kakao);color:var(--kakao-d)}
+.pill.sm{padding:8px 14px;font-size:13.5px}
+.pill:disabled{opacity:.45;cursor:default}
+
+/* top */
+.top{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.92);backdrop-filter:saturate(1.6) blur(14px);border-bottom:1px solid var(--line)}
+.top .in{max-width:1240px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:20px}
+.word{font-weight:800;font-size:18px;letter-spacing:-.02em;text-decoration:none;color:var(--ink)}.word b{color:var(--blue)}
+.top nav{display:flex;gap:4px;margin-left:auto}
+.top nav a{text-decoration:none;font-size:14px;font-weight:600;padding:8px 12px;border-radius:999px;color:var(--ink2)}.top nav a:hover{background:var(--soft)}
+@media(max-width:760px){.top nav{display:none}.top .pill{margin-left:auto}}
+
+/* hero */
+.hero{max-width:1240px;margin:0 auto;padding:64px 24px 40px;text-align:center}
+.hero h1{font-size:clamp(36px,6vw,72px);line-height:1.08;letter-spacing:-.045em;font-weight:800;margin:0 0 18px;color:var(--ink)}
+.hero .lede{font-size:clamp(16px,1.6vw,19px);color:var(--sub);margin:0 auto 36px;max-width:36em}
+.starter{max-width:860px;margin:0 auto;background:#fff;border-radius:var(--r-xl);padding:14px;text-align:left;box-shadow:0 1px 2px rgba(0,0,0,.04),0 20px 50px -30px rgba(0,0,0,.25)}
+.modes{display:flex;gap:6px;padding:4px;background:var(--soft);border-radius:999px;margin-bottom:12px;overflow-x:auto}
+.modes button{flex:1;border:0;background:transparent;border-radius:999px;padding:11px 14px;font-weight:700;font-size:14.5px;cursor:pointer;color:var(--sub);white-space:nowrap}
+.modes button.on{background:var(--ink);color:#fff}
+.urlrow{display:flex;gap:8px;align-items:center;border:2px solid var(--ink);border-radius:999px;padding:6px 6px 6px 22px}
+.urlrow input{border:0;padding:12px 0;font-size:17px;min-width:0;flex:1;background:transparent}
+.urlrow input:focus{box-shadow:none}
+.urlrow .pill{padding:14px 26px;font-size:16px}
+.detect{min-height:34px;display:flex;align-items:center;gap:8px;padding:10px 8px 2px;font-size:13.5px;color:var(--sub);flex-wrap:wrap}
+.detect .chip{display:inline-flex;align-items:center;gap:6px;background:var(--blue-l);color:var(--blue);border-radius:999px;padding:4px 12px;font-weight:700}
+.detect .chip.nv{background:#e5f8ec;color:#03a94d}.detect .chip.kk{background:#fff8c2;color:#6b5600}
+.srcs{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:18px auto 0;max-width:860px}
+.srcs span{background:#fff;border-radius:999px;padding:6px 12px;font-size:13px;color:var(--sub)}
+.drop{border:2px dashed #c9c9cf;border-radius:var(--r-l);padding:28px 18px;text-align:center;cursor:pointer;transition:.15s;display:block}
+.drop:hover,.drop.over{border-color:var(--ink);background:var(--soft)}
+.drop b{display:block;font-size:17px;color:var(--ink);margin-bottom:4px}.drop small{color:var(--sub)}
+.cardrow{display:grid;grid-template-columns:200px 1fr;gap:16px;align-items:start}
+@media(max-width:640px){.cardrow{grid-template-columns:1fr}}
+.cardrow img{width:100%;border-radius:12px;background:var(--soft);aspect-ratio:1.6;object-fit:contain}
+.mform .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:640px){.mform .g2{grid-template-columns:1fr}}
+.mform label{display:block;font-weight:700;font-size:13px;margin:10px 0 5px}
+.mform .note{border-radius:12px;padding:10px 14px;font-size:13.5px;background:var(--warn-l);color:#6b4a00;margin-bottom:6px}
+.mform .note.okn{background:var(--ok-l);color:#0b5c40}
+.mform .acts{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.err{color:var(--err);font-weight:600;font-size:14px;padding:8px 8px 0}
+.demo{display:inline-block;background:var(--warn-l);color:#6b4a00;font-size:13px;padding:6px 14px;border-radius:999px;margin-bottom:16px}
+
+/* sections */
+.sec{max-width:1240px;margin:0 auto;padding:56px 24px}
+.sec h2{font-size:clamp(26px,3.4vw,40px);letter-spacing:-.035em;margin:0 0 10px;font-weight:800;color:var(--ink);text-align:center}
+.sec .sl{color:var(--sub);text-align:center;margin:0 0 32px;font-size:16px}
+.how{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;list-style:none;padding:0;margin:0;counter-reset:h}
+@media(max-width:900px){.how{grid-template-columns:1fr 1fr}}@media(max-width:560px){.how{grid-template-columns:1fr}}
+.how li{background:#fff;border-radius:var(--r-l);padding:26px 24px 28px;counter-increment:h}
+.how li::before{content:counter(h);display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--ink);color:#fff;font-weight:800;font-size:17px;margin-bottom:18px}
+.how b{display:block;font-size:18px;letter-spacing:-.02em;margin-bottom:6px;color:var(--ink)}.how p{margin:0;color:var(--sub);font-size:14.5px}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:800px){.duo{grid-template-columns:1fr}}
+.duo section{border-radius:var(--r-xl);padding:34px 34px 30px;min-height:300px;display:flex;flex-direction:column}
+.duo .r{background:var(--ink);color:#fff}.duo .k{background:var(--kakao);color:var(--kakao-d)}
+.duo h3{margin:0 0 6px;font-size:26px;letter-spacing:-.03em}.duo .s{margin:0 0 20px;opacity:.75}
+.duo ul{margin:0;padding:0;list-style:none;display:grid;gap:10px;font-size:15px}
+.duo li::before{content:"✓";font-weight:800;margin-right:10px}
+
+/* loading */
+.loading{display:none;position:fixed;inset:0;z-index:80;background:rgba(244,244,244,.95);place-items:center}
+.loading.on{display:grid}
+.ld{background:#fff;border-radius:var(--r-xl);padding:32px 34px;width:min(440px,92vw);box-shadow:0 30px 60px -30px rgba(0,0,0,.35)}
+.ld h3{margin:0 0 4px;font-size:21px;letter-spacing:-.02em}.ld .u{color:var(--sub);font-size:13px;margin-bottom:18px;word-break:break-all}
+.ld ol{list-style:none;padding:0;margin:0}
+.ld li{display:flex;gap:12px;align-items:center;padding:8px 0;color:#a1a1a6}
+.ld li i{width:22px;height:22px;border-radius:50%;border:2px solid #dcdce0;flex:none;font-style:normal;display:grid;place-items:center;font-size:12px}
+.ld li.on{color:var(--ink);font-weight:700}.ld li.on i{border-color:var(--ink);border-top-color:transparent;animation:sp .9s linear infinite}
+.ld li.ok{color:var(--ok)}.ld li.ok i{background:var(--ok);border-color:var(--ok);color:#fff}
+@keyframes sp{to{transform:rotate(360deg)}}
+.ld .n{font-size:12.5px;color:var(--sub);margin-top:14px}
+
+/* result: sticky step nav */
+body.has-result .hero,body.has-result .intro{display:none}
+.stepnav{position:sticky;top:57px;z-index:30;background:rgba(244,244,244,.92);backdrop-filter:blur(12px)}
+.stepnav .in{max-width:1240px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.who b{display:block;font-size:19px;letter-spacing:-.025em;color:var(--ink);line-height:1.2}.who small{color:var(--sub);font-size:12.5px}
+.steps{display:flex;gap:6px;margin-left:auto;overflow-x:auto;padding:2px}
+.steps button{border:0;background:#fff;border-radius:999px;padding:9px 16px 9px 10px;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px;white-space:nowrap;color:var(--sub)}
+.steps button i{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:#ececee;color:var(--sub);font-style:normal;font-size:12.5px}
+.steps button.on{background:var(--ink);color:#fff}.steps button.on i{background:#fff;color:var(--ink)}
+.steps button.done i{background:var(--ok);color:#fff}
+.steps button .w{width:7px;height:7px;border-radius:50%;background:#e59400}
+.meter{height:4px;background:#e4e4e7}.meter span{display:block;height:100%;background:var(--ink);transition:width .4s}
+.res{max-width:1240px;margin:0 auto;padding:24px 24px 80px;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:28px}
+@media(max-width:1000px){.res{grid-template-columns:1fr}.aside{position:static!important}}
+.res.wide{grid-template-columns:1fr}
+.res.wide .aside{display:none}
+.pane h2.t{font-size:clamp(24px,3vw,34px);letter-spacing:-.035em;margin:6px 0 6px;color:var(--ink)}
+.pane .ts{color:var(--sub);margin:0 0 22px}
+.box{background:#fff;border-radius:var(--r-l);padding:26px 28px;margin-bottom:14px}
+@media(max-width:560px){.box{padding:20px 18px}}
+.box h3{margin:0 0 4px;font-size:18px;letter-spacing:-.02em;display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--ink)}
+.box .d{margin:0 0 16px;color:var(--sub);font-size:14px}
+.nav2{display:flex;justify-content:space-between;gap:10px;margin-top:22px}
+.seg{display:inline-flex;gap:4px;background:#e9e9ec;border-radius:999px;padding:4px;margin-bottom:14px}
+.seg button{border:0;background:transparent;border-radius:999px;padding:9px 18px;font-weight:700;cursor:pointer;color:var(--sub);display:flex;gap:6px;align-items:center}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.seg .n{font-size:11px;background:var(--err);color:#fff;border-radius:99px;padding:1px 7px}
+
+/* fields */
+.f{margin-bottom:16px}
+.f .lb{display:flex;align-items:center;gap:6px;font-weight:700;font-size:13.5px;margin-bottom:6px;flex-wrap:wrap;color:var(--ink2)}
+.f .lb .cnt{margin-left:auto;font-weight:500;color:var(--sub);font-size:12px}.cnt.over{color:var(--err)!important;font-weight:800!important}
+.f .help{font-size:12.5px;color:var(--sub);margin-top:5px}
+.src{font-size:12px;color:var(--sub);margin-top:5px}.src a{color:var(--blue)}
+.tag{font-size:11px;font-weight:700;padding:2px 9px;border-radius:99px;white-space:nowrap}
+.tag.ok{background:var(--ok-l);color:var(--ok)}.tag.ai{background:var(--blue-l);color:var(--blue)}.tag.chk{background:var(--warn-l);color:var(--warn)}.tag.req{background:var(--err-l);color:var(--err)}.tag.n{background:#ededf0;color:var(--sub)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.g3{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:12px}
+@media(max-width:640px){.g2,.g3{grid-template-columns:1fr}}
+.warn{background:var(--warn-l);border-radius:var(--r-m);padding:12px 16px;font-size:13.5px;color:#6b4a00;margin-bottom:14px}
 .warn ul{margin:4px 0 0;padding-left:18px}
-.check{font-size:13px}.check li{margin:4px 0}.check ul{padding-left:18px;margin:6px 0}
-details{font-size:12.5px;color:var(--sub)}details pre{white-space:pre-wrap;background:#0f1733;color:#d8e0ff;padding:12px;border-radius:10px;max-height:300px;overflow:auto}
-.steps{font-size:12.5px;color:var(--sub);margin-top:10px}.steps div::before{content:"✓ ";color:var(--ok)}
-.loading{display:none;align-items:center;gap:10px;color:var(--sub)}.loading.on{display:flex}
-.spin{width:20px;height:20px;border:3px solid var(--brand-l);border-top-color:var(--brand);border-radius:50%;animation:sp 1s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
-.err{color:var(--err);width:100%}
-.side{position:sticky;top:16px;align-self:start}
-.phone{width:310px;margin:0 auto;background:#111;border-radius:40px;padding:11px;box-shadow:0 18px 45px rgba(15,23,51,.22)}
-.screen{background:#f2f3f7;border-radius:30px;height:600px;overflow:hidden;display:flex;flex-direction:column}
+.legend{font-size:12.5px;color:var(--sub);display:flex;gap:12px;flex-wrap:wrap;margin:-6px 0 16px}
+.mb{display:grid;grid-template-columns:100px 1fr 1.4fr 36px;gap:8px;margin-bottom:8px}
+.mb select{padding:0 8px}
+.mb button{border:1px solid var(--line);background:#fff;border-radius:10px;cursor:pointer;color:var(--sub)}
+.ids{display:flex;flex-direction:column;gap:6px}
+.ids label{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:12px;padding:10px 14px;cursor:pointer}
+.ids label.on{border-color:var(--ink);background:var(--soft)}
+.check{font-size:14px}.check li{margin:5px 0}.check ul{padding-left:18px;margin:6px 0}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+details.staff{margin-top:12px;font-size:13px;color:var(--sub)}
+details.staff summary{cursor:pointer;font-weight:700}
+details.staff pre{white-space:pre-wrap;background:#111;color:#e6e6e6;padding:14px;border-radius:12px;max-height:320px;overflow:auto;font-size:12px}
+.slog div{padding:2px 0}.slog div::before{content:"✓ ";color:var(--ok)}
+
+/* images */
+.thumbs{display:flex;gap:10px;flex-wrap:wrap}
+.th{width:112px;border:2px solid transparent;border-radius:16px;padding:6px;cursor:pointer;background:var(--soft);text-align:center;font-size:11.5px;color:var(--sub);position:relative}
+.th img{width:100%;height:76px;object-fit:contain;background:repeating-conic-gradient(#ececef 0 25%,#fff 0 50%) 50%/12px 12px;border-radius:10px;display:block}
+.th.sel{border-color:var(--ink);background:#fff}
+.th b{display:block;color:var(--ink);font-size:11.5px;margin-top:4px}.th .dim.bad{color:var(--err)}
+.th.add{display:grid;place-items:center;border:2px dashed #c9c9cf;background:#fff;min-height:118px;font-weight:700;color:var(--ink)}
+.th .crop{position:absolute;top:10px;right:10px;border:0;background:rgba(0,0,0,.75);color:#fff;border-radius:999px;font-size:11px;padding:3px 8px;cursor:pointer;font-weight:700}
+.ctrl{display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:14px;margin-top:14px}
+.ctrl label{display:flex;gap:6px;align-items:center}
+.ctrl input[type=range]{width:150px;padding:0}.ctrl input[type=color]{width:42px;height:32px;padding:2px}
+.maker{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
+@media(max-width:1100px){.maker{grid-template-columns:1fr 1fr}}
+.out{background:var(--soft);border-radius:16px;padding:12px;text-align:center;font-size:12.5px;color:var(--sub)}
+.out img{width:100%;aspect-ratio:1;object-fit:contain;border-radius:10px;background:repeating-conic-gradient(#ececef 0 25%,#fff 0 50%) 50%/12px 12px}
+.out.circle img{border-radius:50%}.out.wide img{aspect-ratio:16/9}
+.out b{display:block;color:var(--ink);font-size:13px;margin:8px 0 2px}
+.out a{display:inline-block;margin-top:8px}
+.spec{font-size:11.5px;line-height:1.55}.spec .ok{color:var(--ok)}.spec .bad{color:var(--err)}
+.docs{display:grid;grid-template-columns:180px 1fr;gap:18px;align-items:start}
+@media(max-width:640px){.docs{grid-template-columns:1fr}}
+.docs img{width:100%;border-radius:12px;background:var(--soft)}
+.docs:has(> img.hidden){grid-template-columns:1fr}
+
+/* cropper */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:grid;place-items:center;z-index:90;padding:16px}
+.modal .mbox{background:#fff;border-radius:var(--r-xl);padding:24px;width:min(560px,100%);max-height:94vh;overflow:auto}
+.modal h3{margin:0 0 4px;font-size:20px;letter-spacing:-.02em}.modal .d{color:var(--sub);font-size:13.5px;margin:0 0 14px}
+.cropwrap{display:grid;place-items:center;background:#1d1d1f;border-radius:16px;padding:14px;touch-action:none}
+#cropCv{display:block;cursor:grab;max-width:100%;border-radius:4px}
+#cropCv:active{cursor:grabbing}
+.cropbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px;font-size:14px}
+.cropbar input[type=range]{flex:1;min-width:120px;padding:0}
+
+/* messages */
+.tone{display:flex;gap:6px;flex-wrap:wrap}
+.tone button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-weight:600;font-size:13.5px;cursor:pointer}
+.tone button.on{border-color:var(--ink);background:var(--ink);color:#fff}
+.ai-row{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:12px}
+@media(max-width:640px){.ai-row{grid-template-columns:1fr}}
+.ideas{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.ideas button{border:0;background:var(--soft);border-radius:999px;padding:5px 11px;font-size:12.5px;cursor:pointer;color:var(--sub)}
+.ideas button:hover{color:var(--ink)}
+.ms-chips{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 18px}
+.ms-chips button{border:0;background:#ececee;border-radius:999px;padding:9px 16px;font-weight:700;font-size:14px;cursor:pointer;display:flex;gap:6px;align-items:center}
+.ms-chips button.on{background:var(--ink);color:#fff}
+.ms-chips .ad{font-size:11px;font-weight:800;border-radius:6px;padding:1px 6px;background:var(--err-l);color:var(--err)}
+.ms-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:860px){.ms-grid{grid-template-columns:1fr}}
+.ms-col h4{margin:0 0 12px;font-size:16px;display:flex;align-items:center;gap:8px}
+.ms-btnrow{display:grid;grid-template-columns:96px 1fr 1.3fr;gap:6px;margin-bottom:6px}
+.ms-btnrow select{padding:0 6px;font-size:13px}
+.chat{background:#e9ebf0;border-radius:20px;padding:16px 14px;margin-top:12px}
+.chat.kk{background:#b2c7d9}
+.chat .who2{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;margin-bottom:10px}
+.chat .who2 i{width:30px;height:30px;border-radius:50%;background:#ccc center/cover;display:grid;place-items:center;font-style:normal;color:#fff;font-size:12.5px;flex:none}
+.m-rcs{background:#fff;border-radius:16px;overflow:hidden;max-width:310px}
+.m-rcs .t{padding:13px 15px 4px;font-weight:800;font-size:14.5px}.m-rcs .dd{padding:0 15px 13px;font-size:13px;white-space:pre-wrap;color:#333}
+.m-rcs .b{border-top:1px solid #eee;padding:10px;text-align:center;font-weight:700;font-size:13px}
+.m-at{background:#fff;border-radius:12px;overflow:hidden;max-width:310px;font-size:13px}
+.m-at .hd{background:var(--kakao);color:var(--kakao-d);font-weight:800;padding:10px 13px}
+.m-at .dd{padding:13px;white-space:pre-wrap;color:#222}
+.m-at .b{margin:0 13px 13px;background:#f2f2f2;border-radius:6px;text-align:center;padding:9px;font-weight:700}
+.var{background:#fff1b8;border-radius:4px;padding:0 2px}
+.ms-note{font-size:12.5px;color:var(--sub);margin-top:10px}
+
+/* lead */
+.leadbox{background:var(--ink);color:#fff;border-radius:var(--r-xl);padding:34px}
+.leadbox h3{color:#fff;font-size:26px;letter-spacing:-.03em;margin:0 0 6px}
+.leadbox .d{color:#b9b9be}
+.leadbox input{background:#1c1c1e;border-color:#3a3a3c;color:#fff}
+.leadbox input:focus{border-color:#fff;box-shadow:none}
+.leadbox .f .lb{color:#fff}
+.leadbox .tag.req{background:#3a1d1b;color:#ff8a80}
+.leadbox .opts{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;margin:4px 0 12px}
+.consent{background:#1c1c1e;border-radius:14px;padding:14px 16px;font-size:13px;color:#c7c7cc;display:grid;gap:10px}
+.consent label{display:flex;gap:10px;align-items:flex-start}.consent input{margin-top:3px}
+.consent b{color:#fff}
+.leadbox .pill.wh{background:#fff;color:#000}
+.ldmsg{font-size:14px;align-self:center}
+
+/* phone preview */
+.aside{position:sticky;top:130px;align-self:start}
+.pv-tabs{display:flex;justify-content:center;margin-bottom:12px}
+.phone{width:300px;margin:0 auto;background:#111;border-radius:46px;padding:11px;box-shadow:0 30px 60px -28px rgba(0,0,0,.5)}
+.screen{background:#f2f3f7;border-radius:36px;height:590px;overflow:hidden;display:flex;flex-direction:column}
 .bgimg{height:140px;background:#cfd6ea center/cover no-repeat;position:relative;flex:none}
-.pfimg{width:76px;height:76px;border-radius:50%;background:#fff center/cover no-repeat;border:3px solid #fff;position:absolute;left:50%;bottom:-38px;transform:translateX(-50%);box-shadow:0 2px 8px rgba(0,0,0,.15);display:grid;place-items:center;font-weight:800;font-size:28px;color:var(--brand)}
-.bh{padding:46px 16px 16px;text-align:center;overflow:auto}
-.bh h3{margin:0;font-size:17px}.bh .ct{font-size:11.5px;color:#888}.bh p{font-size:12.5px;color:#555;margin:8px 0 12px;white-space:pre-wrap}
+.pfimg{width:78px;height:78px;border-radius:50%;background:#fff center/cover no-repeat;border:3px solid #fff;position:absolute;left:50%;bottom:-39px;transform:translateX(-50%);box-shadow:0 2px 8px rgba(0,0,0,.15);display:grid;place-items:center;font-weight:800;font-size:28px}
+.bh{padding:48px 16px 16px;text-align:center;overflow:auto}
+.bh h4{margin:0;font-size:17px}.bh .ct{font-size:11.5px;color:#888}.bh p{font-size:12.5px;color:#555;margin:8px 0 12px;white-space:pre-wrap}
 .bhb{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.bhb div{background:#fff;border-radius:12px;padding:10px 4px;font-size:11.5px;font-weight:600}
 .bhb div span{display:block;font-size:17px}
 .info{text-align:left;background:#fff;border-radius:12px;padding:10px 12px;margin-top:10px;font-size:12px;color:#444;word-break:break-all}.info div{padding:2px 0}
-.ver{display:inline-grid;width:16px;height:16px;border-radius:50%;background:var(--brand);color:#fff;font-size:10px;place-items:center;vertical-align:middle}
+.ver{display:inline-grid;width:16px;height:16px;border-radius:50%;background:var(--blue);color:#fff;font-size:10px;place-items:center;vertical-align:middle}
 .kscreen{background:#fff}
-.khead{padding:34px 18px 14px;text-align:center;border-bottom:8px solid #f4f4f4}
+.khead{padding:36px 18px 14px;text-align:center;border-bottom:8px solid #f4f4f4}
 .kpf{width:84px;height:84px;border-radius:32px;background:#eee center/cover no-repeat;margin:0 auto 10px;display:grid;place-items:center;font-size:30px;font-weight:800;color:#999}
-.khead h3{margin:0;font-size:18px}.khead .kid{font-size:12px;color:#999;margin-top:2px}.khead p{font-size:12.5px;color:#555;margin:8px 0 12px}
+.khead h4{margin:0;font-size:18px}.khead .kid{font-size:12px;color:#999;margin-top:2px}.khead p{font-size:12.5px;color:#555;margin:8px 0 12px}
 .kbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}.kbtns div{border-radius:10px;padding:9px;font-size:12.5px;font-weight:700;background:#f4f4f4}.kbtns div.y{background:var(--kakao)}
 .kinfo{padding:12px 18px;font-size:12px;color:#444;text-align:left}.kinfo div{padding:3px 0}
-.cap{text-align:center;font-size:12px;color:var(--sub);margin:10px 0}
-.hidden{display:none!important}
-.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#0f1733;color:#fff;padding:10px 18px;border-radius:10px;opacity:0;transition:.25s;pointer-events:none}.toast.on{opacity:1}
-.modal{position:fixed;inset:0;background:rgba(15,23,51,.45);display:grid;place-items:center;z-index:50;padding:16px}
-.modal .box{background:#fff;border-radius:16px;padding:22px;width:min(460px,100%);max-height:90vh;overflow:auto}
-.modal h3{margin:0 0 6px;font-size:17px}.modal .note{background:#fff4dc;color:#7a5a12;border-radius:10px;padding:8px 12px;font-size:12.5px;margin:8px 0 12px}
-.modal label.l{display:block;font-weight:600;font-size:13px;margin:10px 0 5px}
-.lead{border:2px solid var(--brand);background:linear-gradient(180deg,#f5f8ff,#fff)}
-.lead .chk{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--sub);margin-top:10px}.lead .chk input{width:auto;margin-top:3px}
-.maker{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
-@media(max-width:1100px){.maker{grid-template-columns:1fr 1fr}}
-.maker .out.wide img{aspect-ratio:16/9}
-.spec{margin-top:4px;font-size:11.5px;line-height:1.5}.spec .ok{color:var(--ok)}.spec .bad{color:var(--err)}
-@media(max-width:700px){.maker{grid-template-columns:1fr}}
-.maker .out{border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center;font-size:12px;color:var(--sub)}
-.maker .out img{width:100%;aspect-ratio:1;object-fit:contain;border-radius:8px;background:repeating-conic-gradient(#f1f2f6 0 25%,#fff 0 50%) 50%/12px 12px}
-.maker .out.circle img{border-radius:50%}
-.maker .out b{display:block;color:var(--ink);font-size:12.5px;margin:6px 0 2px}
-.maker .out a{display:inline-block;margin-top:6px;font-weight:700;color:var(--brand-d);text-decoration:none}
-.ctrl{display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:13px}
-.ctrl label{display:flex;gap:6px;align-items:center}.ctrl input[type=radio]{width:auto}
-.ctrl input[type=range]{width:140px;padding:0}.ctrl input[type=color]{width:40px;height:30px;padding:2px}
-.demo{background:#fff4dc;color:#7a5a12;font-size:12.5px;padding:8px 14px;border-radius:10px;margin-bottom:12px}
-.legend{font-size:12px;color:var(--sub);display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
-.actions{display:flex;gap:8px;flex-wrap:wrap}
+.cap{text-align:center;font-size:12.5px;color:var(--sub);margin:12px 0}
 
-/* ===== redesign ===== */
-header.top{background:transparent;color:var(--ink)}
-:root{--bg:#f5f6fa;--ink:#12172e;--sub:#5a6178;--line:#e2e5ee;--brand:#2b50e8;--brand-d:#1d3bc0;--brand-l:#e9eeff;--ok:#0f9d68}
-body{font-size:14.5px;-webkit-font-smoothing:antialiased}
-:focus-visible{outline:3px solid #9db1ff;outline-offset:2px}
-.top{display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto;padding:18px 24px}
-.word{font-weight:800;font-size:19px;letter-spacing:-.02em;color:var(--ink);text-decoration:none}.word b{color:var(--brand)}
-.top a.ask{font-weight:700;font-size:13.5px;color:var(--ink);text-decoration:none;border:1.5px solid var(--ink);border-radius:999px;padding:8px 14px}
-.hero{max-width:1200px;margin:0 auto;padding:28px 24px 56px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:48px;align-items:center}
-@media(max-width:900px){.hero{grid-template-columns:1fr;gap:32px;padding-top:12px}}
-.hero h1{font-size:clamp(34px,5vw,58px);line-height:1.12;letter-spacing:-.035em;font-weight:800;margin:0 0 18px;word-break:keep-all}
-.hero .lede{font-size:17px;color:var(--sub);max-width:34em;margin:0 0 28px;word-break:keep-all}
-.search{background:#fff;border:2px solid var(--ink);border-radius:18px;padding:8px 8px 8px 18px;display:flex;gap:8px;align-items:center;flex-wrap:nowrap;box-shadow:0 6px 0 var(--ink)}
-.search input{border:0;font-size:17px;padding:12px 0;min-width:0;flex:1;background:transparent}
-.search input:focus{outline:none;box-shadow:none}
-.search .btn.p{border-radius:12px;padding:14px 22px;font-size:15.5px;white-space:nowrap}
-.search:focus-within{box-shadow:0 6px 0 var(--brand);border-color:var(--brand)}
-.under{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:18px;font-size:13.5px;color:var(--sub)}
-.under button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;color:var(--ink);cursor:pointer}
-.under button:hover{border-color:var(--ink)}
-.facts{display:flex;gap:18px;margin-top:22px;font-size:13px;color:var(--sub);flex-wrap:wrap}
-.facts b{color:var(--ink)}
-.err{margin-top:10px}
-/* hero phone: number → brand */
-.demo-phone{justify-self:center;width:300px;background:#0e1328;border-radius:44px;padding:11px;box-shadow:0 30px 60px -20px rgba(18,23,46,.45)}
-.demo-phone .scr{background:#fff;border-radius:34px;height:560px;overflow:hidden;display:flex;flex-direction:column}
-.dp-top{display:flex;align-items:center;gap:10px;padding:34px 16px 12px;border-bottom:1px solid #eef0f5;position:relative;min-height:84px}
-.dp-from{display:flex;align-items:center;gap:10px;position:absolute;left:16px;right:16px;transition:opacity .5s,transform .5s}
-.dp-av{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff;flex:none}
-.dp-num .dp-av{background:#c5c9d6}.dp-brand .dp-av{background:var(--brand)}
-.dp-from b{font-size:14.5px;display:flex;align-items:center;gap:5px}.dp-from small{display:block;color:#8a90a3;font-size:11.5px;font-weight:400}
-.dp-brand{opacity:0;transform:translateY(8px)}
-.dp-body{padding:16px 14px;flex:1;background:#f4f5f9;position:relative}
-.dp-sms,.dp-rcs{position:absolute;left:14px;right:22px;transition:opacity .6s,transform .6s}
-.dp-sms{background:#fff;border-radius:16px 16px 16px 4px;padding:12px 14px;font-size:13px;color:#444;line-height:1.5}
-.dp-rcs{opacity:0;transform:translateY(10px);background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.06)}
-.dp-rcs .h{height:96px;background:linear-gradient(135deg,var(--brand),#13207a);color:#fff;font-weight:800;padding:12px;display:flex;align-items:flex-end;font-size:15px}
-.dp-rcs .t{padding:12px 14px 4px;font-weight:800;font-size:14px}.dp-rcs .d{padding:0 14px 12px;font-size:12.5px;color:#555}
-.dp-rcs .b{border-top:1px solid #eee;text-align:center;padding:10px;font-weight:700;color:var(--brand);font-size:13px}
-.dp-kakao{position:absolute;left:14px;right:22px;bottom:18px;background:#fff;border-radius:14px;padding:10px 12px;display:flex;align-items:center;gap:10px;opacity:0;transform:translateY(10px);transition:opacity .6s .35s,transform .6s .35s}
-.dp-kakao .k{width:34px;height:34px;border-radius:12px;background:var(--kakao);display:grid;place-items:center;font-weight:900;color:var(--kakao-d);font-size:13px}
-.dp-kakao b{font-size:13px;display:block}.dp-kakao>div:nth-child(2){min-width:0}.dp-kakao small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}.dp-kakao small{font-size:11.5px;color:#888}
-.dp-kakao span.add{margin-left:auto;white-space:nowrap;flex:none;background:var(--kakao);border-radius:8px;padding:5px 9px;font-size:11.5px;font-weight:800;color:var(--kakao-d)}
-.demo-phone.brand .dp-num,.demo-phone.brand .dp-sms{opacity:0;transform:translateY(-8px)}
-.demo-phone.brand .dp-brand,.demo-phone.brand .dp-rcs,.demo-phone.brand .dp-kakao{opacity:1;transform:none}
-.dp-cap{text-align:center;font-size:12.5px;color:var(--sub);margin-top:14px}
-.dp-cap button{border:0;background:none;color:var(--brand);font:inherit;font-weight:700;cursor:pointer}
-@media (prefers-reduced-motion: reduce){.dp-from,.dp-sms,.dp-rcs,.dp-kakao{transition:none}}
-/* how + what */
-.band{max-width:1200px;margin:0 auto;padding:8px 24px 64px}
-.band h2{font-size:26px;letter-spacing:-.025em;margin:0 0 22px}
-.steps3{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,1fr);gap:0;counter-reset:s;border-top:2px solid var(--ink)}
-@media(max-width:800px){.steps3{grid-template-columns:1fr}}
-.steps3 li{counter-increment:s;padding:20px 22px 6px 0}
-.steps3 li::before{content:counter(s);display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;font-weight:800;margin-bottom:12px}
-.steps3 b{display:block;font-size:17px;margin-bottom:4px}.steps3 p{margin:0;color:var(--sub);word-break:keep-all}
-.duo{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-@media(max-width:800px){.duo{grid-template-columns:1fr}}
-.duo section{border-radius:20px;padding:24px 26px}
-.duo .r{background:var(--ink);color:#fff}.duo .k{background:var(--kakao);color:var(--kakao-d)}
-.duo h3{margin:0 0 4px;font-size:19px}.duo .s{margin:0 0 14px;font-size:13.5px;opacity:.75}
-.duo ul{margin:0;padding-left:18px;line-height:1.9;font-size:14px}
-.foot{border-top:1px solid var(--line);color:var(--sub);font-size:12.5px;padding:20px 24px;text-align:center}
-/* loading overlay */
-.loading{display:none}
-.loading.on{display:grid;position:fixed;inset:0;z-index:60;background:rgba(245,246,250,.94);place-items:center}
-.ld-box{color:var(--ink);background:#fff;border:2px solid var(--ink);border-radius:20px;padding:26px 30px;width:min(420px,92vw);box-shadow:0 8px 0 var(--ink)}
-.ld-box h3{margin:0 0 4px;font-size:19px}.ld-box .u{color:var(--sub);font-size:13px;margin-bottom:16px;word-break:break-all}
-.ld-steps{list-style:none;padding:0;margin:0}
-.ld-steps li{display:flex;gap:10px;align-items:center;padding:7px 0;color:#9aa0b3}
-.ld-steps li i{width:20px;height:20px;border-radius:50%;border:2px solid #d5d9e4;flex:none;font-style:normal;display:grid;place-items:center;font-size:11px}
-.ld-steps li.on{color:var(--ink);font-weight:700}.ld-steps li.on i{border-color:var(--brand);border-top-color:transparent;animation:sp .9s linear infinite}
-.ld-steps li.ok{color:var(--ok)}.ld-steps li.ok i{background:var(--ok);border-color:var(--ok);color:#fff}
-.ld-note{font-size:12px;color:var(--sub);margin-top:12px}
-/* result mode */
-body.has-result .hero{grid-template-columns:1fr;padding:6px 24px 16px}
-body.has-result .hero h1,body.has-result .lede,body.has-result .facts,body.has-result .under,body.has-result .demo-wrap,body.has-result .band{display:none}
-body.has-result .search{box-shadow:0 3px 0 var(--ink);max-width:760px}
-.wrap{max-width:1200px;padding:0 24px 60px}
-.sumbar{position:sticky;top:0;z-index:20;background:rgba(245,246,250,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);margin:0 -24px 18px;padding:12px 24px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
-.sumbar .who b{font-size:17px;letter-spacing:-.02em;display:block}.sumbar .who small{color:var(--sub)}
-.meter{min-width:180px}.meter .bar{height:8px;background:#e3e6ef;border-radius:99px;overflow:hidden;margin-top:5px}.meter .bar span{display:block;height:100%;background:var(--ok);transition:width .4s}
-.meter small{font-size:12.5px;color:var(--sub)}.meter small b{color:var(--ink)}
-.jump{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
-.jump button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 12px;font:inherit;font-size:13px;cursor:pointer;display:flex;gap:6px;align-items:center}
-.jump button:hover{border-color:var(--ink)}
-.jump .dot{width:8px;height:8px;border-radius:50%;background:var(--ok)}.jump .dot.w{background:#e5a100}
-.jump button.cta{background:var(--brand);color:#fff;border-color:var(--brand);font-weight:700}
-.card{border-radius:18px;padding:22px 24px}
-.card h2{font-size:17px;letter-spacing:-.02em}
-.tabs button{border-radius:14px;font-size:15px}
-.lead{border:2px solid var(--ink);background:#fff;box-shadow:0 6px 0 var(--ink)}
-.side .phone{border-radius:42px}
-
-
-/* message samples */
-.ms-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-.ms-chips button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font:inherit;font-size:13.5px;cursor:pointer;display:flex;gap:6px;align-items:center}
-.ms-chips button.on{border-color:var(--ink);background:var(--ink);color:#fff}
-.ms-chips .ad{font-size:11px;font-weight:800;border-radius:6px;padding:1px 6px;background:#fde7ea;color:var(--err)}
-.ms-chips button.on .ad{background:#fff}
-.ms-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-@media(max-width:820px){.ms-grid{grid-template-columns:1fr}}
-.ms-col h3{margin:0 0 10px;font-size:15px;display:flex;align-items:center;gap:8px}
-.ms-col .f{margin-bottom:10px}
-.ms-btnrow{display:grid;grid-template-columns:90px 1fr 1.3fr;gap:6px;margin-bottom:6px}
-.ms-btnrow select{border:1px solid var(--line);border-radius:10px;font:inherit;font-size:13px;padding:0 6px;background:#fff}
-.mini{background:#eef0f5;border-radius:18px;padding:14px 12px;margin-top:12px}
-.mini .who{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;margin-bottom:10px}
-.mini .who i{width:26px;height:26px;border-radius:50%;background:#ccc center/cover;display:grid;place-items:center;font-style:normal;color:#fff;font-size:12px}
-.m-rcs{background:#fff;border-radius:14px;overflow:hidden;max-width:300px}
-.m-rcs .t{padding:12px 14px 4px;font-weight:800;font-size:14px}.m-rcs .d{padding:0 14px 12px;font-size:12.5px;white-space:pre-wrap;color:#333}
-.m-rcs .b{border-top:1px solid #eee;padding:9px;text-align:center;font-weight:700;font-size:12.5px}
-.m-at{background:#fff;border-radius:12px;overflow:hidden;max-width:300px;font-size:12.5px}
-.m-at .hd{background:var(--kakao);color:var(--kakao-d);font-weight:800;padding:9px 12px}
-.m-at .d{padding:12px;white-space:pre-wrap;color:#222}
-.m-at .b{margin:0 12px 12px;background:#f2f2f2;border-radius:6px;text-align:center;padding:8px;font-weight:700}
-.var{background:#fff3c4;border-radius:4px;padding:0 2px}
-.ms-note{font-size:12px;color:var(--sub);margin-top:8px}
-
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:999px;opacity:0;transition:.25s;pointer-events:none;z-index:100;font-weight:600;font-size:14px}.toast.on{opacity:1;transform:translateX(-50%)}
+.foot{color:var(--sub);font-size:12.5px;padding:28px 24px 40px;text-align:center}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
-<header class="top">
-  <a class="word" href="./">Sure<b>M</b> 브랜드 개설 도우미</a>
-  <a class="ask" href="mailto:wonyoung@surem.com?subject=RCS%20%EB%B8%8C%EB%9E%9C%EB%93%9C%C2%B7%EC%B9%B4%EC%B9%B4%EC%98%A4%20%EC%B1%84%EB%84%90%20%EA%B0%9C%EC%84%A4%20%EB%AC%B8%EC%9D%98">개설 대행 문의</a>
-</header>
+<header class="top"><div class="in">
+  <a class="word" href="./">Sure<b>M</b> 브랜드 개설</a>
+  <nav><a href="#how">진행 방법</a><a href="#what">준비하는 것</a></nav>
+  <a class="pill b sm" href="mailto:wonyoung@surem.com?subject=RCS%20%EB%B8%8C%EB%9E%9C%EB%93%9C%C2%B7%EC%B9%B4%EC%B9%B4%EC%98%A4%20%EC%B1%84%EB%84%90%20%EA%B0%9C%EC%84%A4%20%EB%AC%B8%EC%9D%98">무료 개설 문의</a>
+</div></header>
+
 <section class="hero" id="hero">
-  <div>
-    <h1>번호로 보내던 문자를<br>브랜드로 보내세요</h1>
-    <p class="lede">홈페이지 주소만 넣으면 RCS 브랜드와 카카오톡 채널을 여는 데 필요한 정보를 채워 드려요. 심사 기준 확인과 규격 이미지까지 한 번에 끝나요.</p>
-    <div class="demo hidden" id="demoBar">데모 모드예요. 서버가 연결되지 않아 예시 결과를 보여 드려요.</div>
-    <form class="search" id="form">
-      <input id="url" placeholder="홈페이지 주소 (예: www.surem.com)" autocomplete="url" aria-label="홈페이지 주소">
-      <button class="btn p" id="go">정보 채우기</button>
-    </form>
-    <div class="err hidden" id="err"></div>
-    <div class="under">홈페이지가 없다면 <button type="button" id="noSite">브랜드명으로 시작하기</button> 또는 카카오톡 채널 주소(pf.kakao.com/…)를 넣어도 돼요.</div>
-    <div class="facts"><span><b>로그인 없이</b> 바로</span><span><b>약 30초</b> 소요</span><span>개설 대행 <b>무료</b></span></div>
-  </div>
-  <div class="demo-wrap">
-    <div class="demo-phone" id="demoPhone" aria-hidden="true"><div class="scr">
-      <div class="dp-top">
-        <div class="dp-from dp-num"><div class="dp-av">#</div><div><b>02-1234-5678</b><small>저장되지 않은 번호</small></div></div>
-        <div class="dp-from dp-brand"><div class="dp-av">S</div><div><b>슈어치과 <span class="ver">✓</span></b><small>인증된 브랜드</small></div></div>
-      </div>
-      <div class="dp-body">
-        <div class="dp-sms">[Web발신]<br>내일 오전 10시 진료 예약이 있습니다. 변경은 아래 링크에서 해 주세요.<br>http://bit.ly/3xYz</div>
-        <div class="dp-rcs"><div class="h">슈어치과</div><div class="t">내일 오전 10시 진료 예약</div><div class="d">예약 시간을 확인해 주세요. 변경이 필요하면 아래 버튼을 눌러 주세요.</div><div class="b">예약 변경하기</div><div class="b">전화 문의</div></div>
-        <div class="dp-kakao"><div class="k">TALK</div><div><b>슈어치과</b><small>@슈어치과 · 카카오톡 채널</small></div><span class="add">채널 추가</span></div>
-      </div>
-    </div></div>
-    <div class="dp-cap">같은 메시지, 받는 사람에게는 이렇게 달라 보여요 · <button type="button" id="dpReplay">다시 보기</button></div>
-  </div>
-</section>
-<section class="band">
-  <h2>이렇게 진행돼요</h2>
-  <ol class="steps3">
-    <li><b>주소 입력</b><p>홈페이지나 카카오톡 채널 주소를 넣어요. 읽을 수 없는 사이트는 브랜드명과 소개만 적으면 돼요.</p></li>
-    <li><b>자동으로 채우기</b><p>회사 소개, 연락처, 사업자 정보, 로고를 찾아 두 곳의 개설 양식에 맞춰 채우고 규격 이미지를 만들어요.</p></li>
-    <li><b>확인하고 신청</b><p>틀린 곳만 고친 뒤 입력값을 복사해 직접 개설하거나, 슈어엠에 무료 대행을 맡기세요.</p></li>
-  </ol>
-</section>
-<section class="band">
-  <h2>한 번에 두 곳을 준비해요</h2>
-  <div class="duo">
-    <section class="r"><h3>RCS 비즈센터 브랜드</h3><p class="s">문자에 로고와 브랜드명, 인증 마크가 보여요</p>
-      <ul><li>브랜드명·소개·카테고리·전화·웹사이트</li><li>소개 문구의 홍보성 표현 검사</li><li>웹사이트 사업자 정보 노출 확인</li><li>프로필 1080×1080 PNG, 백그라운드 이미지</li></ul></section>
-    <section class="k"><h3>카카오톡 채널</h3><p class="s">알림톡을 보내려면 먼저 채널이 있어야 해요</p>
-      <ul><li>채널 이름·검색용 아이디 후보 3개</li><li>채널 소개·고객센터 연락처·매장 주소</li><li>사업자정보 불일치 소명 초안</li><li>프로필 640×640, 브랜드카드 16:9</li></ul></section>
-  </div>
-</section>
-<div class="loading" id="loading" role="status" aria-live="polite"><div class="ld-box">
-  <h3 id="loadMsg">사이트를 읽는 중…</h3><div class="u" id="loadUrl"></div>
-  <ol class="ld-steps" id="ldSteps">
-    <li><i></i>홈페이지 읽기</li><li><i></i>회사소개·연락처 페이지 찾기</li><li><i></i>사업자 정보·카카오 채널 확인</li><li><i></i>RCS·카카오 개설 정보 작성</li>
-  </ol>
-  <div class="ld-note">보통 20~40초 걸려요. 창을 닫지 마세요.</div>
-</div></div>
-<div class="wrap">
-  <div class="hidden" id="result">
-    <div class="sumbar" id="sumbar">
-      <div class="who"><b id="sbName">브랜드</b><small id="sbUrl"></small></div>
-      <div class="meter"><small>필수 항목 <b id="sbCount">0/0</b> · 확인할 것 <b id="sbWarn">0</b>개</small><div class="bar"><span id="sbBar" style="width:0"></span></div></div>
-      <div class="jump">
-        <button type="button" data-jump="bizCard"><span class="dot" id="dBiz"></span>사업자 정보</button>
-        <button type="button" data-jump="rbc"><span class="dot" id="dRbc"></span>RCS 브랜드</button>
-        <button type="button" data-jump="kakao"><span class="dot" id="dKakao"></span>카카오 채널</button>
-        <button type="button" data-jump="msgCard">메시지 샘플</button>
-        <button type="button" data-jump="makerCard">이미지</button>
-        <button type="button" class="cta" data-jump="leadCard">무료 대행 신청</button>
+  <div class="demo hidden" id="demoBar">데모 화면이에요. 예시 결과로 보여 드려요.</div>
+  <h1>문자에 우리 가게<br>이름과 로고를 달아 보세요</h1>
+  <p class="lede">홈페이지, 네이버 플레이스, 명함 사진 중 하나만 있으면 돼요. RCS 브랜드와 카카오톡 채널 개설 정보, 규격 이미지, 메시지 초안까지 한 번에 만들어 드려요.</p>
+  <div class="starter">
+    <div class="modes" role="tablist">
+      <button type="button" class="on" data-mode="url" role="tab">주소로 시작</button>
+      <button type="button" data-mode="card" role="tab">명함·간판 사진으로 시작</button>
+      <button type="button" data-mode="manual" role="tab">직접 입력</button>
+    </div>
+    <div id="modeUrl">
+      <form class="urlrow" id="form">
+        <input id="url" placeholder="홈페이지 · 네이버 플레이스 · 카카오맵 주소" autocomplete="url" aria-label="업체 주소">
+        <button class="pill b" id="go">시작하기</button>
+      </form>
+      <div class="detect" id="detect">업체가 가진 주소면 무엇이든 괜찮아요.</div>
+    </div>
+    <div id="modeCard" class="hidden">
+      <label class="drop" id="drop"><input type="file" id="cardFile" accept="image/*" hidden>
+        <b>명함이나 간판 사진을 올려 주세요</b><small>사진 속 상호·연락처·주소를 읽어서 채워요. 큰 사진은 자동으로 줄여서 보내요.</small></label>
+    </div>
+    <div id="modeManual" class="hidden"></div>
+    <div class="mform hidden" id="mform">
+      <div class="cardrow" id="mformRow"><img id="cardPv" class="hidden" alt="올린 사진">
+        <div>
+          <div class="note" id="mNote"></div>
+          <div class="g2"><div><label>상호(브랜드명) <span class="tag req">필수</span></label><input id="mName" maxlength="40"></div>
+            <div><label>업종</label><input id="mCat" placeholder="예: 미용실, 치과, 카페"></div></div>
+          <label>한 줄 소개 <span class="tag req">필수</span> <span class="src" id="mCnt" style="float:right;margin:0">0/300</span></label>
+          <textarea id="mDesc" rows="3" maxlength="300" placeholder="예: 강남역 2번 출구 앞, 1:1 예약제 헤어살롱이에요."></textarea>
+          <div class="g2"><div><label>대표 전화</label><input id="mPhone" inputmode="tel"></div><div><label>이메일</label><input id="mEmail" inputmode="email"></div></div>
+          <div class="g2"><div><label>주소</label><input id="mAddr"></div><div><label>홈페이지·플레이스 주소</label><input id="mWeb" placeholder="있으면 함께 읽어요"></div></div>
+          <div class="acts"><button class="pill b" id="mGo" type="button">이 내용으로 만들기</button><button class="pill g" id="mBack" type="button">처음으로</button></div>
+        </div>
       </div>
     </div>
-    <div class="grid">
-      <main>
-        <div class="card" id="bizCard">
-          <h2>사업자 정보 <span class="tag" style="background:#eef1f8;color:var(--sub)">RCS·카카오 공통</span></h2>
-          <p class="desc">두 곳 모두 사업자등록증과 대조해요. 사업자등록증과 똑같이 맞춰 주세요.</p>
+    <div class="err hidden" id="err"></div>
+  </div>
+  <div class="srcs"><span>홈페이지</span><span>네이버 플레이스</span><span>카카오맵</span><span>카카오톡 채널</span><span>네이버 블로그</span><span>스마트스토어</span><span>인스타그램</span></div>
+</section>
+
+<div class="intro">
+<section class="sec" id="how">
+  <h2>네 단계면 끝나요</h2>
+  <p class="sl">로그인 없이 바로, 보통 30초 안에 초안이 나와요.</p>
+  <ol class="how">
+    <li><b>정보 확인</b><p>찾아온 상호·소개·연락처·사업자 정보를 확인하고 틀린 곳만 고쳐요.</p></li>
+    <li><b>이미지 만들기</b><p>로고를 고르거나 사진에서 잘라내면 RCS·카카오 규격에 맞춰 줄여 드려요.</p></li>
+    <li><b>메시지 미리보기</b><p>업종에 맞는 예약·주문·혜택 메시지 초안을 받고, 원하는 말투로 다시 써요.</p></li>
+    <li><b>무료 개설 신청</b><p>그대로 신청하면 슈어엠이 RCS 브랜드와 카카오톡 채널 개설을 대신해 드려요.</p></li>
+  </ol>
+</section>
+<section class="sec" id="what" style="padding-top:8px">
+  <h2>한 번에 두 곳을 준비해요</h2>
+  <p class="sl">받는 사람 휴대폰에 번호 대신 브랜드가 보여요.</p>
+  <div class="duo">
+    <section class="r"><h3>RCS 브랜드</h3><p class="s">문자에 로고·브랜드명·인증 마크가 붙어요</p>
+      <ul><li>브랜드명·소개·카테고리·대표 전화</li><li>소개 문구 심사 기준(홍보 문구) 검사</li><li>프로필 1080px PNG · 배경 이미지</li><li>브랜드 홈 퀵 버튼</li></ul></section>
+    <section class="k"><h3>카카오톡 채널</h3><p class="s">알림톡을 보내려면 먼저 채널이 있어야 해요</p>
+      <ul><li>채널 이름·검색용 아이디 후보</li><li>채널 소개·고객센터 연락처·매장 주소</li><li>사업자정보 불일치 소명 초안</li><li>프로필 640px · 브랜드카드 16:9</li></ul></section>
+  </div>
+</section>
+</div>
+
+<div class="loading" id="loading" role="status" aria-live="polite"><div class="ld">
+  <h3 id="loadMsg">업체 정보를 읽는 중…</h3><div class="u" id="loadUrl"></div>
+  <ol id="ldSteps"><li><i></i>주소 읽기</li><li><i></i>소개·연락처 찾기</li><li><i></i>사업자 정보·카카오 채널 확인</li><li><i></i>개설 정보와 메시지 초안 쓰기</li></ol>
+  <div class="n">보통 20~40초 걸려요. 창을 닫지 마세요.</div>
+</div></div>
+
+<div id="result" class="hidden">
+  <div class="stepnav"><div class="in">
+    <div class="who"><b id="sbName">브랜드</b><small id="sbSub"></small></div>
+    <div class="steps" id="steps">
+      <button type="button" data-step="0"><i>1</i>정보 확인<span class="w hidden" id="wDot0"></span></button>
+      <button type="button" data-step="1"><i>2</i>이미지</button>
+      <button type="button" data-step="2"><i>3</i>메시지</button>
+      <button type="button" data-step="3"><i>4</i>무료 개설 신청</button>
+    </div>
+  </div><div class="meter"><span id="meter" style="width:0"></span></div></div>
+
+  <div class="res" id="res">
+    <main>
+      <!-- STEP 1 -->
+      <section class="pane" data-pane="0">
+        <h2 class="t">정보가 맞는지 확인해 주세요</h2>
+        <p class="ts" id="s1sub">사이트에서 찾은 값에는 근거가 표시돼요. 틀린 곳만 고치면 돼요.</p>
+        <div class="box" id="bizCard">
+          <h3>사업자 정보 <span class="tag n">RCS·카카오 공통</span></h3>
+          <p class="d">두 곳 모두 사업자등록증과 대조해요. 등록증과 똑같이 맞춰 주세요.</p>
           <div class="warn hidden" id="wCommon"></div>
-          <div class="row3" id="bizFields"></div>
-          <label style="display:flex;gap:8px;align-items:center;font-size:13px;margin-top:4px"><input type="checkbox" id="hasStore" style="width:auto"> 오프라인 매장이 있어요 (카카오 채널 매장 정보 등록)</label>
+          <div class="g3" id="bizFields"></div>
+          <label style="display:flex;gap:8px;align-items:center;font-size:14px"><input type="checkbox" id="hasStore"> 손님이 찾아오는 매장이 있어요</label>
         </div>
-
-        <div class="tabs" id="tabsBar">
-          <button class="rbc on" data-tab="rbc">📨 RCS 비즈센터 브랜드 <span class="n hidden" id="nRbc"></span></button>
-          <button class="kakao" data-tab="kakao">💬 카카오톡 채널 <span class="n hidden" id="nKakao"></span></button>
+        <div class="seg" id="tabsBar">
+          <button type="button" class="on" data-tab="rbc">RCS 브랜드 <span class="n hidden" id="nRbc"></span></button>
+          <button type="button" data-tab="kakao">카카오톡 채널 <span class="n hidden" id="nKakao"></span></button>
         </div>
-        <div class="legend"><span><span class="tag ok">사이트 확인</span> 사이트에 실제로 있는 값</span><span><span class="tag ai">AI 작성</span> 검토 필요</span><span><span class="tag chk">확인 필요</span> 못 찾았거나 근거 약함</span></div>
-
-        <!-- RBC -->
-        <section id="tab-rbc">
+        <div class="legend"><span><span class="tag ok">확인됨</span> 업체 페이지에 실제로 있는 값</span><span><span class="tag ai">AI 작성</span> 다듬어 쓴 문구</span><span><span class="tag chk">확인 필요</span> 못 찾았거나 근거가 약해요</span></div>
+        <div id="tab-rbc">
           <div class="warn hidden" id="wRbc"></div>
-          <div class="card">
-            <h2>기본 정보 <span class="tag" style="background:#eef1f8;color:var(--sub)">모든 단말 노출</span></h2>
-            <div id="rbcFields"></div>
-          </div>
-          <div class="card">
-            <h2>프로필 이미지</h2>
-            <p class="desc">브랜드 심벌 · 1:1 · 388~1080px · PNG만 · 1MB 이하 · 배경색 필수 · 원형으로 잘려도 안 잘릴 것 (아래 🪄에서 자동으로 맞춰요)</p>
-            <div class="imgs" data-img="rbc.profileImage"></div>
-          </div>
-          <div class="card">
-            <h2>퀵 메뉴 / 탭 <span class="tag" style="background:#eef1f8;color:var(--sub)">삼성 단말 노출</span></h2>
-            <p class="desc">백그라운드 이미지 (대표 상품·서비스 이미지 · 1:1 · 388~1080px · PNG/JPG · 1MB 이하)</p>
-            <div class="imgs" data-img="rbc.backgroundImage"></div>
-            <p class="desc" style="margin-top:14px">퀵 버튼 메뉴</p>
-            <div id="qm"></div>
-            <button class="btn s" id="addQm" style="padding:8px 12px;font-size:13px">+ 버튼 추가</button>
-          </div>
-          <div class="card check">
-            <h2>RBC 개설 전 준비물</h2>
-            <ul>
-              <li>RBC 기업 회원(기업 계정 마스터만 브랜드 개설 가능)</li>
-              <li>운영 증빙: 온라인 서비스는 홈페이지·앱, 오프라인 서비스는 간판이 보이는 건물 전경 사진 + 영수증</li>
-              <li>웹사이트에 사업자등록번호·기업명이 보여야 해요 <span id="rbcBizCheck"></span></li>
-              <li>전화번호는 실제 브랜드 용도로 쓰는 번호여야 해요</li>
-              <li>개설 후 [브랜드 운영관리]에서 슈어엠에 대행사 권한을 부여하면 이후 절차를 대행해 드려요</li>
-            </ul>
-            <div class="actions">
-              <button class="btn p" id="copyRbc">📋 RBC 입력값 복사</button>
-              <a class="btn g" href="https://www.rcsbizcenter.com" target="_blank" rel="noopener">RCS 비즈센터 열기 ↗</a>
-            </div>
-          </div>
-        </section>
-
-        <!-- KAKAO -->
-        <section id="tab-kakao" class="hidden">
+          <div class="box"><h3>브랜드 기본 정보</h3><p class="d">모든 휴대폰에서 메시지 위와 브랜드 홈에 보여요.</p><div id="rbcFields"></div></div>
+          <div class="box"><h3>브랜드 홈 퀵 버튼 <span class="tag n">삼성 휴대폰</span></h3><p class="d">브랜드 홈 상단에 버튼으로 보여요. 최대 4개.</p>
+            <div id="qm"></div><button class="pill g sm" id="addQm" type="button">+ 버튼 추가</button></div>
+        </div>
+        <div id="tab-kakao" class="hidden">
           <div class="warn hidden" id="wKakao"></div>
-          <div class="card">
-            <h2>채널 정보</h2>
+          <div class="box"><h3>채널 정보</h3><p class="d">채널 홈·채팅 목록·대화창에 보여요.</p>
             <div id="kakaoFields"></div>
             <div class="f">
-              <div class="lb">검색용 아이디 <span class="tag req">개설 후 변경 불가</span><span class="cnt" id="idCnt"></span></div>
+              <div class="lb">검색용 아이디 <span class="tag req">개설 후 못 바꿔요</span><span class="cnt" id="idCnt"></span></div>
               <div class="ids" id="ids"></div>
               <input id="idCustom" placeholder="직접 입력" style="margin-top:6px">
-              <div class="help">최대 15자, 한글·영문·숫자. 중복이면 개설 화면에서 다른 후보를 쓰세요.</div>
+              <div class="help">최대 15자, 한글·영문·숫자. 이미 쓰는 아이디면 다른 후보를 고르세요.</div>
             </div>
             <div class="f hidden" id="mismatchBox">
               <div class="lb">사업자정보 불일치 소명 <span class="tag ai">AI 작성</span><span class="cnt" data-path="kakao.mismatchNote" data-max="300"></span></div>
               <textarea id="mismatch" rows="4"></textarea>
-              <div class="help">채널 이름과 사업자등록증 상 업체명이 다를 때 내야 해요. 홈페이지 하단 캡처를 증빙으로 첨부하면 좋아요.</div>
+              <div class="help">채널 이름과 사업자등록증 상호가 다를 때 내야 해요. 홈페이지 하단 캡처를 함께 내면 좋아요.</div>
             </div>
           </div>
-          <div class="card">
-            <h2>프로필 사진</h2>
-            <p class="desc">권장 640×640px · JPG/PNG · 10MB 이하 (아래 🪄에서 자동으로 맞춰요)</p>
-            <div class="imgs" data-img="kakao.profileImage"></div>
-          </div>
-          <div class="card check">
-            <h2>카카오톡 채널 개설 전 준비물</h2>
-            <ul>
-              <li>카카오비즈니스(business.kakao.com) 계정 → 파트너센터 [새 채널 만들기]</li>
-              <li>신청인별 서류
-                <ul>
-                  <li>개인사업자 대표: 카카오톡 전자증명서</li>
-                  <li>법인 대표: 사업자등록증 + 휴대폰 본인인증</li>
-                  <li>직원: 사업자등록증 + 카카오톡 전자증명서</li>
-                  <li>대행사(슈어엠): 광고주 사업자등록증 + 대행사 사업자등록증 + 업무 계약서 또는 위임장</li>
-                </ul></li>
-              <li>서류는 jpg·png·pdf, 파일당 10MB 이하. 개인정보는 마스킹하고 잘리거나 흐리면 반려돼요</li>
-              <li>인허가가 필요한 업종은 인허가 서류 필수</li>
-              <li>개설 후: 채널 공개·검색 허용 켜기, [채널 정보]에 고객센터 연락처 등록 (알림톡 발신 프로필 키 생성에 필요)</li>
-            </ul>
-            <div class="actions">
-              <button class="btn k" id="copyKakao">📋 카카오 채널 입력값 복사</button>
-              <a class="btn g" href="https://business.kakao.com" target="_blank" rel="noopener">카카오비즈니스 열기 ↗</a>
-            </div>
-          </div>
-        </section>
-
-        <div class="card" id="msgCard">
-          <h2>💬 메시지 샘플 <span class="tag ai" id="msSrc">업종별 템플릿</span></h2>
-          <p class="desc">개설한 브랜드와 채널로 실제 고객에게 이렇게 보낼 수 있어요. 문구를 고치면 미리보기에 바로 반영돼요. <span class="var">#{고객명}</span>처럼 표시된 곳은 보낼 때 채워지는 값이에요.</p>
-          <div class="ms-chips" id="msChips"></div>
-          <div class="ms-grid">
-            <div class="ms-col">
-              <h3>📨 RCS 메시지</h3>
-              <div class="f"><div class="lb">제목 <span class="cnt" id="msTc"></span></div><input id="msTitle"></div>
-              <div class="f"><div class="lb">본문 <span class="cnt" id="msBc"></span></div><textarea id="msBody" rows="5"></textarea></div>
-              <div class="f"><div class="lb">버튼 (최대 2개)</div><div id="msBtns"></div></div>
-              <div class="mini"><div class="who"><i id="msAv"></i><span id="msName"></span> <span class="ver">✓</span></div><div class="m-rcs" id="msRcsPv"></div></div>
-            </div>
-            <div class="ms-col">
-              <h3 id="msAtTitle">💛 카카오 알림톡</h3>
-              <div class="f"><div class="lb">본문 <span class="cnt" id="msAc"></span></div><textarea id="msAtBody" rows="7"></textarea></div>
-              <div class="f"><div class="lb">버튼</div><div class="ms-btnrow" style="grid-template-columns:1fr 1.3fr"><input id="msAtBtn" placeholder="버튼명"><input id="msAtUrl" placeholder="링크"></div></div>
-              <div class="mini"><div class="who"><i id="msKav" style="border-radius:10px"></i><span id="msKname"></span></div><div class="m-at" id="msAtPv"></div></div>
-              <div class="ms-note" id="msAtNote"></div>
-            </div>
-          </div>
-          <div class="actions" style="margin-top:14px"><button class="btn s" id="msCopy">📋 이 샘플 복사</button><button class="btn g" id="msCopyAll">모든 샘플 복사</button></div>
         </div>
+        <div class="nav2"><span></span><button class="pill b" data-go="1" type="button">다음: 이미지 만들기</button></div>
+      </section>
 
-        <div class="card" id="makerCard">
-          <h2>🪄 이미지 자동 만들기 <span class="tag" style="background:#eef1f8;color:var(--sub)">RBC·카카오 공통</span></h2>
-          <p class="desc">고른 로고(또는 직접 올린 로고)의 여백을 자르고, 원형으로 잘려도 안 잘리게 가운데 맞춰 규격 이미지로 만들어요.</p>
-          <div class="ctrl">
-            <span>로고: <b id="mkSrc">RBC 프로필에서 고른 이미지</b></span>
-            <label class="btn g" style="padding:6px 10px;font-size:12.5px;cursor:pointer">로고 파일 올리기<input type="file" id="mkFile" accept="image/*" hidden></label>
-          </div>
-          <div class="ctrl" style="margin-top:10px">
-            <span>배경</span>
+      <!-- STEP 2 -->
+      <section class="pane hidden" data-pane="1">
+        <h2 class="t">규격 이미지를 만들어 드려요</h2>
+        <p class="ts">로고를 고르면 여백을 자르고 원형으로 잘려도 안전하게 맞춰요. 사진에서 원하는 부분만 잘라 쓸 수도 있어요.</p>
+        <div class="box">
+          <h3>1. 로고 고르기</h3><p class="d">사진 위의 <b>자르기</b>를 누르면 원하는 부분만 잘라 쓸 수 있어요. 명함 사진에서 로고만 잘라내도 돼요.</p>
+          <div class="thumbs" id="logoThumbs"></div>
+          <div class="ctrl"><span>배경</span>
             <label><input type="radio" name="mkBg" value="auto" checked> 자동</label>
             <label><input type="radio" name="mkBg" value="white"> 흰색</label>
             <label><input type="radio" name="mkBg" value="brand"> 브랜드 컬러</label>
             <label><input type="radio" name="mkBg" value="custom"> 직접 <input type="color" id="mkColor" value="#ffffff"></label>
-            <span>로고 크기 <input type="range" id="mkScale" min="50" max="100" value="80"></span>
+            <span style="display:flex;gap:8px;align-items:center">로고 크기 <input type="range" id="mkScale" min="50" max="100" value="80"></span>
           </div>
-          <div class="ctrl" style="margin-top:10px" id="mkPhotoRow">
-            <span>RBC 백그라운드 · 카카오 브랜드카드</span>
-            <label><input type="radio" name="mkCover" value="photo" checked> 사이트 대표 사진</label>
-            <label><input type="radio" name="mkCover" value="logo"> 로고 배너</label>
-            <label class="btn g" style="padding:6px 10px;font-size:12.5px;cursor:pointer">사진 파일 올리기<input type="file" id="mkPhotoFile" accept="image/*" hidden></label>
-          </div>
-          <div class="maker" id="mkOut"><div class="src">로고를 고르거나 올리면 여기에 만들어져요.</div></div>
-          <div class="src" id="mkMsg"></div>
         </div>
+        <div class="box">
+          <h3>2. 배경·브랜드카드 사진</h3><p class="d">RCS 배경 이미지(삼성 휴대폰)와 카카오 브랜드카드에 쓰여요. 고르지 않으면 로고로 배너를 만들어요.</p>
+          <div class="thumbs" id="coverThumbs"></div>
+        </div>
+        <div class="box">
+          <h3>3. 완성된 이미지 <span class="tag n">바로 올릴 수 있는 크기</span></h3>
+          <div class="maker" id="mkOut"><div class="src">로고를 고르면 여기에 만들어져요.</div></div>
+          <div class="src" id="mkMsg" style="margin-top:12px"></div>
+        </div>
+        <div class="box">
+          <h3>서류·증빙 사진 줄이기 <span class="tag n">선택</span></h3>
+          <p class="d">사업자등록증, 명함, 간판이 보이는 매장 사진을 심사에 올릴 크기로 줄이고 반듯하게 돌려요.</p>
+          <div class="docs"><img id="docPv" class="hidden" alt="서류 미리보기">
+            <div><div class="acts"><label class="pill w sm" style="cursor:pointer">사진 올리기<input type="file" id="docFile" accept="image/*" hidden></label>
+              <button class="pill g sm" id="docRot" type="button" disabled>90° 돌리기</button><button class="pill g sm" id="docCrop" type="button" disabled>자르기</button></div>
+              <div class="maker" id="docOut" style="grid-template-columns:1fr 1fr"></div></div>
+          </div>
+        </div>
+        <div class="nav2"><button class="pill g" data-go="0" type="button">이전</button><button class="pill b" data-go="2" type="button">다음: 메시지 미리보기</button></div>
+      </section>
 
-        <div class="card lead" id="leadCard">
-          <h2>📮 슈어엠이 무료로 개설해 드려요</h2>
-          <p class="desc">위 정보 그대로 RCS 브랜드 등록과 카카오톡 채널 개설을 대행해 드립니다. 연락처를 남겨 주시면 담당자가 연락드려요.</p>
-          <div class="row">
+      <!-- STEP 3 -->
+      <section class="pane hidden" data-pane="2">
+        <h2 class="t">이렇게 보낼 수 있어요</h2>
+        <p class="ts">업종에 맞춘 메시지 초안이에요. 문구를 고치면 미리보기에 바로 반영돼요. <span class="var">#{고객명}</span> 같은 곳은 보낼 때 채워져요.</p>
+        <div class="box">
+          <h3>AI로 다시 쓰기 <span class="tag ai" id="msSrc">업종별 초안</span></h3>
+          <p class="d">말투를 고르고, 보내고 싶은 내용을 적으면 초안 3개를 새로 써 드려요.</p>
+          <div class="tone" id="tone">
+            <button type="button" class="on" data-tone="friendly">친근하게</button><button type="button" data-tone="formal">정중하게</button>
+            <button type="button" data-tone="short">짧고 굵게</button><button type="button" data-tone="emotional">감성적으로</button>
+          </div>
+          <div class="ai-row"><input id="aiPurpose" placeholder="보내고 싶은 내용 (예: 연말 감사 인사, 신메뉴 출시, 예약 리마인드)" maxlength="80"><button class="pill b" id="aiGo" type="button">초안 3개 받기</button></div>
+          <div class="ideas" id="ideas"></div>
+        </div>
+        <div class="box">
+          <div class="ms-chips" id="msChips"></div>
+          <div class="ms-grid">
+            <div class="ms-col">
+              <h4>RCS 메시지</h4>
+              <div class="f"><div class="lb">제목 <span class="cnt" id="msTc"></span></div><input id="msTitle"></div>
+              <div class="f"><div class="lb">본문 <span class="cnt" id="msBc"></span></div><textarea id="msBody" rows="5"></textarea></div>
+              <div class="f"><div class="lb">버튼 (최대 2개)</div><div id="msBtns"></div></div>
+              <div class="chat"><div class="who2"><i id="msAv"></i><span id="msName"></span> <span class="ver">✓</span></div><div class="m-rcs" id="msRcsPv"></div></div>
+            </div>
+            <div class="ms-col">
+              <h4 id="msAtTitle">카카오 알림톡</h4>
+              <div class="f"><div class="lb">본문 <span class="cnt" id="msAc"></span></div><textarea id="msAtBody" rows="7"></textarea></div>
+              <div class="f"><div class="lb">버튼</div><div class="ms-btnrow" style="grid-template-columns:1fr 1.3fr"><input id="msAtBtn" placeholder="버튼 이름"><input id="msAtUrl" placeholder="링크"></div></div>
+              <div class="chat kk"><div class="who2"><i id="msKav" style="border-radius:11px"></i><span id="msKname"></span></div><div class="m-at" id="msAtPv"></div></div>
+              <div class="ms-note" id="msAtNote"></div>
+            </div>
+          </div>
+          <div class="acts" style="margin-top:18px"><button class="pill w sm" id="msCopy" type="button">이 메시지 복사</button><button class="pill g sm" id="msCopyAll" type="button">전체 복사</button></div>
+        </div>
+        <div class="nav2"><button class="pill g" data-go="1" type="button">이전</button><button class="pill b" data-go="3" type="button">다음: 무료 개설 신청</button></div>
+      </section>
+
+      <!-- STEP 4 -->
+      <section class="pane hidden" data-pane="3">
+        <h2 class="t">이대로 개설해 드릴까요?</h2>
+        <p class="ts">연락처를 남기면 슈어엠 담당자가 지금 만든 정보 그대로 RCS 브랜드와 카카오톡 채널 개설을 무료로 대행해요.</p>
+        <div class="leadbox" id="leadCard">
+          <h3>무료 개설 신청</h3><p class="d">평일 기준 하루 안에 연락드려요.</p>
+          <div class="g2">
             <div class="f"><div class="lb">회사명 <span class="tag req">필수</span></div><input id="ldCompany"></div>
             <div class="f"><div class="lb">담당자</div><input id="ldName"></div>
           </div>
-          <div class="row">
+          <div class="g2">
             <div class="f"><div class="lb">휴대폰 번호 <span class="tag req">필수</span></div><input id="ldPhone" inputmode="tel" placeholder="010-0000-0000"></div>
             <div class="f"><div class="lb">이메일</div><input id="ldEmail" inputmode="email"></div>
           </div>
-          <div style="display:flex;gap:14px;font-size:13px;flex-wrap:wrap">
-            <label><input type="checkbox" id="ldRbc" checked style="width:auto"> RCS 브랜드 개설</label>
-            <label><input type="checkbox" id="ldKakao" checked style="width:auto"> 카카오톡 채널 개설</label>
+          <div class="opts"><label><input type="checkbox" id="ldRbc" checked> RCS 브랜드 개설</label><label><input type="checkbox" id="ldKakao" checked> 카카오톡 채널 개설</label></div>
+          <div class="consent">
+            <label><input type="checkbox" id="ldAgree"> <span><b>[필수] 개인정보 수집·이용 동의</b><br>항목: 회사명·담당자·휴대폰 번호·이메일 / 목적: 개설 대행 상담 / 보관: 상담 종료 후 6개월. 동의하지 않으면 상담할 수 없어요.</span></label>
+            <label><input type="checkbox" id="ldMkt"> <span><b>[선택] 마케팅 정보 수신 동의</b><br>슈어엠의 메시징 서비스 소식과 혜택을 문자·이메일로 받아요. 동의하지 않아도 개설 대행은 그대로 받을 수 있고, 언제든 수신을 거부할 수 있어요.</span></label>
           </div>
-          <label class="chk"><input type="checkbox" id="ldAgree"> <span>[필수] 상담 연락을 위한 개인정보 수집·이용에 동의합니다. 수집 항목: 회사명·담당자·휴대폰 번호·이메일 / 목적: 개설 대행 안내 / 보관: 안내 종료 후 6개월. 동의하지 않으면 연락드릴 수 없어요.</span></label>
-          <div class="actions" style="margin-top:12px"><button class="btn p" id="ldSend">상담 신청하기</button><span id="ldMsg" style="font-size:13px;align-self:center"></span></div>
+          <div class="acts" style="margin-top:18px"><button class="pill wh" id="ldSend" type="button">무료 개설 신청하기</button><span class="ldmsg" id="ldMsg"></span></div>
         </div>
+        <div class="box" style="margin-top:14px">
+          <h3>직접 개설하실 때</h3><p class="d">입력값을 복사해서 각 사이트에 붙여 넣으면 돼요.</p>
+          <div class="acts"><button class="pill b sm" id="copyRbc" type="button">RCS 입력값 복사</button><button class="pill k sm" id="copyKakao" type="button">카카오 입력값 복사</button>
+            <a class="pill g sm" href="https://www.rcsbizcenter.com" target="_blank" rel="noopener">RCS 비즈센터 열기</a><a class="pill g sm" href="https://business.kakao.com" target="_blank" rel="noopener">카카오비즈니스 열기</a></div>
+          <div class="g2 check" style="margin-top:16px">
+            <div><b>RCS 브랜드 준비물</b><ul>
+              <li>RCS 비즈센터 기업 회원(마스터 계정만 개설 가능)</li>
+              <li>운영 증빙: 홈페이지·앱, 또는 간판이 보이는 매장 사진 + 영수증</li>
+              <li>웹사이트에 사업자등록번호·상호 노출 <span id="rbcBizCheck"></span></li>
+              <li>브랜드 용도로 실제 쓰는 전화번호</li></ul></div>
+            <div><b>카카오톡 채널 준비물</b><ul>
+              <li>카카오비즈니스 계정 → 파트너센터 [새 채널 만들기]</li>
+              <li>대표: 카카오톡 전자증명서 / 법인: 사업자등록증 + 본인인증</li>
+              <li>서류는 JPG·PNG·PDF, 파일당 10MB 이하(위 이미지 단계에서 줄일 수 있어요)</li>
+              <li>개설 후 고객센터 연락처 등록(알림톡 발신 프로필 키에 필요)</li></ul></div>
+          </div>
+          <details class="staff"><summary>담당자용 정보</summary>
+            <div class="acts" style="margin:10px 0"><button class="pill g sm" id="copyAll" type="button">전체 복사</button><button class="pill g sm" id="copyJson" type="button">JSON 복사</button></div>
+            <div class="slog" id="slog"></div><pre id="raw"></pre></details>
+        </div>
+        <div class="nav2"><button class="pill g" data-go="2" type="button">이전</button><span></span></div>
+      </section>
+    </main>
 
-        <div class="card">
-          <div class="actions"><button class="btn s" id="copyAll">📋 둘 다 복사 (고객 전달용)</button><button class="btn g" id="copyJson">{ } JSON</button></div>
-          <div class="steps" id="steps"></div>
-          <details style="margin-top:12px"><summary>사이트에서 추출한 원본 데이터</summary><pre id="raw"></pre></details>
-        </div>
-      </main>
-
-      <aside class="side">
-        <div id="pvRbc">
-          <div class="phone"><div class="screen">
-            <div class="bgimg" id="pvBg"><div class="pfimg" id="pvPf"></div></div>
-            <div class="bh">
-              <h3><span id="pvName"></span> <span class="ver">✓</span></h3>
-              <div class="ct" id="pvCat"></div>
-              <p id="pvDesc"></p>
-              <div class="bhb" id="pvBtns"></div>
-              <div class="info" id="pvInfo"></div>
-            </div>
-          </div></div>
-          <div class="cap">RCS 브랜드 홈 미리보기</div>
-        </div>
-        <div id="pvKakao" class="hidden">
-          <div class="phone"><div class="screen kscreen">
-            <div class="khead">
-              <div class="kpf" id="kPf"></div>
-              <h3 id="kName"></h3>
-              <div class="kid" id="kId"></div>
-              <p id="kDesc"></p>
-              <div class="kbtns"><div class="y">채널 추가</div><div>채팅</div></div>
-            </div>
-            <div class="kinfo" id="kInfo"></div>
-          </div></div>
-          <div class="cap">카카오톡 채널 홈 미리보기</div>
-        </div>
-      </aside>
-    </div>
+    <aside class="aside" id="aside">
+      <div class="pv-tabs"><div class="seg" id="pvSeg" style="margin:0"><button type="button" class="on" data-pv="rbc">RCS 브랜드 홈</button><button type="button" data-pv="kakao">카카오 채널</button></div></div>
+      <div id="pvRbc">
+        <div class="phone"><div class="screen">
+          <div class="bgimg" id="pvBg"><div class="pfimg" id="pvPf"></div></div>
+          <div class="bh"><h4><span id="pvName"></span> <span class="ver">✓</span></h4><div class="ct" id="pvCat"></div><p id="pvDesc"></p><div class="bhb" id="pvBtns"></div><div class="info" id="pvInfo"></div></div>
+        </div></div>
+      </div>
+      <div id="pvKakao" class="hidden">
+        <div class="phone"><div class="screen kscreen">
+          <div class="khead"><div class="kpf" id="kPf"></div><h4 id="kName"></h4><div class="kid" id="kId"></div><p id="kDesc"></p><div class="kbtns"><div class="y">채널 추가</div><div>채팅</div></div></div>
+          <div class="kinfo" id="kInfo"></div>
+        </div></div>
+      </div>
+      <div class="cap">고친 내용이 바로 반영돼요</div>
+    </aside>
   </div>
 </div>
-<div class="modal hidden" id="manual"><div class="box">
-  <h3>브랜드 정보 직접 입력</h3>
-  <div class="note" id="manualWhy">이 사이트는 자동으로 읽지 못했어요. 기본 정보만 넣어 주시면 그 내용으로 만들어 드려요.</div>
-  <label class="l">브랜드명 <span class="tag req">필수</span></label><input id="mName" maxlength="40">
-  <label class="l">브랜드 소개 <span class="tag req">필수</span> <span class="src" id="mCnt" style="float:right">0/300</span></label>
-  <textarea id="mDesc" rows="4" maxlength="300" placeholder="예: 중소 제조사가 쓰는 생산관리 프로그램을 만드는 회사입니다."></textarea>
-  <div class="row"><div><label class="l">대표 전화</label><input id="mPhone" inputmode="tel"></div><div><label class="l">이메일</label><input id="mEmail"></div></div>
-  <label class="l">주소 (매장이 있으면)</label><input id="mAddr">
-  <div class="actions" style="margin-top:16px"><button class="btn p" id="mGo">이 내용으로 만들기</button><button class="btn g" id="mClose">닫기</button></div>
+
+<div class="modal hidden" id="cropper"><div class="mbox">
+  <h3 id="cropTitle">자르기</h3><p class="d">끌어서 위치를 옮기고, 아래 막대로 확대해요.</p>
+  <div class="cropwrap"><canvas id="cropCv" width="400" height="400"></canvas></div>
+  <div class="cropbar"><span>확대</span><input type="range" id="cropZoom" min="100" max="800" value="100"><button class="pill g sm" id="cropRot" type="button">90° 돌리기</button></div>
+  <div class="acts" style="margin-top:16px"><button class="pill b" id="cropOk" type="button">이 영역 쓰기</button><button class="pill g" id="cropNo" type="button">취소</button></div>
 </div></div>
 <div class="toast" id="toast"></div>
-
+<footer class="foot">슈어엠주식회사 · RCS 브랜드·카카오톡 채널 개설 대행 · 입력한 정보는 개설 상담에만 써요</footer>
 <script>
 /* ===== 설정 ===== */
-const API_URL = "";      // 예: "https://xxxx.supabase.co/functions/v1/rbc-profile"
+const API_URL = "";      // 배포 시 워크플로가 채워요: "https://xxxx.supabase.co/functions/v1/rbc-profile"
 const ANON_KEY = "";     // --no-verify-jwt로 배포했다면 비워도 됨
 const LIMITS = { rbcBrandName: 40, rbcDescription: 300, rbcQuickMenu: 4, kakaoName: 20, kakaoSearchId: 15, kakaoDescription: 60, kakaoMismatch: 300 };
 /* ================= */
@@ -519,117 +550,191 @@ const LIMITS = { rbcBrandName: 40, rbcDescription: 300, rbcQuickMenu: 4, kakaoNa
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const DEMO = !API_URL || new URLSearchParams(location.search).has("demo");
-const BT = { url: "🔗 URL", call: "📞 전화", map: "📍 지도", copy: "📋 복사" };
+const BT = { url: "🔗 링크", call: "📞 전화", map: "📍 지도", copy: "📋 복사" };
 const ICON = { url: "🌐", call: "📞", map: "📍", copy: "📋" };
 const PROMO_RE = /(이벤트|할인|적립|쿠폰|특가|세일|증정|사은품|무료\s*체험|최저가|\d+\s*%|프로모션|혜택)/;
-let A = null, EX = null, STEPS = [], tab = "rbc", searchId = "";
-const dims = {}; // url -> {w,h}
+let A = null, EX = null, STEPS = [], REQ_ID = null, tab = "rbc", searchId = "", step = 0, seen = new Set([0]);
+let CARD = null, CARD_IMG = "";       // 명함에서 읽은 값 · 올린 사진(dataURL, 이 브라우저 안에만)
+const dims = {};                     // image url -> {w,h}
 
 const get = p => p.split(".").reduce((o, k) => o?.[k], A);
 const set = (p, v) => { const ks = p.split("."), last = ks.pop(); ks.reduce((o, k) => o[k], A)[last] = v; };
 
 const BIZ = [["business.companyName", "상호(법인명)"], ["business.ceo", "대표자"], ["business.bizNo", "사업자등록번호"]];
 const RBC = [
-  ["rbc.brandName", "브랜드명", { max: LIMITS.rbcBrandName, help: "기업명 또는 서비스명. 수정 시 재심사" }],
-  ["rbc.description", "브랜드 소개", { max: LIMITS.rbcDescription, area: 3, ai: 1, req: 1, help: "슬로건·특징 소개. 이벤트·할인·적립 등 홍보 문구 불가" }],
-  ["rbc.category", "카테고리", { ai: 1, help: "RBC 화면에서 대·중·소 분류를 고를 때 참고" }],
-  ["rbc.phone", "전화번호", { help: "브랜드 용도로 실제 사용하는 번호" }],
+  ["rbc.brandName", "브랜드명", { max: LIMITS.rbcBrandName, help: "손님이 아는 상호나 서비스 이름. 바꾸면 다시 심사해요" }],
+  ["rbc.description", "브랜드 소개", { max: LIMITS.rbcDescription, area: 3, ai: 1, req: 1, help: "어떤 곳인지 소개해요. 이벤트·할인·적립 같은 홍보 문구는 반려돼요" }],
+  ["rbc.category", "업종(카테고리)", { ai: 1, help: "RCS 비즈센터에서 대·중·소 분류를 고를 때 참고해요" }],
+  ["rbc.phone", "대표 전화", { help: "브랜드 용도로 실제 쓰는 번호. 0507 안심번호는 피해 주세요" }],
   ["rbc.website", "웹사이트"], ["rbc.email", "이메일"], ["rbc.address", "주소"],
-  ["rbc.brandColor", "브랜드 컬러", { color: 1, help: "메시지 표 글자색·버튼 글자색에 쓰여요" }],
+  ["rbc.brandColor", "브랜드 컬러", { color: 1, help: "메시지 버튼 글자색에 쓰여요" }],
 ];
 const KAKAO = [
-  ["kakao.channelName", "채널 이름", { max: LIMITS.kakaoName, help: "채널 홈·채팅탭·대화창에 노출. 브랜드명과 맞추세요" }],
-  ["kakao.category", "카테고리", { ai: 1 }],
-  ["kakao.description", "채널 소개", { max: LIMITS.kakaoDescription, area: 2, ai: 1, help: "언제든 수정 가능" }],
-  ["kakao.csPhone", "고객센터 연락처", { help: "알림톡 발신 프로필 키 생성에 필요" }],
-  ["kakao.storeAddress", "매장 주소", { store: 1, help: "카카오맵 검색 또는 직접 입력" }],
+  ["kakao.channelName", "채널 이름", { max: LIMITS.kakaoName, help: "브랜드명과 맞추면 찾기 쉬워요" }],
+  ["kakao.category", "업종", { ai: 1 }],
+  ["kakao.description", "채널 소개", { max: LIMITS.kakaoDescription, area: 2, ai: 1, help: "언제든 바꿀 수 있어요" }],
+  ["kakao.csPhone", "고객센터 연락처", { help: "알림톡 발신 프로필 키를 만들 때 꼭 필요해요" }],
+  ["kakao.storeAddress", "매장 주소", { store: 1 }],
   ["kakao.website", "웹사이트"],
 ];
 
-/* ---------- request ---------- */
-let REQ_ID = null;
+/* ---------- API ---------- */
 async function callApi(payload) {
-  if (DEMO) {
-    await new Promise(r => setTimeout(r, 900));
-    if (payload.action === "lead") return { ok: true };
-    if (/surem\.com/i.test(payload.url || "") && !payload.manual) { const e = new Error("이 홈페이지는 자동 접속을 막고 있어 읽지 못했어요."); e.code = "unreadable"; throw e; }
-    const d = demoResponse();
-    if (payload.manual) { d.application.rbc.brandName.value = payload.manual.name; d.application.kakao.channelName.value = payload.manual.name; d.application.rbc.description.value = payload.manual.description; d.steps = ["직접 입력한 정보로 작성"]; }
-    return d;
-  }
+  if (DEMO) return demoApi(payload);
   const res = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "application/json", ...(ANON_KEY ? { Authorization: `Bearer ${ANON_KEY}`, apikey: ANON_KEY } : {}) }, body: JSON.stringify(payload) });
   const data = await res.json().catch(() => ({ error: "서버 응답을 읽지 못했어요." }));
   if (!res.ok || data.error) { const e = new Error(data.error || `오류 ${res.status}`); e.code = data.code; throw e; }
   return data;
 }
-async function analyze(payload) {
-  showErr(""); $("go").disabled = true; $("loading").classList.add("on");
-  const msgs = ["사이트를 읽는 중…", "회사소개·연락처 페이지 찾는 중…", "사업자 정보·카카오 채널 확인 중…", "RBC·카카오 신청 정보 작성 중…"];
-  let i = 0; $("loadMsg").textContent = payload.manual ? "입력한 정보로 작성 중…" : msgs[0];
-  $("loadUrl").textContent = payload.manual ? payload.manual.name : (payload.url || "");
-  const marks = [...$("ldSteps").children], mark = n => marks.forEach((li, k) => li.className = k < n ? "ok" : k === n ? "on" : "");
-  mark(payload.manual ? 3 : 0);
-  const t = setInterval(() => { if (payload.manual) return; i = Math.min(i + 1, msgs.length - 1); $("loadMsg").textContent = msgs[i]; mark(i); }, 3000);
-  try {
-    const data = await callApi(payload);
-    A = data.application; EX = data.extracted; STEPS = data.steps || []; REQ_ID = data.requestId || null;
-    searchId = A.kakao.searchIds[0] || "";
-    $("manual").classList.add("hidden");
-    Object.keys(GEN).forEach(k => delete GEN[k]); mkFor = ""; mkPhotoFor = ""; if (mkUpload) { URL.revokeObjectURL(mkUpload); mkUpload = null; } if (mkPhotoUpload) { URL.revokeObjectURL(mkPhotoUpload); mkPhotoUpload = null; }
-    $("result").classList.remove("hidden"); document.body.classList.add("has-result"); render(); measureImages(); makeImages(); initSamples();
-    $("sbUrl").textContent = payload.manual ? "직접 입력" : (EX.url || payload.url || "");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    if (!$("ldCompany").value) $("ldCompany").value = A.business.companyName.value || A.rbc.brandName.value;
-    $("ldMsg").textContent = ""; $("ldSend").disabled = false;
-  } catch (err) {
-    if (err.code === "unreadable" && !payload.manual) { openManual(err.message); }
-    else showErr(err.message || "분석에 실패했어요.");
-  }
-  clearInterval(t); $("go").disabled = false; $("loading").classList.remove("on");
+
+/* ---------- start: url / card / manual ---------- */
+let mode = "url";
+function setMode(m, note) {
+  mode = m;
+  document.querySelectorAll(".modes button").forEach(b => b.classList.toggle("on", b.dataset.mode === m));
+  $("modeUrl").classList.toggle("hidden", m !== "url");
+  const cardReady = $("mform").dataset.ready === "1";
+  $("modeCard").classList.toggle("hidden", m !== "card" || cardReady);
+  const showForm = m === "manual" || (m === "card" && cardReady);
+  $("mform").classList.toggle("hidden", !showForm);
+  $("cardPv").classList.toggle("hidden", m !== "card" || !CARD_IMG);
+  if (m === "manual") { $("mNote").textContent = note || "아는 만큼만 적어 주세요. 상호와 한 줄 소개만 있어도 만들 수 있어요."; $("mNote").className = "note"; }
+  showErr("");
 }
+document.querySelectorAll(".modes button").forEach(b => b.onclick = () => setMode(b.dataset.mode));
+
+const KIND = [
+  [/naver\.me|map\.naver\.com|place\.naver\.com/i, "nv", "네이버 플레이스", "업체명·업종·주소·전화와 대표 사진을 가져와요"],
+  [/place\.map\.kakao\.com|kko\.to|map\.kakao\.com/i, "kk", "카카오맵", "장소 이름·주소·전화를 가져와요"],
+  [/pf\.kakao\.com|kakao\.com\/_/i, "kk", "카카오톡 채널", "이미 있는 채널이에요. 채널 정보를 바탕으로 RCS 브랜드를 준비해요"],
+  [/blog\.naver\.com/i, "nv", "네이버 블로그", "블로그 소개와 연락처를 읽어요"],
+  [/smartstore\.naver\.com|brand\.naver\.com/i, "nv", "스마트스토어", "스토어 이름과 판매자 정보를 읽어요"],
+  [/instagram\.com/i, "", "인스타그램", "프로필 소개를 읽어요. 내용이 적으면 직접 입력을 함께 써 주세요"],
+];
+function detectKind(u) {
+  if (!u.trim()) return null;
+  for (const [re, cls, name, what] of KIND) if (re.test(u)) return { cls, name, what };
+  return /\.[a-z]{2,}/i.test(u) ? { cls: "", name: "홈페이지", what: "회사 소개·연락처·사업자 정보를 찾아요" } : null;
+}
+$("url").oninput = () => {
+  const k = detectKind($("url").value);
+  $("detect").innerHTML = k ? `<span class="chip ${k.cls}">${esc(k.name)}로 인식했어요</span>${esc(k.what)}` : "업체가 가진 주소면 무엇이든 괜찮아요.";
+};
 $("form").onsubmit = e => {
   e.preventDefault();
   const url = $("url").value.trim();
-  if (!url && !DEMO) return showErr("홈페이지 주소를 입력해 주세요.");
+  if (!url && !DEMO) return showErr("주소를 넣어 주세요. 주소가 없다면 ‘명함·간판 사진’이나 ‘직접 입력’으로 시작하세요.");
   analyze({ url });
 };
-function openManual(why) {
-  $("manualWhy").textContent = (why ? why + " " : "") + "브랜드명과 소개만 넣어 주시면 그 내용으로 만들어 드려요.";
-  $("manual").classList.remove("hidden"); $("mName").focus();
-}
-$("mDesc").oninput = () => $("mCnt").textContent = `${$("mDesc").value.length}/300`;
-$("mClose").onclick = () => $("manual").classList.add("hidden");
-$("mGo").onclick = () => {
-  const name = $("mName").value.trim(), description = $("mDesc").value.trim();
-  if (!name || !description) return toast("브랜드명과 소개를 넣어 주세요");
-  analyze({ url: $("url").value.trim(), manual: { name, description, phone: $("mPhone").value.trim(), email: $("mEmail").value.trim(), address: $("mAddr").value.trim() } });
-};
-$("ldSend").onclick = async () => {
-  const company = $("ldCompany").value.trim(), phone = $("ldPhone").value.trim();
-  if (!company || phone.replace(/\D/g, "").length < 9) return toast("회사명과 휴대폰 번호를 확인해 주세요");
-  if (!$("ldAgree").checked) return toast("개인정보 수집·이용에 동의해 주세요");
-  $("ldSend").disabled = true; $("ldMsg").textContent = "보내는 중…";
+
+/** Resize a photo in the browser before sending/using it (long edge ≤ max, JPEG). */
+async function shrinkFile(file, max = 1600, q = 0.85) {
+  const url = URL.createObjectURL(file);
   try {
-    await callApi({ action: "lead", requestId: REQ_ID, company, name: $("ldName").value.trim(), phone, email: $("ldEmail").value.trim(),
-      wants: [$("ldRbc").checked && "rbc", $("ldKakao").checked && "kakao"].filter(Boolean), agreed: true, application: { ...A, kakao: { ...A.kakao, searchId }, messages: SAMPLES } });
-    $("ldMsg").innerHTML = '<b style="color:var(--ok)">✓ 신청됐어요. 담당자가 연락드릴게요.</b>';
-  } catch (e) { $("ldMsg").textContent = e.message; $("ldSend").disabled = false; }
+    const img = await new Promise((ok, bad) => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => bad(new Error("사진을 열 수 없어요. JPG나 PNG로 올려 주세요.")); i.src = url; });
+    const s = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+    const c = document.createElement("canvas"); c.width = Math.round(img.naturalWidth * s); c.height = Math.round(img.naturalHeight * s);
+    const x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, c.width, c.height); x.imageSmoothingQuality = "high"; x.drawImage(img, 0, 0, c.width, c.height);
+    return c.toDataURL("image/jpeg", q);
+  } finally { URL.revokeObjectURL(url); }
+}
+async function takeCard(file) {
+  if (!file) return;
+  showErr("");
+  try { CARD_IMG = await shrinkFile(file); } catch (e) { return showErr(e.message); }
+  $("cardPv").src = CARD_IMG; $("cardPv").classList.remove("hidden");
+  $("modeCard").classList.add("hidden"); $("mform").classList.remove("hidden"); $("mform").dataset.ready = "1";
+  $("mNote").className = "note okn"; $("mNote").textContent = "사진을 읽는 중이에요…";
+  ["mName", "mCat", "mDesc", "mPhone", "mEmail", "mAddr", "mWeb"].forEach(id => $(id).value = "");
+  try {
+    const { card } = await callApi({ action: "card", image: CARD_IMG });
+    CARD = card;
+    $("mName").value = card.name || card.company || ""; $("mCat").value = card.category || ""; $("mDesc").value = card.slogan || "";
+    $("mPhone").value = card.phone || card.mobile || ""; $("mEmail").value = card.email || ""; $("mAddr").value = card.address || ""; $("mWeb").value = card.website || "";
+    $("mNote").textContent = card.website ? `사진에서 읽었어요. 홈페이지(${card.website})도 함께 읽어 올게요. 틀린 곳만 고쳐 주세요.` : "사진에서 읽었어요. 틀린 곳만 고치고, 한 줄 소개를 적어 주세요.";
+  } catch (e) {
+    CARD = null;
+    $("mNote").className = "note"; $("mNote").textContent = (e.code === "ai_off" || e.code === "unreadable") ? e.message : "사진을 자동으로 읽지 못했어요. 사진을 보며 직접 적어 주세요.";
+  }
+  $("mDesc").dispatchEvent(new Event("input")); $("mName").focus();
+}
+$("cardFile").onchange = e => takeCard(e.target.files[0]);
+["dragover", "dragenter"].forEach(t => $("drop").addEventListener(t, e => { e.preventDefault(); $("drop").classList.add("over"); }));
+["dragleave", "drop"].forEach(t => $("drop").addEventListener(t, e => { e.preventDefault(); $("drop").classList.remove("over"); }));
+$("drop").addEventListener("drop", e => takeCard(e.dataTransfer.files[0]));
+$("mDesc").oninput = () => $("mCnt").textContent = `${$("mDesc").value.length}/300`;
+$("mBack").onclick = () => { $("mform").classList.add("hidden"); $("mform").dataset.ready = ""; CARD = null; CARD_IMG = ""; $("cardFile").value = ""; setMode("url"); };
+$("mGo").onclick = () => {
+  const name = $("mName").value.trim(), description = $("mDesc").value.trim(), web = $("mWeb").value.trim();
+  if (!name) return toast("상호(브랜드명)를 적어 주세요");
+  if (!description && !web) return toast("한 줄 소개를 적어 주세요");
+  const card = { ...(CARD || {}), name, category: $("mCat").value.trim(), phone: $("mPhone").value.trim(), email: $("mEmail").value.trim(), address: $("mAddr").value.trim(), slogan: description };
+  const manual = { name, description: description || `${name}${card.category ? ` · ${card.category}` : ""}`, phone: card.phone, email: card.email, address: card.address };
+  // a website (from the card or typed) is read first; the typed values ride along as "명함" facts
+  analyze(web ? { url: web, card } : { url: "", manual, card }, { fallbackManual: manual });
 };
+
+async function analyze(payload, o = {}) {
+  showErr(""); $("go").disabled = true; $("loading").classList.add("on");
+  const msgs = ["주소를 읽는 중…", "소개·연락처 찾는 중…", "사업자 정보·카카오 채널 확인 중…", "개설 정보와 메시지 초안 쓰는 중…"];
+  let i = 0; $("loadMsg").textContent = payload.manual ? "입력한 정보로 만드는 중…" : msgs[0];
+  $("loadUrl").textContent = payload.manual ? payload.manual.name : (payload.url || "");
+  const marks = [...$("ldSteps").children], mark = n => marks.forEach((li, k) => li.className = k < n ? "ok" : k === n ? "on" : "");
+  mark(payload.manual ? 3 : 0);
+  const t = setInterval(() => { if (payload.manual) return; i = Math.min(i + 1, msgs.length - 1); $("loadMsg").textContent = msgs[i]; mark(i); }, 3200);
+  try {
+    let data;
+    try { data = await callApi(payload); }
+    catch (err) { // the site couldn't be read but the customer already typed the basics → build from those
+      if (err.code === "unreadable" && o.fallbackManual) data = await callApi({ url: payload.url, manual: o.fallbackManual, card: payload.card });
+      else throw err;
+    }
+    A = data.application; EX = data.extracted; STEPS = data.steps || []; REQ_ID = data.requestId || null;
+    searchId = A.kakao.searchIds[0] || "";
+    resetImages();
+    document.body.classList.add("has-result"); $("result").classList.remove("hidden");
+    $("sbSub").textContent = payload.manual ? (CARD_IMG ? "명함·직접 입력" : "직접 입력") : (EX.url || payload.url || "");
+    render(); measureImages(); renderThumbs(); makeImages(); initSamples(); renderIdeas();
+    if (!$("ldCompany").value) $("ldCompany").value = A.business.companyName.value || A.rbc.brandName.value;
+    if (CARD?.mobile && !$("ldPhone").value) $("ldPhone").value = CARD.mobile;
+    $("ldMsg").textContent = ""; $("ldSend").disabled = false;
+    seen = new Set([0]); go(0);
+  } catch (err) {
+    if (err.code === "unreadable" && !payload.manual) { setMode("manual", `${err.message} 아는 정보를 적어 주시면 그 내용으로 만들어 드려요.`); $("mWeb").value = payload.url || ""; $("mName").focus(); }
+    else showErr(err.message || "불러오지 못했어요.");
+  }
+  clearInterval(t); $("go").disabled = false; $("loading").classList.remove("on");
+}
 function showErr(m) { $("err").textContent = m; $("err").classList.toggle("hidden", !m); }
 
-/* ---------- render ---------- */
+/* ---------- wizard ---------- */
+function go(n) {
+  step = n; seen.add(n);
+  document.querySelectorAll(".pane").forEach(p => p.classList.toggle("hidden", +p.dataset.pane !== n));
+  document.querySelectorAll("#steps button").forEach(b => { const k = +b.dataset.step; b.classList.toggle("on", k === n); b.classList.toggle("done", k !== n && seen.has(k) && k < n); });
+  $("res").classList.toggle("wide", n === 1 || n === 2);
+  $("meter").style.width = `${(n + 1) * 25}%`;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+document.querySelectorAll("#steps button").forEach(b => b.onclick = () => go(+b.dataset.step));
+document.querySelectorAll("[data-go]").forEach(b => b.onclick = () => go(+b.dataset.go));
+document.querySelectorAll("#tabsBar button").forEach(b => b.onclick = () => { tab = b.dataset.tab; document.querySelectorAll("#tabsBar button").forEach(x => x.classList.toggle("on", x === b)); $("tab-rbc").classList.toggle("hidden", tab !== "rbc"); $("tab-kakao").classList.toggle("hidden", tab !== "kakao"); showPv(tab); });
+document.querySelectorAll("#pvSeg button").forEach(b => b.onclick = () => showPv(b.dataset.pv));
+function showPv(k) { document.querySelectorAll("#pvSeg button").forEach(x => x.classList.toggle("on", x.dataset.pv === k)); $("pvRbc").classList.toggle("hidden", k !== "rbc"); $("pvKakao").classList.toggle("hidden", k !== "kakao"); }
+
+/* ---------- step 1: fields ---------- */
 function tagFor(f, o = {}) {
   if (!f.value) return o.req ? `<span class="tag req">필수 · 비어 있음</span>` : `<span class="tag chk">확인 필요</span>`;
   if (o.ai) return `<span class="tag ai">AI 작성</span>`;
-  return f.verified ? `<span class="tag ok">사이트 확인</span>` : `<span class="tag chk">확인 필요</span>`;
+  return f.verified ? `<span class="tag ok">확인됨</span>` : `<span class="tag chk">확인 필요</span>`;
 }
 const CAND = { "business.companyName": "companyNames", "business.ceo": "ceos", "business.bizNo": "bizNos", "rbc.brandName": "siteName", "kakao.channelName": "siteName",
   "rbc.description": "descriptions", "kakao.description": "descriptions", "rbc.phone": "phones", "kakao.csPhone": "phones", "rbc.email": "emails",
-  "rbc.address": "addresses", "kakao.storeAddress": "addresses", "rbc.brandColor": "themeColors" };
+  "rbc.address": "addresses", "kakao.storeAddress": "addresses", "rbc.brandColor": "themeColors", "rbc.category": "categories", "kakao.category": "categories" };
 function fieldHtml([path, label, o = {}]) {
   const f = get(path) || { value: "" };
   const input = o.color
-    ? `<div style="display:flex;gap:8px"><input type="color" data-path="${path}" value="${esc(f.value || "#2f5bff")}" style="width:56px;height:42px;padding:4px"><input data-path="${path}" value="${esc(f.value)}"></div>`
+    ? `<div style="display:flex;gap:8px"><input type="color" data-path="${path}" value="${esc(/^#[0-9a-f]{6}$/i.test(f.value) ? f.value : "#1428a0")}" style="width:58px;height:48px;padding:4px"><input data-path="${path}" value="${esc(f.value)}"></div>`
     : o.area ? `<textarea data-path="${path}" rows="${o.area}">${esc(f.value)}</textarea>` : `<input data-path="${path}" value="${esc(f.value)}">`;
   const cands = (EX[CAND[path]] || []).filter(c => c.value !== f.value).slice(0, 3);
   return `<div class="f ${o.store && !A.business.hasStore ? "hidden" : ""}"><div class="lb">${label} ${tagFor(f, o)}${o.max ? `<span class="cnt" data-path="${path}" data-max="${o.max}"></span>` : ""}</div>${input}
@@ -646,11 +751,11 @@ function render() {
     el.oninput = () => { set(el.dataset.path + ".value", el.value); if (el.type === "color") el.nextElementSibling.value = el.value; else if (el.previousElementSibling?.type === "color" && /^#[0-9a-f]{6}$/i.test(el.value)) el.previousElementSibling.value = el.value; refresh(); };
   });
   document.querySelectorAll("[data-pick]").forEach(a => a.onclick = e => { e.preventDefault(); set(a.dataset.pick, { value: a.dataset.v, source: a.dataset.s + " (선택)", verified: true }); render(); });
-  renderImgs(); renderQm(); renderIds();
-  $("mismatchBox").classList.toggle("hidden", !A.kakao.mismatchNote.value && !needMismatch());
+  renderQm(); renderIds();
   $("mismatch").value = A.kakao.mismatchNote.value;
-  $("steps").innerHTML = STEPS.map(s => `<div>${esc(s)}</div>`).join("") + `<div>작성 방식: ${A.engine === "claude" ? "Claude AI + 사이트 대조 검증" : "규칙 기반"}</div>`;
+  $("slog").innerHTML = STEPS.map(s => `<div>${esc(s)}</div>`).join("") + `<div>작성 방식: ${A.engine === "claude" ? "AI 작성 + 업체 페이지 대조 검증" : "기본 규칙"}</div>`;
   $("raw").textContent = JSON.stringify(EX, null, 2);
+  $("s1sub").textContent = A.engine === "claude" ? "업체 페이지에서 찾은 값을 AI가 양식에 맞게 정리했어요. 틀린 곳만 고치면 돼요." : "업체 페이지에서 찾은 값으로 채웠어요. 틀린 곳만 고치면 돼요.";
   refresh();
 }
 $("hasStore").onchange = e => { A.business.hasStore = e.target.checked; if (e.target.checked && !A.kakao.storeAddress.value && EX.addresses?.[0]) A.kakao.storeAddress = { ...EX.addresses[0], verified: true }; render(); };
@@ -658,238 +763,345 @@ $("mismatch").oninput = e => { A.kakao.mismatchNote.value = e.target.value; refr
 const strip = s => (s || "").replace(/\(주\)|㈜|주식회사|\(유\)|유한회사|의원$|\s/g, "");
 const needMismatch = () => A.business.companyName.value && strip(A.business.companyName.value) !== strip(A.kakao.channelName.value);
 
-function renderImgs() {
-  document.querySelectorAll(".imgs").forEach(box => {
-    const path = box.dataset.img, cur = get(path)?.value || "", imgs = EX.images || [];
-    if (!imgs.length) { box.innerHTML = `<div class="src">사이트에서 이미지를 찾지 못했어요. 직접 준비해 주세요.</div>`; return; }
-    box.innerHTML = imgs.map((im, i) => {
-      const d = dims[im.url], bad = d && !dimOk(path, d);
-      return `<div class="im ${im.url === cur ? "sel" : ""}" data-i="${i}"><img src="${esc(im.url)}" referrerpolicy="no-referrer" onerror="this.style.opacity=.2">
-        <b>${im.url === cur ? "✓ 선택됨" : ({ logo: "로고", og: "대표 이미지", icon: "아이콘", kakao: "카카오 채널" }[im.kind] || im.kind)}</b>
-        <div class="dim ${bad ? "bad" : ""}">${d ? `${d.w}×${d.h}${bad ? " ⚠" : ""}` : ""}</div></div>`;
-    }).join("");
-    box.querySelectorAll(".im").forEach(el => el.onclick = () => {
-      const u = imgs[+el.dataset.i].url;
-      set(path, cur === u ? { value: "", source: "" } : { value: u, source: imgs[+el.dataset.i].source, verified: true });
-      renderImgs(); refresh();
-      if ((path === "rbc.profileImage" && !mkUpload) || path === "rbc.backgroundImage") makeImages();
-    });
-  });
-}
-function dimOk(path, d) {
-  if (path === "kakao.profileImage") return d.w === d.h && d.w >= 640;
-  if (path === "rbc.profileImage") return d.w === d.h && d.w >= 388 && d.w <= 1080;
-  return d.w >= 388 && d.h >= 388 && d.w <= 1080 && d.h <= 1080;
-}
-function measureImages() {
-  (EX.images || []).forEach(im => { if (dims[im.url]) return; const i = new Image(); i.referrerPolicy = "no-referrer"; i.onload = () => { dims[im.url] = { w: i.naturalWidth, h: i.naturalHeight }; renderImgs(); refresh(); }; i.src = im.url; });
-}
-
 function renderQm() {
   const q = A.rbc.quickMenu;
   $("qm").innerHTML = q.map((b, i) => `<div class="mb">
     <select data-i="${i}" data-f="type">${Object.entries(BT).map(([k, v]) => `<option value="${k}" ${k === b.type ? "selected" : ""}>${v}</option>`).join("")}</select>
-    <input data-i="${i}" data-f="label" value="${esc(b.label)}" placeholder="버튼명"><input data-i="${i}" data-f="value" value="${esc(b.value)}" placeholder="URL·번호·주소">
-    <button data-del="${i}">✕</button></div>`).join("");
+    <input data-i="${i}" data-f="label" value="${esc(b.label)}" placeholder="버튼 이름"><input data-i="${i}" data-f="value" value="${esc(b.value)}" placeholder="링크·번호·주소">
+    <button data-del="${i}" type="button" aria-label="삭제">✕</button></div>`).join("");
   $("qm").querySelectorAll("[data-f]").forEach(el => el.oninput = () => { q[+el.dataset.i][el.dataset.f] = el.value; refresh(); });
   $("qm").querySelectorAll("[data-del]").forEach(el => el.onclick = () => { q.splice(+el.dataset.del, 1); renderQm(); refresh(); });
   $("addQm").disabled = q.length >= LIMITS.rbcQuickMenu;
 }
 $("addQm").onclick = () => { A.rbc.quickMenu.push({ label: "", type: "url", value: "" }); renderQm(); };
-
 function renderIds() {
   const ids = A.kakao.searchIds;
-  $("ids").innerHTML = ids.map(id => `<label class="${id === searchId ? "on" : ""}"><input type="radio" name="sid" value="${esc(id)}" ${id === searchId ? "checked" : ""}> @${esc(id)} <span class="src" style="margin:0 0 0 auto">${id.length}자</span></label>`).join("") || `<div class="src">후보 없음 — 직접 입력해 주세요</div>`;
+  $("ids").innerHTML = ids.map(id => `<label class="${id === searchId ? "on" : ""}"><input type="radio" name="sid" value="${esc(id)}" ${id === searchId ? "checked" : ""}> @${esc(id)} <span class="src" style="margin:0 0 0 auto">${id.length}자</span></label>`).join("") || `<div class="src">후보가 없어요. 직접 입력해 주세요</div>`;
   $("ids").querySelectorAll("input").forEach(r => r.onchange = () => { searchId = r.value; $("idCustom").value = ""; renderIds(); refresh(); });
 }
-$("idCustom").oninput = e => { const v = e.target.value.replace(/^@/, "").replace(/\s/g, ""); if (v) searchId = v; else searchId = A.kakao.searchIds[0] || ""; renderIds(); refresh(); };
+$("idCustom").oninput = e => { const v = e.target.value.replace(/^@/, "").replace(/\s/g, ""); searchId = v || A.kakao.searchIds[0] || ""; renderIds(); refresh(); };
 
-
-/* ---------- image maker (official specs) ----------
-   RBC 프로필:     1:1, 388~1080px, ≤1MB, PNG만, 원형 크롭 안전 여백, 배경색 필수(투명 X)
-   RBC 백그라운드: 1:1, 388~1080px, ≤1MB, PNG/JPG, 삼성 단말 노출, 배경색 있는 브랜드 이미지
-   카카오 프로필:  640×640 권장, ≤10MB, JPG/PNG
-   카카오 브랜드카드(선택): 16:9·1:1·3:4, ≤10MB, JPG/PNG */
-const GEN = {};            // key -> {url, w, h, kb, fmt}
-let mkUpload = null, mkPhotoUpload = null;
+/* ---------- step 2: images ---------- */
+const GEN = {};
+let LOGO = null, COVER = null;         // chosen sources: {src, label, kind}
+let UPLOADS = [];                      // {src(dataURL), label}
 const OUTS = [
-  { key: "rbcProfile", label: "RBC 프로필", w: 1080, h: 1080, min: 388, src: "logo", circle: true, fmts: ["png"], maxKB: 1024, file: "RBC_profile" },
-  { key: "rbcBg", label: "RBC 백그라운드", w: 1080, h: 1080, min: 388, src: "cover", fmts: ["png", "jpeg"], maxKB: 1024, file: "RBC_background" },
+  { key: "rbcProfile", label: "RCS 프로필", w: 1080, h: 1080, min: 388, src: "logo", circle: true, fmts: ["png"], maxKB: 1024, file: "RCS_profile" },
+  { key: "rbcBg", label: "RCS 배경", w: 1080, h: 1080, min: 388, src: "cover", fmts: ["png", "jpeg"], maxKB: 1024, file: "RCS_background" },
   { key: "kakao", label: "카카오 프로필", w: 640, h: 640, min: 640, src: "logo", circle: true, fmts: ["png", "jpeg"], maxKB: 10240, file: "Kakao_profile" },
-  { key: "kakaoCard", label: "카카오 브랜드카드 16:9 (선택)", w: 1280, h: 720, min: 640, src: "cover", wide: true, fmts: ["jpeg", "png"], maxKB: 10240, file: "Kakao_brandcard" },
+  { key: "kakaoCard", label: "카카오 브랜드카드 16:9", w: 1280, h: 720, min: 640, src: "cover", wide: true, fmts: ["jpeg", "png"], maxKB: 10240, file: "Kakao_brandcard" },
 ];
+const KLABEL = { logo: "로고", og: "대표 사진", icon: "아이콘", kakao: "카카오 채널" };
+function resetImages() {
+  Object.keys(GEN).forEach(k => delete GEN[k]); mkFor = ""; mkPhotoFor = ""; UPLOADS = []; COVER = null; LOGO = null;
+  if (CARD_IMG) UPLOADS.push({ src: CARD_IMG, label: "올린 명함" });
+}
+function sources() {
+  return [...UPLOADS.map(u => ({ src: u.src, label: u.label, kind: "up" })), ...(EX.images || []).map(i => ({ src: i.url, label: KLABEL[i.kind] || i.kind, kind: i.kind }))];
+}
+function thumbHtml(s, i, cur, which) {
+  const d = dims[s.src], bad = which === "logo" && d && !(d.w === d.h && d.w >= 388);
+  return `<div class="th ${s.src === cur ? "sel" : ""}" data-i="${i}" role="button" tabindex="0"><img src="${esc(s.src)}" referrerpolicy="no-referrer" alt="" onerror="this.style.opacity=.2">
+    <button type="button" class="crop" data-crop="${i}">자르기</button>
+    <b>${s.src === cur ? "✓ 사용 중" : esc(s.label)}</b><div class="dim ${bad ? "bad" : ""}">${d ? `${d.w}×${d.h}` : ""}</div></div>`;
+}
+function renderThumbs() {
+  const list = sources();
+  if (!LOGO) { const l = list.find(s => s.kind === "up" && s.label !== "올린 명함") || list.find(s => s.src === A.rbc.profileImage.value) || list.find(s => s.kind === "logo"); if (l) LOGO = l; }
+  if (!COVER) { const c = list.find(s => s.src === A.rbc.backgroundImage.value) || list.find(s => s.kind === "og"); if (c) COVER = c; }
+  const add = which => `<label class="th add">+ 사진 올리기<input type="file" accept="image/*" hidden data-up="${which}"></label>`;
+  $("logoThumbs").innerHTML = list.map((s, i) => thumbHtml(s, i, LOGO?.src, "logo")).join("") + add("logo");
+  $("coverThumbs").innerHTML = `<div class="th ${!COVER ? "sel" : ""}" data-none="1" role="button" tabindex="0"><img alt="" style="background:linear-gradient(135deg,${esc(A.rbc.brandColor.value || "#1428a0")},#000)"><b>${!COVER ? "✓ 로고 배너" : "로고 배너"}</b><div class="dim">사진 없이</div></div>`
+    + list.map((s, i) => thumbHtml(s, i, COVER?.src, "cover")).join("") + add("cover");
+  const bind = (box, which) => {
+    box.querySelectorAll(".th[data-i]").forEach(el => el.onclick = e => {
+      if (e.target.dataset.crop !== undefined) return;
+      const s = list[+el.dataset.i];
+      if (which === "logo") LOGO = s; else COVER = s;
+      renderThumbs(); makeImages();
+    });
+    box.querySelectorAll("[data-crop]").forEach(b => b.onclick = e => { e.stopPropagation(); const s = list[+b.dataset.crop]; cropAndUse(s.src, which); });
+    box.querySelectorAll("[data-none]").forEach(el => el.onclick = () => { COVER = null; renderThumbs(); makeImages(); });
+    box.querySelectorAll("[data-up]").forEach(inp => inp.onchange = async e => {
+      const f = e.target.files[0]; if (!f) return;
+      const src = await shrinkFile(f, 2000, 0.92).catch(err => (toast(err.message), ""));
+      if (!src) return;
+      if (f.type === "image/png") { // keep transparency for logos: re-read as PNG
+        const u = URL.createObjectURL(f); const i = await loadImage(u); const c = document.createElement("canvas"); const s = Math.min(1, 2000 / Math.max(i.naturalWidth, i.naturalHeight));
+        c.width = Math.round(i.naturalWidth * s); c.height = Math.round(i.naturalHeight * s); c.getContext("2d").drawImage(i, 0, 0, c.width, c.height); URL.revokeObjectURL(u);
+        UPLOADS.unshift({ src: c.toDataURL("image/png"), label: "올린 사진" });
+      } else UPLOADS.unshift({ src, label: "올린 사진" });
+      const s = { ...UPLOADS[0], kind: "up" };
+      if (which === "logo") LOGO = s; else COVER = s;
+      renderThumbs(); makeImages();
+    });
+  };
+  bind($("logoThumbs"), "logo"); bind($("coverThumbs"), "cover");
+}
+function cropAndUse(src, which) {
+  openCropper(src, { aspect: which === "logo" ? 1 : 16 / 9, title: which === "logo" ? "로고 부분만 잘라내기" : "배경 사진 자르기" }, url => {
+    UPLOADS.unshift({ src: url, label: which === "logo" ? "자른 로고" : "자른 사진" });
+    const s = { ...UPLOADS[0], kind: "up" };
+    if (which === "logo") LOGO = s; else COVER = s;
+    renderThumbs(); makeImages();
+  });
+}
+function measureImages() {
+  (EX.images || []).forEach(im => { if (dims[im.url]) return; const i = new Image(); i.referrerPolicy = "no-referrer"; i.onload = () => { dims[im.url] = { w: i.naturalWidth, h: i.naturalHeight }; if (step === 1) renderThumbs(); refresh(); }; i.src = im.url; });
+}
 async function loadImage(src) {
   let url = src;
   if (!/^(data|blob):/.test(src) && !DEMO) {
     const res = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "application/json", ...(ANON_KEY ? { Authorization: `Bearer ${ANON_KEY}`, apikey: ANON_KEY } : {}) }, body: JSON.stringify({ action: "image", url: src }) });
-    if (!res.ok) throw new Error("이미지를 가져오지 못했어요. 파일로 올려 주세요.");
+    if (!res.ok) throw new Error("이 이미지는 가져오지 못했어요. 사진 올리기로 올려 주세요.");
     url = URL.createObjectURL(await res.blob());
   }
-  return await new Promise((ok, bad) => { const i = new Image(); if (!/^(data|blob):/.test(url)) i.crossOrigin = "anonymous"; i.onload = () => ok(i); i.onerror = () => bad(new Error("이미지를 열 수 없어요. 파일로 올려 주세요.")); i.src = url; });
-}
-function trimLogo(img) {
-  const w = img.naturalWidth || 256, h = img.naturalHeight || 256, c = document.createElement("canvas");
-  c.width = w; c.height = h; const x = c.getContext("2d"); x.drawImage(img, 0, 0, w, h);
-  const d = x.getImageData(0, 0, w, h).data, px = (i, j) => { const k = (j * w + i) * 4; return [d[k], d[k + 1], d[k + 2], d[k + 3]]; };
-  const corners = [px(0, 0), px(w - 1, 0), px(0, h - 1), px(w - 1, h - 1)];
-  const transparent = corners.some(p => p[3] < 20);
-  const bg = transparent ? null : corners[0];
-  const empty = p => p[3] < 20 || (bg && Math.abs(p[0] - bg[0]) + Math.abs(p[1] - bg[1]) + Math.abs(p[2] - bg[2]) < 40);
-  let x0 = w, y0 = h, x1 = -1, y1 = -1;
-  for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) if (!empty(px(i, j))) { if (i < x0) x0 = i; if (i > x1) x1 = i; if (j < y0) y0 = j; if (j > y1) y1 = j; }
-  if (x1 < 0) { x0 = 0; y0 = 0; x1 = w - 1; y1 = h - 1; }
-  const cw = x1 - x0 + 1, ch = y1 - y0 + 1, out = document.createElement("canvas");
-  out.width = cw; out.height = ch; out.getContext("2d").drawImage(c, x0, y0, cw, ch, 0, 0, cw, ch);
-  // luminance of the logo ink, to keep contrast against the chosen background
-  let lum = 0, n = 0; const od = out.getContext("2d").getImageData(0, 0, cw, ch).data;
-  for (let k = 0; k < od.length; k += 16) if (od[k + 3] > 120) { lum += 0.299 * od[k] + 0.587 * od[k + 1] + 0.114 * od[k + 2]; n++; }
-  return { canvas: out, bgColor: bg ? `rgb(${bg[0]},${bg[1]},${bg[2]})` : null, transparent, inkLum: n ? lum / n : 0, src: cw * ch };
-}
-const lumOf = c => { const m = c.match(/\d+/g) || []; let r, g, b; if (c[0] === "#") { const v = parseInt(c.slice(1), 16); r = v >> 16; g = v >> 8 & 255; b = v & 255; } else [r, g, b] = m.map(Number); return 0.299 * r + 0.587 * g + 0.114 * b; };
-function bgFor(logo) {
-  const mode = document.querySelector("input[name=mkBg]:checked").value;
-  if (mode === "white") return "#ffffff";
-  if (mode === "brand") return A?.rbc.brandColor.value || "#2f5bff";
-  if (mode === "custom") return $("mkColor").value;
-  if (logo.bgColor) return logo.bgColor;
-  // transparent logo: white for dark ink, brand color (or dark) for light ink → visible in dark mode too
-  return logo.inkLum > 200 ? (A?.rbc.brandColor.value || "#1b2c7a") : "#ffffff";
-}
-function drawLogo(o, logo, bg) {
-  const c = document.createElement("canvas"); c.width = o.w; c.height = o.h; const x = c.getContext("2d");
-  x.fillStyle = bg; x.fillRect(0, 0, o.w, o.h);
-  const w = logo.canvas.width, h = logo.canvas.height, k = (+$("mkScale").value) / 100;
-  // circle-safe: logo diagonal inside the inscribed circle with margin; banners keep the logo in a central band
-  const s = o.circle ? (o.w * 0.80 * k) / Math.hypot(w, h) : Math.min((o.w * 0.6 * k) / w, (o.h * 0.4 * k) / h);
-  x.imageSmoothingQuality = "high";
-  x.drawImage(logo.canvas, (o.w - w * s) / 2, (o.h - h * s) / 2, w * s, h * s);
-  return c;
-}
-function drawCover(o, img, bg) { // center-crop a photo to the target ratio (object-fit: cover)
-  const c = document.createElement("canvas"); c.width = o.w; c.height = o.h; const x = c.getContext("2d");
-  x.fillStyle = bg; x.fillRect(0, 0, o.w, o.h);
-  const iw = img.naturalWidth, ih = img.naturalHeight, s = Math.max(o.w / iw, o.h / ih);
-  x.imageSmoothingQuality = "high";
-  x.drawImage(img, (o.w - iw * s) / 2, (o.h - ih * s) / 2, iw * s, ih * s);
-  return c;
-}
-function resize(c, w, h) { const r = document.createElement("canvas"); r.width = w; r.height = h; const x = r.getContext("2d"); x.imageSmoothingQuality = "high"; x.drawImage(c, 0, 0, w, h); return r; }
-const kbOf = u => Math.round((u.length - u.indexOf(",") - 1) * 0.75 / 1024);
-/** Encode within the size limit: allowed formats in order, JPEG quality steps, then downscale (never below the spec minimum). */
-function encode(c, o) {
-  let cur = c;
-  while (true) {
-    for (const f of o.fmts) {
-      if (f === "png") { const u = cur.toDataURL("image/png"); if (kbOf(u) <= o.maxKB) return { url: u, w: cur.width, h: cur.height, kb: kbOf(u), fmt: "PNG" }; }
-      else for (const q of [0.92, 0.85, 0.78, 0.7]) { const u = cur.toDataURL("image/jpeg", q); if (kbOf(u) <= o.maxKB) return { url: u, w: cur.width, h: cur.height, kb: kbOf(u), fmt: "JPG" }; }
-    }
-    const nw = Math.round(cur.width * 0.85), nh = Math.round(cur.height * 0.85);
-    if (nw < o.min || nh < o.min * (o.h / o.w)) { const u = cur.toDataURL(o.fmts.includes("jpeg") ? "image/jpeg" : "image/png", 0.7); return { url: u, w: cur.width, h: cur.height, kb: kbOf(u), fmt: o.fmts.includes("jpeg") ? "JPG" : "PNG" }; }
-    cur = resize(cur, nw, nh);
-  }
-}
-function specLine(o, g) {
-  const ratio = (g.w / g.h).toFixed(2) === (o.w / o.h).toFixed(2), size = g.w >= o.min && g.w <= Math.max(o.w, 1080), kb = g.kb <= o.maxKB, fmt = o.fmts.map(f => f === "jpeg" ? "JPG" : "PNG").includes(g.fmt);
-  const t = (ok, s) => `<span class="${ok ? "ok" : "bad"}">${ok ? "✓" : "✗"} ${s}</span>`;
-  return `<div class="spec">${t(ratio, o.wide ? "16:9" : "1:1")} · ${t(size, `${g.w}×${g.h}`)}<br>${t(fmt, g.fmt)} · ${t(kb, `${g.kb}KB / ${o.maxKB >= 1024 ? o.maxKB / 1024 + "MB" : o.maxKB + "KB"}`)}${o.circle ? `<br>${t(true, "원형 크롭 안전")}` : ""}</div>`;
+  return await new Promise((ok, bad) => { const i = new Image(); if (!/^(data|blob):/.test(url)) i.crossOrigin = "anonymous"; i.onload = () => ok(i); i.onerror = () => bad(new Error("이미지를 열 수 없어요. 사진 올리기로 올려 주세요.")); i.src = url; });
 }
 let mkLogo = null, mkFor = "", mkPhoto = null, mkPhotoFor = "";
-function coverSrc() {
-  if (mkPhotoUpload) return mkPhotoUpload;
-  const og = A?.rbc.backgroundImage.value || (EX?.images || []).find(i => i.kind === "og")?.url;
-  return og || "";
-}
 async function makeImages() {
-  const src = mkUpload || A?.rbc.profileImage.value;
-  $("mkSrc").textContent = mkUpload ? "직접 올린 파일" : (src ? "RBC 프로필에서 고른 이미지" : "없음 — 로고를 고르거나 올려 주세요");
-  if (!src) { $("mkOut").innerHTML = '<div class="src">로고를 고르거나 올리면 여기에 만들어져요.</div>'; return; }
+  const src = LOGO?.src;
+  if (!src) { $("mkOut").innerHTML = '<div class="src">로고를 고르거나 올리면 여기에 만들어져요.</div>'; $("mkMsg").textContent = ""; refresh(); return; }
   const msgs = [];
   try {
     if (mkFor !== src) { $("mkMsg").textContent = "로고를 불러오는 중…"; mkLogo = trimLogo(await loadImage(src)); mkFor = src; }
-    const useCover = document.querySelector("input[name=mkCover]:checked").value === "photo" && coverSrc();
-    if (useCover && mkPhotoFor !== coverSrc()) {
-      try { mkPhoto = await loadImage(coverSrc()); mkPhotoFor = coverSrc(); } catch { mkPhoto = null; mkPhotoFor = ""; msgs.push("대표 사진을 못 불러와 로고 배너로 만들었어요."); }
+    if (COVER && mkPhotoFor !== COVER.src) {
+      try { mkPhoto = await loadImage(COVER.src); mkPhotoFor = COVER.src; } catch { mkPhoto = null; mkPhotoFor = ""; msgs.push("배경 사진을 못 불러와 로고 배너로 만들었어요."); }
     }
+    const useCover = COVER && mkPhoto && mkPhotoFor === COVER.src;
     const bg = bgFor(mkLogo);
-    if (mkLogo.canvas.width < 200 && mkLogo.canvas.height < 200) msgs.push(`원본 로고가 작아요(${mkLogo.canvas.width}×${mkLogo.canvas.height}). 확대하면 흐릴 수 있으니 큰 로고 파일을 올려 주세요.`);
-    for (const o of OUTS) {
-      const c = o.src === "cover" && useCover && mkPhoto ? drawCover(o, mkPhoto, bg) : drawLogo(o, mkLogo, o.src === "cover" ? tint(bg) : bg);
-      GEN[o.key] = encode(c, o);
-    }
+    if (mkLogo.canvas.width < 200 && mkLogo.canvas.height < 200) msgs.push(`원본 로고가 작아요(${mkLogo.canvas.width}×${mkLogo.canvas.height}). 크게 늘리면 흐릴 수 있으니 큰 로고 파일을 올려 주세요.`);
+    for (const o of OUTS) GEN[o.key] = encode(o.src === "cover" && useCover ? drawCover(o, mkPhoto, bg) : drawLogo(o, mkLogo, o.src === "cover" ? tint(bg) : bg), o);
     const base = (A?.rbc.brandName.value || "brand").replace(/[\\/:*?"<>|\s]/g, "");
-    $("mkOut").innerHTML = OUTS.map(o => { const g = GEN[o.key]; return `<div class="out ${o.circle ? "circle" : ""} ${o.wide ? "wide" : ""}"><img src="${g.url}"><b>${o.label}</b>${specLine(o, g)}<a href="${g.url}" download="${base}_${o.file}_${g.w}x${g.h}.${g.fmt === "PNG" ? "png" : "jpg"}">⬇ 다운로드</a></div>`; }).join("");
-    if (mkLogo.transparent) msgs.push("투명 로고라 배경색을 채웠어요(RBC는 배경색 필수, 다크모드에서도 보이게).");
-    if (lumOf(bg) > 200 && mkLogo.inkLum > 200) msgs.push("배경과 로고가 둘 다 밝아요. 배경을 '브랜드 컬러'로 바꿔 보세요.");
-    msgs.push("여백을 자동으로 잘랐고, 미리보기에도 적용됐어요.");
+    $("mkOut").innerHTML = OUTS.map(o => { const g = GEN[o.key]; return `<div class="out ${o.circle ? "circle" : ""} ${o.wide ? "wide" : ""}"><img src="${g.url}" alt="${o.label}"><b>${o.label}</b>${specLine(o, g)}<a class="pill b sm" href="${g.url}" download="${base}_${o.file}_${g.w}x${g.h}.${g.fmt === "PNG" ? "png" : "jpg"}">내려받기</a></div>`; }).join("");
+    if (mkLogo.transparent) msgs.push("투명 로고라 배경색을 채웠어요(RCS는 배경색이 꼭 있어야 하고, 다크 모드에서도 보여야 해요).");
+    if (lumOf(bg) > 200 && mkLogo.inkLum > 200) msgs.push("배경과 로고가 둘 다 밝아요. 배경을 ‘브랜드 컬러’로 바꿔 보세요.");
+    msgs.push("여백을 자동으로 잘랐고 미리보기에도 반영했어요.");
     $("mkMsg").textContent = msgs.join(" ");
-    refresh();
-  } catch (e) { $("mkMsg").textContent = e.message; $("mkOut").innerHTML = ""; }
+  } catch (e) { $("mkMsg").textContent = e.message; $("mkOut").innerHTML = ""; delete GEN.rbcProfile; delete GEN.kakao; }
+  refresh();
 }
-function tint(c) { // light background for logo banners so most logos stay readable
-  const v = c[0] === "#" ? parseInt(c.slice(1), 16) : null; if (v === null) return c;
-  const mix = ch => Math.round(ch + (255 - ch) * 0.85);
-  return `rgb(${mix(v >> 16)},${mix(v >> 8 & 255)},${mix(v & 255)})`;
-}
-$("mkFile").onchange = e => { const f = e.target.files[0]; if (!f) return; if (mkUpload) URL.revokeObjectURL(mkUpload); mkUpload = URL.createObjectURL(f); makeImages(); };
-$("mkPhotoFile").onchange = e => { const f = e.target.files[0]; if (!f) return; if (mkPhotoUpload) URL.revokeObjectURL(mkPhotoUpload); mkPhotoUpload = URL.createObjectURL(f); document.querySelector("input[name=mkCover][value=photo]").checked = true; makeImages(); };
-document.querySelectorAll("input[name=mkBg],input[name=mkCover]").forEach(r => r.onchange = makeImages);
+document.querySelectorAll("input[name=mkBg]").forEach(r => r.onchange = makeImages);
 $("mkColor").oninput = () => { document.querySelector("input[name=mkBg][value=custom]").checked = true; makeImages(); };
 $("mkScale").oninput = makeImages;
+
+/* cropper: fixed frame, drag to pan, slider/wheel to zoom, 90° rotate */
+const CR = { img: null, s: 1, min: 1, ox: 0, oy: 0, W: 400, H: 400, cb: null };
+async function openCropper(src, o, cb) {
+  let img; try { img = await loadImage(src); } catch (e) { return toast(e.message); }
+  const c = document.createElement("canvas"); c.width = img.naturalWidth; c.height = img.naturalHeight; c.getContext("2d").drawImage(img, 0, 0);
+  CR.img = c; CR.cb = cb;
+  const W = Math.min(440, window.innerWidth - 90); CR.W = W; CR.H = Math.round(W / o.aspect);
+  $("cropCv").width = CR.W; $("cropCv").height = CR.H; $("cropTitle").textContent = o.title;
+  fitCrop(); $("cropper").classList.remove("hidden");
+}
+function fitCrop() { const { img, W, H } = CR; CR.min = Math.min(W / img.width, H / img.height); CR.s = CR.min; CR.ox = (W - img.width * CR.s) / 2; CR.oy = (H - img.height * CR.s) / 2; $("cropZoom").value = 100; drawCrop(); }
+function clampCrop() {
+  const { img, W, H } = CR, w = img.width * CR.s, h = img.height * CR.s;
+  CR.ox = w <= W ? (W - w) / 2 : Math.min(0, Math.max(W - w, CR.ox));
+  CR.oy = h <= H ? (H - h) / 2 : Math.min(0, Math.max(H - h, CR.oy));
+}
+function drawCrop() {
+  const x = $("cropCv").getContext("2d"), { W, H } = CR;
+  x.clearRect(0, 0, W, H);
+  for (let i = 0; i < W; i += 12) for (let j = 0; j < H; j += 12) { x.fillStyle = ((i + j) / 12) % 2 ? "#e6e6e9" : "#fff"; x.fillRect(i, j, 12, 12); }
+  x.imageSmoothingQuality = "high"; x.drawImage(CR.img, CR.ox, CR.oy, CR.img.width * CR.s, CR.img.height * CR.s);
+  x.strokeStyle = "rgba(255,255,255,.6)"; x.lineWidth = 1;
+  for (const k of [1, 2]) { x.beginPath(); x.moveTo(W * k / 3, 0); x.lineTo(W * k / 3, H); x.moveTo(0, H * k / 3); x.lineTo(W, H * k / 3); x.stroke(); }
+  if (Math.abs(W - H) < 2) { x.strokeStyle = "rgba(0,0,0,.45)"; x.setLineDash([6, 6]); x.beginPath(); x.arc(W / 2, H / 2, W / 2 - 1, 0, Math.PI * 2); x.stroke(); x.setLineDash([]); }
+}
+function zoomTo(s, cx = CR.W / 2, cy = CR.H / 2) {
+  s = Math.max(CR.min, Math.min(CR.min * 8, s));
+  CR.ox = cx - (cx - CR.ox) * (s / CR.s); CR.oy = cy - (cy - CR.oy) * (s / CR.s); CR.s = s; clampCrop(); drawCrop();
+  $("cropZoom").value = Math.round(s / CR.min * 100);
+}
+$("cropZoom").oninput = e => zoomTo(CR.min * e.target.value / 100);
+$("cropCv").addEventListener("wheel", e => { e.preventDefault(); const r = $("cropCv").getBoundingClientRect(), k = CR.W / r.width; zoomTo(CR.s * (e.deltaY < 0 ? 1.1 : 0.9), (e.clientX - r.left) * k, (e.clientY - r.top) * k); }, { passive: false });
+let drag = null;
+$("cropCv").addEventListener("pointerdown", e => { drag = { x: e.clientX, y: e.clientY, ox: CR.ox, oy: CR.oy }; $("cropCv").setPointerCapture(e.pointerId); });
+$("cropCv").addEventListener("pointermove", e => { if (!drag) return; const r = $("cropCv").getBoundingClientRect(), k = CR.W / r.width; CR.ox = drag.ox + (e.clientX - drag.x) * k; CR.oy = drag.oy + (e.clientY - drag.y) * k; clampCrop(); drawCrop(); });
+["pointerup", "pointercancel"].forEach(t => $("cropCv").addEventListener(t, () => drag = null));
+$("cropRot").onclick = () => { const s = CR.img, c = document.createElement("canvas"); c.width = s.height; c.height = s.width; const x = c.getContext("2d"); x.translate(c.width, 0); x.rotate(Math.PI / 2); x.drawImage(s, 0, 0); CR.img = c; fitCrop(); };
+$("cropNo").onclick = () => $("cropper").classList.add("hidden");
+$("cropOk").onclick = () => {
+  // the frame region in source pixels, rendered at up to 2000px (letterbox stays transparent → trimmed later)
+  const k = Math.min(2000 / CR.W, 1 / CR.s), out = document.createElement("canvas");
+  out.width = Math.round(CR.W * k); out.height = Math.round(CR.H * k);
+  const x = out.getContext("2d"); x.imageSmoothingQuality = "high";
+  x.drawImage(CR.img, CR.ox * k, CR.oy * k, CR.img.width * CR.s * k, CR.img.height * CR.s * k);
+  $("cropper").classList.add("hidden");
+  CR.cb?.(out.toDataURL("image/png"));
+};
+
+/* 서류·증빙 사진: rotate / crop, then two upload-ready sizes */
+let DOC = null; // canvas
+async function setDoc(src) { const i = await loadImage(src); const c = document.createElement("canvas"); c.width = i.naturalWidth; c.height = i.naturalHeight; c.getContext("2d").drawImage(i, 0, 0); DOC = c; renderDoc(); }
+function renderDoc() {
+  $("docPv").src = DOC.toDataURL("image/jpeg", 0.7); $("docPv").classList.remove("hidden"); $("docRot").disabled = $("docCrop").disabled = false;
+  const outs = [
+    { label: "카카오 심사 서류용", long: 2400, maxKB: 10240, note: "JPG · 10MB 이하", file: "Kakao_document" },
+    { label: "RCS 운영 증빙용", long: 1600, maxKB: 3072, note: "JPG · 긴 변 1600px", file: "RCS_proof" },
+  ];
+  $("docOut").innerHTML = outs.map(o => {
+    const s = Math.min(1, o.long / Math.max(DOC.width, DOC.height)), c = resize(DOC, Math.round(DOC.width * s), Math.round(DOC.height * s));
+    let q = 0.9, u = c.toDataURL("image/jpeg", q); while (kbOf(u) > o.maxKB && q > 0.5) { q -= 0.1; u = c.toDataURL("image/jpeg", q); }
+    return `<div class="out"><img src="${u}" alt="" style="aspect-ratio:auto;max-height:140px"><b>${o.label}</b><div class="spec"><span class="ok">✓ ${c.width}×${c.height}</span> · <span class="${kbOf(u) <= o.maxKB ? "ok" : "bad"}">${kbOf(u)}KB</span><br>${o.note}</div><a class="pill b sm" href="${u}" download="${(A?.rbc.brandName.value || "brand").replace(/[\\/:*?"<>|\s]/g, "")}_${o.file}.jpg">내려받기</a></div>`;
+  }).join("");
+}
+$("docFile").onchange = async e => { const f = e.target.files[0]; if (!f) return; const u = URL.createObjectURL(f); try { await setDoc(u); } catch (er) { toast(er.message); } URL.revokeObjectURL(u); };
+$("docRot").onclick = () => { const s = DOC, c = document.createElement("canvas"); c.width = s.height; c.height = s.width; const x = c.getContext("2d"); x.translate(c.width, 0); x.rotate(Math.PI / 2); x.drawImage(s, 0, 0); DOC = c; renderDoc(); };
+$("docCrop").onclick = () => openCropper(DOC.toDataURL("image/png"), { aspect: DOC.width / DOC.height, title: "필요한 부분만 남기기" }, async url => { await setDoc(url); });
 
 /* ---------- live checks + preview ---------- */
 function liveWarnings() {
   const w = { rbc: [...A.warnings.rbc], kakao: [...A.warnings.kakao], common: [...A.warnings.common] };
   const d = A.rbc.description.value;
-  if (PROMO_RE.test(d) && !w.rbc.some(x => x.includes("홍보성"))) w.rbc.push(`브랜드 소개에 홍보성 문구("${PROMO_RE.exec(d)[0]}")가 있어요. RBC 심사에서 반려돼요.`);
+  if (PROMO_RE.test(d) && !w.rbc.some(x => x.includes("홍보성"))) w.rbc.push(`브랜드 소개에 홍보성 문구("${PROMO_RE.exec(d)[0]}")가 있어요. RCS 심사에서 반려돼요.`);
   if (!PROMO_RE.test(d)) w.rbc = w.rbc.filter(x => !x.includes("홍보성"));
   if (d) w.rbc = w.rbc.filter(x => !x.includes("브랜드 소개는 필수"));
-  const pf = !GEN.rbcProfile && dims[A.rbc.profileImage.value]; if (pf && !dimOk("rbc.profileImage", pf)) w.rbc.push(`RBC 프로필 이미지가 ${pf.w}×${pf.h}예요. 정사각형 388~1080px로 다시 만들어 주세요.`);
-  const kp = !GEN.kakao && dims[A.kakao.profileImage.value]; if (kp && !dimOk("kakao.profileImage", kp)) w.kakao.push(`카카오 프로필 사진이 ${kp.w}×${kp.h}예요. 640×640 정사각형을 권장해요.`);
+  if (GEN.rbcProfile) w.rbc = w.rbc.filter(x => !x.includes("프로필 이미지"));
+  if (/^0507/.test((A.rbc.phone.value || "").replace(/\D/g, "")) && !w.rbc.some(x => x.includes("안심번호"))) w.rbc.push("대표 전화가 0507 안심번호예요. 실제 매장 번호로 바꾸면 심사가 수월해요.");
   if (searchId.length > LIMITS.kakaoSearchId) w.kakao.push(`검색용 아이디가 ${LIMITS.kakaoSearchId}자를 넘어요.`);
   if (/[^가-힣a-zA-Z0-9]/.test(searchId)) w.kakao.push("검색용 아이디에는 한글·영문·숫자만 쓰는 게 안전해요.");
-  if (needMismatch() && !A.kakao.mismatchNote.value) w.kakao.push("채널 이름과 사업자등록증 상 업체명이 달라요. 소명을 작성해 주세요.");
+  if (needMismatch() && !A.kakao.mismatchNote.value) w.kakao.push("채널 이름과 사업자등록증 상호가 달라요. 소명을 적어 주세요.");
   return w;
 }
-function warnBox(id, list) { $(id).innerHTML = list.length ? `<b>⚠️ 확인하세요</b><ul>${list.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""; $(id).classList.toggle("hidden", !list.length); }
+function warnBox(id, list) { $(id).innerHTML = list.length ? `<b>확인해 주세요</b><ul>${list.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""; $(id).classList.toggle("hidden", !list.length); }
 function refresh() {
+  if (!A) return;
   document.querySelectorAll(".cnt[data-path]").forEach(c => { const n = (get(c.dataset.path)?.value || "").length, m = +c.dataset.max; c.textContent = `${n}/${m}`; c.classList.toggle("over", n > m); });
   $("idCnt").textContent = `${searchId.length}/${LIMITS.kakaoSearchId}`; $("idCnt").classList.toggle("over", searchId.length > LIMITS.kakaoSearchId);
   $("mismatchBox").classList.toggle("hidden", !A.kakao.mismatchNote.value && !needMismatch());
   const w = liveWarnings();
   warnBox("wRbc", w.rbc); warnBox("wKakao", w.kakao); warnBox("wCommon", w.common);
   [["nRbc", w.rbc], ["nKakao", w.kakao]].forEach(([id, l]) => { $(id).textContent = l.length; $(id).classList.toggle("hidden", !l.length); });
+  $("wDot0").classList.toggle("hidden", !(w.rbc.length + w.kakao.length + w.common.length));
   const hasBiz = A.business.bizNo.verified || A.business.companyName.verified;
-  $("rbcBizCheck").innerHTML = hasBiz ? `<span class="tag ok">사이트에서 확인됨</span>` : `<span class="tag chk">사이트에서 못 찾음</span>`;
-  // RBC preview
-  const r = A.rbc, name = r.brandName.value || "브랜드명", pf = GEN.rbcProfile?.url || r.profileImage.value, bg = GEN.rbcBg?.url || r.backgroundImage.value, col = r.brandColor.value || "#2f5bff";
-  $("pvBg").style.backgroundImage = bg ? `url("${bg}")` : `linear-gradient(135deg,${col},#1b2c7a)`;
+  $("rbcBizCheck").innerHTML = hasBiz ? `<span class="tag ok">확인됨</span>` : `<span class="tag chk">못 찾음</span>`;
+  const r = A.rbc, name = r.brandName.value || "브랜드명", pf = GEN.rbcProfile?.url || r.profileImage.value, bg = GEN.rbcBg?.url || r.backgroundImage.value, col = r.brandColor.value || "#1428a0";
+  $("sbName").textContent = name;
+  $("pvBg").style.backgroundImage = bg ? `url("${bg}")` : `linear-gradient(135deg,${col},#000)`;
   $("pvPf").style.backgroundImage = pf ? `url("${pf}")` : ""; $("pvPf").textContent = pf ? "" : name.charAt(0); $("pvPf").style.color = col;
   $("pvName").textContent = name; $("pvCat").textContent = r.category.value; $("pvDesc").textContent = r.description.value;
-  $("pvBtns").innerHTML = r.quickMenu.filter(b => b.label).map(b => `<div style="color:${col}"><span>${ICON[b.type] || "🔗"}</span>${esc(b.label)}</div>`).join("");
+  $("pvBtns").innerHTML = r.quickMenu.filter(b => b.label).map(b => `<div style="color:${esc(col)}"><span>${ICON[b.type] || "🔗"}</span>${esc(b.label)}</div>`).join("");
   const info = [["📞", r.phone.value], ["🌐", r.website.value], ["✉️", r.email.value], ["📍", r.address.value]].filter(x => x[1]);
   $("pvInfo").innerHTML = info.map(([i, v]) => `<div>${i} ${esc(v)}</div>`).join(""); $("pvInfo").classList.toggle("hidden", !info.length);
-  // Kakao preview
   const k = A.kakao, kn = k.channelName.value || "채널 이름", kpf = GEN.kakao?.url || k.profileImage.value;
   $("kPf").style.backgroundImage = kpf ? `url("${kpf}")` : ""; $("kPf").textContent = kpf ? "" : kn.charAt(0);
   $("kName").textContent = kn; $("kId").textContent = searchId ? "@" + searchId : ""; $("kDesc").textContent = k.description.value;
   const ki = [["🏷", k.category.value], ["📞", k.csPhone.value], ["🌐", k.website.value], ["📍", A.business.hasStore ? k.storeAddress.value : ""]].filter(x => x[1]);
   $("kInfo").innerHTML = ki.map(([i, v]) => `<div>${i} ${esc(v)}</div>`).join("");
-  updateSumbar();
   if (SAMPLES.length) previewSample();
 }
-document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
-  tab = b.dataset.tab;
-  document.querySelectorAll(".tabs button").forEach(x => x.classList.toggle("on", x === b));
-  $("tab-rbc").classList.toggle("hidden", tab !== "rbc"); $("tab-kakao").classList.toggle("hidden", tab !== "kakao");
-  $("pvRbc").classList.toggle("hidden", tab !== "rbc"); $("pvKakao").classList.toggle("hidden", tab !== "kakao");
-});
 
-
-
-/* ---------- message samples ---------- */
-const MS = { title: 40, body: 200, btn: 17, at: 1000, atBtn: 14 };  // RCS 제목·본문·버튼, 알림톡 본문·버튼명 (soft limits)
-let SAMPLES = [], sIdx = 0;
+/* ---------- step 3: messages ---------- */
+const MS = { title: 40, body: 200, btn: 17, at: 1000, atBtn: 14 };
+let SAMPLES = [], sIdx = 0, TONE = "friendly";
 const V = t => `#{${t}}`;
+
+
+/* ---------- step 3: messages (continued) ---------- */
+function initSamples() {
+  const ai = Array.isArray(A.messages) && A.messages.length ? A.messages : null;
+  setSamples(ai || ruleSamples(A), ai ? "AI 초안" : "업종별 초안");
+}
+function setSamples(list, label) {
+  SAMPLES = list.map(x => ({ ...x, rcs: { ...x.rcs, buttons: (x.rcs.buttons || []).slice(0, 2) }, at: x.at || { body: "", button: { label: "", value: "" } } }));
+  $("msSrc").textContent = label; sIdx = 0; renderSamples();
+}
+const IDEAS = {
+  clinic: ["예약 리마인드", "정기 검진 알림", "휴진 안내", "진료 후 관리 안내"],
+  beauty: ["예약 확정", "재방문 혜택", "시술 후 관리", "신규 디자이너 소개"],
+  shop: ["배송 출발", "재입고 알림", "시즌 할인", "장바구니 리마인드"],
+  edu: ["수업 일정", "출결 알림", "신규 모집", "상담 예약 확인"],
+  finance: ["거래 알림", "만기 안내", "신상품 안내", "보안 공지"],
+  food: ["주문 접수", "예약 확정", "신메뉴 출시", "단골 감사 인사"],
+  biz: ["상담 접수 확인", "서비스 공지", "신규 서비스 안내", "연말 감사 인사"],
+};
+function renderIdeas() {
+  $("ideas").innerHTML = (IDEAS[industryOf(A)] || IDEAS.biz).map(t => `<button type="button">${esc(t)}</button>`).join("");
+  $("ideas").querySelectorAll("button").forEach(b => b.onclick = () => { $("aiPurpose").value = b.textContent; $("aiGo").click(); });
+}
+document.querySelectorAll("#tone button").forEach(b => b.onclick = () => { TONE = b.dataset.tone; document.querySelectorAll("#tone button").forEach(x => x.classList.toggle("on", x === b)); });
+$("aiGo").onclick = async () => {
+  const purpose = $("aiPurpose").value.trim();
+  $("aiGo").disabled = true; $("aiGo").textContent = "쓰는 중…";
+  try {
+    const r = A.rbc;
+    const { messages } = await callApi({ action: "messages", requestId: REQ_ID, purpose, tone: TONE,
+      brand: { name: r.brandName.value, description: r.description.value, category: r.category.value || A.kakao.category.value, phone: r.phone.value || A.kakao.csPhone.value, website: r.website.value, address: r.address.value || A.kakao.storeAddress.value, kakao: A.kakao.existingChannel?.value || "" } });
+    setSamples(messages, purpose ? `AI 초안 · ${purpose}` : "AI 초안");
+    toast("새 초안 3개를 받았어요");
+  } catch (e) {
+    toast(e.code === "ai_off" ? "AI 다시 쓰기는 AI 연결 후 켜져요. 지금은 업종별 초안을 고쳐 써 주세요." : e.message);
+  }
+  $("aiGo").disabled = false; $("aiGo").textContent = "초안 3개 받기";
+};
+function adWrap(s, body) { return s.kind === "ad" ? `(광고) ${A.rbc.brandName.value}\n${body}\n\n무료수신거부 ${V("080번호")}` : body; }
+const varHtml = t => esc(t).replace(/#\{[^}]+\}/g, m => `<span class="var">${m}</span>`);
+function renderSamples() {
+  $("msChips").innerHTML = SAMPLES.map((x, i) => `<button type="button" class="${i === sIdx ? "on" : ""}" data-i="${i}">${esc(x.purpose)}${x.kind === "ad" ? ' <span class="ad">광고</span>' : ""}</button>`).join("");
+  $("msChips").querySelectorAll("button").forEach(b => b.onclick = () => { sIdx = +b.dataset.i; renderSamples(); });
+  const s = SAMPLES[sIdx];
+  $("msTitle").value = s.rcs.title; $("msBody").value = s.rcs.body;
+  const bt = s.rcs.buttons.concat([{ label: "", type: "url", value: "" }, { label: "", type: "url", value: "" }]).slice(0, 2);
+  s.rcs.buttons = bt;
+  $("msBtns").innerHTML = bt.map((b, i) => `<div class="ms-btnrow"><select data-b="${i}" data-k="type">${Object.entries(BT).filter(([k]) => k !== "copy").map(([k, v]) => `<option value="${k}" ${k === b.type ? "selected" : ""}>${v}</option>`).join("")}</select><input data-b="${i}" data-k="label" value="${esc(b.label)}" placeholder="버튼 문구" maxlength="${MS.btn}"><input data-b="${i}" data-k="value" value="${esc(b.value)}" placeholder="링크·번호·주소"></div>`).join("");
+  $("msBtns").querySelectorAll("[data-b]").forEach(el => el.oninput = () => { s.rcs.buttons[+el.dataset.b][el.dataset.k] = el.value; previewSample(); });
+  const isAd = s.kind === "ad";
+  $("msAtTitle").textContent = isAd ? "카카오 브랜드 메시지 (광고)" : "카카오 알림톡";
+  $("msAtBody").value = isAd ? (s.at.body || `(광고) ${s.rcs.title}\n${s.rcs.body}`) : s.at.body;
+  $("msAtBtn").value = s.at.button?.label || (isAd ? s.rcs.buttons[0]?.label || "" : ""); $("msAtUrl").value = s.at.button?.value || (isAd ? s.rcs.buttons[0]?.value || "" : "");
+  $("msAtNote").textContent = isAd
+    ? "알림톡으로는 광고를 보낼 수 없어요. 광고는 브랜드 메시지로, 광고 수신에 동의한 고객에게만 보내요. RCS 광고도 (광고) 표기와 무료수신거부 안내가 필요해요."
+    : "알림톡은 카카오 템플릿 검수를 통과해야 보낼 수 있어요. 정보성 내용만 담고, #{변수} 자리는 보낼 때 채워요.";
+  previewSample();
+}
+function previewSample() {
+  const s = SAMPLES[sIdx]; if (!s) return;
+  s.rcs.title = $("msTitle").value; s.rcs.body = $("msBody").value;
+  s.at.body = $("msAtBody").value; s.at.button = { label: $("msAtBtn").value, value: $("msAtUrl").value };
+  const cnt = (id, n, m) => { $(id).textContent = `${n}/${m}`; $(id).classList.toggle("over", n > m); };
+  cnt("msTc", s.rcs.title.length, MS.title); cnt("msBc", adWrap(s, s.rcs.body).length, MS.body); cnt("msAc", s.at.body.length, MS.at);
+  const col = A.rbc.brandColor.value || "#1428a0", pf = GEN.rbcProfile?.url || A.rbc.profileImage.value, kpf = GEN.kakao?.url || A.kakao.profileImage.value;
+  const av = (el, img, fb, txt) => { el.style.background = img ? `#fff url("${img}") center/cover` : fb; el.textContent = img ? "" : txt; };
+  av($("msAv"), pf, col, (A.rbc.brandName.value || "B")[0]); $("msName").textContent = A.rbc.brandName.value;
+  $("msRcsPv").innerHTML = `<div class="t">${varHtml(s.rcs.title)}</div><div class="dd">${varHtml(adWrap(s, s.rcs.body))}</div>` + s.rcs.buttons.filter(b => b.label).map(b => `<div class="b" style="color:${esc(col)}">${esc(b.label)}</div>`).join("");
+  av($("msKav"), kpf, "var(--kakao)", ""); $("msKname").textContent = A.kakao.channelName.value;
+  $("msAtPv").innerHTML = `<div class="hd">${s.kind === "ad" ? "브랜드 메시지" : "알림톡 도착"}</div><div class="dd">${varHtml(s.at.body)}</div>` + (s.at.button.label ? `<div class="b">${esc(s.at.button.label)}</div>` : "");
+}
+["msTitle", "msBody", "msAtBody", "msAtBtn", "msAtUrl"].forEach(id => $(id).addEventListener("input", previewSample));
+function sampleText(s) {
+  return `[${s.purpose}${s.kind === "ad" ? " · 광고" : ""}]
+■ RCS 메시지
+제목: ${s.rcs.title}
+본문:
+${adWrap(s, s.rcs.body)}
+버튼: ${s.rcs.buttons.filter(b => b.label).map(b => `${b.label}(${b.value})`).join(" / ") || "-"}
+
+■ ${s.kind === "ad" ? "카카오 브랜드 메시지" : "카카오 알림톡 템플릿"}
+${s.at.body}
+버튼: ${s.at.button.label ? `${s.at.button.label}(${s.at.button.value})` : "-"}`;
+}
+$("msCopy").onclick = () => { previewSample(); copy(sampleText(SAMPLES[sIdx]), "메시지를 복사했어요"); };
+$("msCopyAll").onclick = () => { previewSample(); copy(SAMPLES.map(sampleText).join("\n\n────────\n\n"), "전체 메시지를 복사했어요"); };
+
+/* ---------- step 4: lead ---------- */
+$("ldSend").onclick = async () => {
+  const company = $("ldCompany").value.trim(), phone = $("ldPhone").value.trim();
+  if (!company || phone.replace(/\D/g, "").length < 9) return toast("회사명과 휴대폰 번호를 확인해 주세요");
+  if (!$("ldAgree").checked) return toast("개인정보 수집·이용에 동의해 주세요");
+  $("ldSend").disabled = true; $("ldMsg").textContent = "보내는 중…";
+  try {
+    await callApi({ action: "lead", requestId: REQ_ID, company, name: $("ldName").value.trim(), phone, email: $("ldEmail").value.trim(),
+      wants: [$("ldRbc").checked && "rbc", $("ldKakao").checked && "kakao"].filter(Boolean), agreed: true, marketing: $("ldMkt").checked,
+      application: { ...A, kakao: { ...A.kakao, searchId }, messages: SAMPLES } });
+    $("ldMsg").innerHTML = '<b style="color:#7ee2b8">✓ 신청됐어요. 담당자가 곧 연락드릴게요.</b>';
+  } catch (e) { $("ldMsg").textContent = e.message; $("ldSend").disabled = false; }
+};
+
+
+/* ---------- shared helpers (from v1) ---------- */
 function industryOf(a) {
   const t = [a.rbc.category.value, a.kakao.category.value, a.rbc.brandName.value, a.rbc.description.value].join(" ");
   if (/치과|병원|의원|의료|클리닉|한의|피부|안과|동물병원/.test(t)) return "clinic";
@@ -957,98 +1169,77 @@ function ruleSamples(a) {
   };
   return sets[industryOf(a)];
 }
-function initSamples() {
-  const ai = Array.isArray(A.messages) && A.messages.length ? A.messages : null;
-  SAMPLES = (ai || ruleSamples(A)).map(x => ({ ...x, rcs: { ...x.rcs, buttons: (x.rcs.buttons || []).slice(0, 2) }, at: x.at || { body: "", button: { label: "", value: "" } } }));
-  $("msSrc").textContent = ai ? "AI 작성" : "업종별 템플릿";
-  sIdx = 0; renderSamples();
+function trimLogo(img) {
+  const w = img.naturalWidth || 256, h = img.naturalHeight || 256, c = document.createElement("canvas");
+  c.width = w; c.height = h; const x = c.getContext("2d"); x.drawImage(img, 0, 0, w, h);
+  const d = x.getImageData(0, 0, w, h).data, px = (i, j) => { const k = (j * w + i) * 4; return [d[k], d[k + 1], d[k + 2], d[k + 3]]; };
+  const corners = [px(0, 0), px(w - 1, 0), px(0, h - 1), px(w - 1, h - 1)];
+  const transparent = corners.some(p => p[3] < 20);
+  const bg = transparent ? null : corners[0];
+  const empty = p => p[3] < 20 || (bg && Math.abs(p[0] - bg[0]) + Math.abs(p[1] - bg[1]) + Math.abs(p[2] - bg[2]) < 40);
+  let x0 = w, y0 = h, x1 = -1, y1 = -1;
+  for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) if (!empty(px(i, j))) { if (i < x0) x0 = i; if (i > x1) x1 = i; if (j < y0) y0 = j; if (j > y1) y1 = j; }
+  if (x1 < 0) { x0 = 0; y0 = 0; x1 = w - 1; y1 = h - 1; }
+  const cw = x1 - x0 + 1, ch = y1 - y0 + 1, out = document.createElement("canvas");
+  out.width = cw; out.height = ch; out.getContext("2d").drawImage(c, x0, y0, cw, ch, 0, 0, cw, ch);
+  // luminance of the logo ink, to keep contrast against the chosen background
+  let lum = 0, n = 0; const od = out.getContext("2d").getImageData(0, 0, cw, ch).data;
+  for (let k = 0; k < od.length; k += 16) if (od[k + 3] > 120) { lum += 0.299 * od[k] + 0.587 * od[k + 1] + 0.114 * od[k + 2]; n++; }
+  return { canvas: out, bgColor: bg ? `rgb(${bg[0]},${bg[1]},${bg[2]})` : null, transparent, inkLum: n ? lum / n : 0, src: cw * ch };
 }
-function adWrap(s, body) { // RCS 광고 표기: (광고)+전송자, 하단 무료수신거부
-  return s.kind === "ad" ? `(광고) ${A.rbc.brandName.value}\n${body}\n\n무료수신거부 ${V("080번호")}` : body;
+const lumOf = c => { const m = c.match(/\d+/g) || []; let r, g, b; if (c[0] === "#") { const v = parseInt(c.slice(1), 16); r = v >> 16; g = v >> 8 & 255; b = v & 255; } else [r, g, b] = m.map(Number); return 0.299 * r + 0.587 * g + 0.114 * b; };
+function bgFor(logo) {
+  const mode = document.querySelector("input[name=mkBg]:checked").value;
+  if (mode === "white") return "#ffffff";
+  if (mode === "brand") return A?.rbc.brandColor.value || "#2f5bff";
+  if (mode === "custom") return $("mkColor").value;
+  if (logo.bgColor) return logo.bgColor;
+  // transparent logo: white for dark ink, brand color (or dark) for light ink → visible in dark mode too
+  return logo.inkLum > 200 ? (A?.rbc.brandColor.value || "#1b2c7a") : "#ffffff";
 }
-const varHtml = t => esc(t).replace(/#\{[^}]+\}/g, m => `<span class="var">${m}</span>`);
-function renderSamples() {
-  $("msChips").innerHTML = SAMPLES.map((x, i) => `<button type="button" class="${i === sIdx ? "on" : ""}" data-i="${i}">${esc(x.purpose)}${x.kind === "ad" ? ' <span class="ad">광고</span>' : ""}</button>`).join("");
-  $("msChips").querySelectorAll("button").forEach(b => b.onclick = () => { sIdx = +b.dataset.i; renderSamples(); });
-  const s = SAMPLES[sIdx];
-  $("msTitle").value = s.rcs.title; $("msBody").value = s.rcs.body;
-  const bt = s.rcs.buttons.concat([{ label: "", type: "url", value: "" }, { label: "", type: "url", value: "" }]).slice(0, 2);
-  s.rcs.buttons = bt;
-  $("msBtns").innerHTML = bt.map((b, i) => `<div class="ms-btnrow"><select data-b="${i}" data-k="type">${Object.entries(BT).map(([k, v]) => `<option value="${k}" ${k === b.type ? "selected" : ""}>${v}</option>`).join("")}</select><input data-b="${i}" data-k="label" value="${esc(b.label)}" placeholder="버튼 문구" maxlength="${MS.btn}"><input data-b="${i}" data-k="value" value="${esc(b.value)}" placeholder="링크·번호·주소"></div>`).join("");
-  $("msBtns").querySelectorAll("[data-b]").forEach(el => el.oninput = () => { s.rcs.buttons[+el.dataset.b][el.dataset.k] = el.value; previewSample(); });
-  const isAd = s.kind === "ad";
-  $("msAtTitle").textContent = isAd ? "💛 카카오 브랜드 메시지 (광고)" : "💛 카카오 알림톡";
-  $("msAtBody").value = isAd ? (s.at.body || `(광고) ${s.rcs.title}\n${s.rcs.body}`) : s.at.body;
-  $("msAtBtn").value = s.at.button?.label || (isAd ? s.rcs.buttons[0]?.label || "" : ""); $("msAtUrl").value = s.at.button?.value || (isAd ? s.rcs.buttons[0]?.value || "" : "");
-  $("msAtNote").textContent = isAd
-    ? "알림톡으로는 광고를 보낼 수 없어요. 광고는 브랜드 메시지로, 광고 수신에 동의한 고객에게만 보내야 해요. RCS 광고도 (광고) 표기와 무료수신거부 안내가 필요해요."
-    : "알림톡은 카카오 템플릿 검수를 통과해야 보낼 수 있어요. 정보성 내용만 담고, #{변수} 자리는 발송할 때 채워요.";
-  previewSample();
+function drawLogo(o, logo, bg) {
+  const c = document.createElement("canvas"); c.width = o.w; c.height = o.h; const x = c.getContext("2d");
+  x.fillStyle = bg; x.fillRect(0, 0, o.w, o.h);
+  const w = logo.canvas.width, h = logo.canvas.height, k = (+$("mkScale").value) / 100;
+  // circle-safe: logo diagonal inside the inscribed circle with margin; banners keep the logo in a central band
+  const s = o.circle ? (o.w * 0.80 * k) / Math.hypot(w, h) : Math.min((o.w * 0.6 * k) / w, (o.h * 0.4 * k) / h);
+  x.imageSmoothingQuality = "high";
+  x.drawImage(logo.canvas, (o.w - w * s) / 2, (o.h - h * s) / 2, w * s, h * s);
+  return c;
 }
-function previewSample() {
-  const s = SAMPLES[sIdx]; if (!s) return;
-  s.rcs.title = $("msTitle").value; s.rcs.body = $("msBody").value;
-  s.at.body = $("msAtBody").value; s.at.button = { label: $("msAtBtn").value, value: $("msAtUrl").value };
-  const set = (id, n, m) => { $(id).textContent = `${n}/${m}`; $(id).classList.toggle("over", n > m); };
-  set("msTc", s.rcs.title.length, MS.title); set("msBc", adWrap(s, s.rcs.body).length, MS.body); set("msAc", s.at.body.length, MS.at);
-  const col = A.rbc.brandColor.value || "#2b50e8", pf = GEN.rbcProfile?.url || A.rbc.profileImage.value, kpf = GEN.kakao?.url || A.kakao.profileImage.value;
-  $("msAv").style.backgroundImage = pf ? `url("${pf}")` : ""; $("msAv").style.background = pf ? "" : col; $("msAv").textContent = pf ? "" : (A.rbc.brandName.value || "B")[0];
-  if (pf) $("msAv").style.backgroundImage = `url("${pf}")`;
-  $("msName").textContent = A.rbc.brandName.value;
-  $("msRcsPv").innerHTML = `<div class="t">${varHtml(s.rcs.title)}</div><div class="d">${varHtml(adWrap(s, s.rcs.body))}</div>` + s.rcs.buttons.filter(b => b.label).map(b => `<div class="b" style="color:${col}">${esc(b.label)}</div>`).join("");
-  $("msKav").style.backgroundImage = kpf ? `url("${kpf}")` : ""; $("msKav").style.background = kpf ? "" : "var(--kakao)"; if (kpf) $("msKav").style.backgroundImage = `url("${kpf}")`;
-  $("msKname").textContent = A.kakao.channelName.value;
-  $("msAtPv").innerHTML = `<div class="hd">${s.kind === "ad" ? "브랜드 메시지" : "알림톡 도착"}</div><div class="d">${varHtml(s.at.body)}</div>` + (s.at.button.label ? `<div class="b">${esc(s.at.button.label)}</div>` : "");
+function drawCover(o, img, bg) { // center-crop a photo to the target ratio (object-fit: cover)
+  const c = document.createElement("canvas"); c.width = o.w; c.height = o.h; const x = c.getContext("2d");
+  x.fillStyle = bg; x.fillRect(0, 0, o.w, o.h);
+  const iw = img.naturalWidth, ih = img.naturalHeight, s = Math.max(o.w / iw, o.h / ih);
+  x.imageSmoothingQuality = "high";
+  x.drawImage(img, (o.w - iw * s) / 2, (o.h - ih * s) / 2, iw * s, ih * s);
+  return c;
 }
-["msTitle", "msBody", "msAtBody", "msAtBtn", "msAtUrl"].forEach(id => $(id).addEventListener("input", previewSample));
-function sampleText(s) {
-  return `[${s.purpose}${s.kind === "ad" ? " · 광고" : ""}]
-■ RCS 메시지
-제목: ${s.rcs.title}
-본문:
-${adWrap(s, s.rcs.body)}
-버튼: ${s.rcs.buttons.filter(b => b.label).map(b => `${b.label}(${b.value})`).join(" / ") || "-"}
-
-■ ${s.kind === "ad" ? "카카오 브랜드 메시지" : "카카오 알림톡 템플릿"}
-${s.at.body}
-버튼: ${s.at.button.label ? `${s.at.button.label}(${s.at.button.value})` : "-"}`;
+function resize(c, w, h) { const r = document.createElement("canvas"); r.width = w; r.height = h; const x = r.getContext("2d"); x.imageSmoothingQuality = "high"; x.drawImage(c, 0, 0, w, h); return r; }
+const kbOf = u => Math.round((u.length - u.indexOf(",") - 1) * 0.75 / 1024);
+/** Encode within the size limit: allowed formats in order, JPEG quality steps, then downscale (never below the spec minimum). */
+function encode(c, o) {
+  let cur = c;
+  while (true) {
+    for (const f of o.fmts) {
+      if (f === "png") { const u = cur.toDataURL("image/png"); if (kbOf(u) <= o.maxKB) return { url: u, w: cur.width, h: cur.height, kb: kbOf(u), fmt: "PNG" }; }
+      else for (const q of [0.92, 0.85, 0.78, 0.7]) { const u = cur.toDataURL("image/jpeg", q); if (kbOf(u) <= o.maxKB) return { url: u, w: cur.width, h: cur.height, kb: kbOf(u), fmt: "JPG" }; }
+    }
+    const nw = Math.round(cur.width * 0.85), nh = Math.round(cur.height * 0.85);
+    if (nw < o.min || nh < o.min * (o.h / o.w)) { const u = cur.toDataURL(o.fmts.includes("jpeg") ? "image/jpeg" : "image/png", 0.7); return { url: u, w: cur.width, h: cur.height, kb: kbOf(u), fmt: o.fmts.includes("jpeg") ? "JPG" : "PNG" }; }
+    cur = resize(cur, nw, nh);
+  }
 }
-$("msCopy").onclick = () => { previewSample(); copy(sampleText(SAMPLES[sIdx]), "샘플을 복사했어요"); };
-$("msCopyAll").onclick = () => { previewSample(); copy(SAMPLES.map(sampleText).join("\n\n────────\n\n"), "모든 샘플을 복사했어요"); };
-
-/* ---------- summary bar ---------- */
-function updateSumbar() {
-  if (!A) return;
-  const w = liveWarnings();
-  const req = [A.business.companyName, A.business.bizNo, A.rbc.brandName, A.rbc.description, A.rbc.phone, A.kakao.channelName, A.kakao.csPhone, A.kakao.description];
-  let have = req.filter(f => f && f.value).length, total = req.length + 3;
-  if (A.rbc.profileImage.value || GEN.rbcProfile) have++;
-  if (A.kakao.profileImage.value || GEN.kakao) have++;
-  if (searchId) have++;
-  $("sbName").textContent = A.rbc.brandName.value || "브랜드";
-  $("sbCount").textContent = `${have}/${total}`;
-  $("sbBar").style.width = Math.round(have / total * 100) + "%";
-  $("sbWarn").textContent = w.rbc.length + w.kakao.length + w.common.length;
-  $("dBiz").className = "dot" + (w.common.length || !A.business.bizNo.value ? " w" : "");
-  $("dRbc").className = "dot" + (w.rbc.length ? " w" : "");
-  $("dKakao").className = "dot" + (w.kakao.length ? " w" : "");
+function specLine(o, g) {
+  const ratio = (g.w / g.h).toFixed(2) === (o.w / o.h).toFixed(2), size = g.w >= o.min && g.w <= Math.max(o.w, 1080), kb = g.kb <= o.maxKB, fmt = o.fmts.map(f => f === "jpeg" ? "JPG" : "PNG").includes(g.fmt);
+  const t = (ok, s) => `<span class="${ok ? "ok" : "bad"}">${ok ? "✓" : "✗"} ${s}</span>`;
+  return `<div class="spec">${t(ratio, o.wide ? "16:9" : "1:1")} · ${t(size, `${g.w}×${g.h}`)}<br>${t(fmt, g.fmt)} · ${t(kb, `${g.kb}KB / ${o.maxKB >= 1024 ? o.maxKB / 1024 + "MB" : o.maxKB + "KB"}`)}${o.circle ? `<br>${t(true, "원형 크롭 안전")}` : ""}</div>`;
 }
-document.querySelectorAll("[data-jump]").forEach(b => b.onclick = () => {
-  const j = b.dataset.jump;
-  if (j === "rbc" || j === "kakao") { document.querySelector(`.tabs button[data-tab=${j}]`).click(); document.getElementById("tabsBar").scrollIntoView({ behavior: "smooth", block: "start" }); return; }
-  document.getElementById(j).scrollIntoView({ behavior: "smooth", block: "start" });
-});
-/* ---------- hero demo phone (one orchestrated moment) ---------- */
-function playDemo() {
-  const p = $("demoPhone"); p.classList.remove("brand");
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) { p.classList.add("brand"); return; }
-  setTimeout(() => p.classList.add("brand"), 1400);
+function tint(c) { // light background for logo banners so most logos stay readable
+  const v = c[0] === "#" ? parseInt(c.slice(1), 16) : null; if (v === null) return c;
+  const mix = ch => Math.round(ch + (255 - ch) * 0.85);
+  return `rgb(${mix(v >> 16)},${mix(v >> 8 & 255)},${mix(v & 255)})`;
 }
-$("dpReplay").onclick = playDemo;
-$("noSite").onclick = () => openManual("");
-playDemo();
-
-/* ---------- copy ---------- */
 const v = f => f?.value || "(확인 필요)";
 function bizText() { const b = A.business; return `[사업자 정보]\n상호(법인명): ${v(b.companyName)}\n대표자: ${v(b.ceo)}\n사업자등록번호: ${v(b.bizNo)}\n오프라인 매장: ${b.hasStore ? "있음" : "없음"}`; }
 function rbcText() {
@@ -1081,13 +1272,7 @@ function kakaoText() {
 웹사이트: ${k.website.value}${A.business.hasStore ? `\n매장 주소: ${v(k.storeAddress)}` : ""}${k.mismatchNote.value ? `\n사업자정보 불일치 소명: ${k.mismatchNote.value}` : ""}`;
 }
 async function copy(t, m) { try { await navigator.clipboard.writeText(t); toast(m); } catch { toast("복사하지 못했어요"); } }
-$("copyRbc").onclick = () => copy(bizText() + "\n\n" + rbcText(), "RBC 입력값을 복사했어요");
-$("copyKakao").onclick = () => copy(bizText() + "\n\n" + kakaoText(), "카카오 채널 입력값을 복사했어요");
-$("copyAll").onclick = () => copy(bizText() + "\n\n" + rbcText() + "\n\n" + kakaoText(), "둘 다 복사했어요");
-$("copyJson").onclick = () => copy(JSON.stringify({ ...A, kakao: { ...A.kakao, searchId } }, null, 2), "JSON을 복사했어요");
 function toast(m) { const t = $("toast"); t.textContent = m; t.classList.add("on"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("on"), 2000); }
-
-/* ---------- demo ---------- */
 function demoResponse() {
   const ok = (value, source) => ({ value, source, verified: true }), ai = (value, source) => ({ value, source, verified: false });
   const url = "https://www.brightdent.co.kr/";
@@ -1120,7 +1305,58 @@ function demoResponse() {
     },
   };
 }
-if (DEMO) { $("demoBar").classList.remove("hidden"); }
+$("copyRbc").onclick = () => copy(bizText() + "\n\n" + rbcText(), "RCS 입력값을 복사했어요");
+$("copyKakao").onclick = () => copy(bizText() + "\n\n" + kakaoText(), "카카오 채널 입력값을 복사했어요");
+$("copyAll").onclick = () => copy(bizText() + "\n\n" + rbcText() + "\n\n" + kakaoText(), "전체를 복사했어요");
+$("copyJson").onclick = () => copy(JSON.stringify({ ...A, kakao: { ...A.kakao, searchId } }, null, 2), "JSON을 복사했어요");
+
+/* ---------- demo (no server) ---------- */
+function demoLogo() {
+  const c = document.createElement("canvas"); c.width = c.height = 600; const x = c.getContext("2d");
+  x.fillStyle = "#0a7cff"; x.beginPath(); x.arc(300, 300, 230, 0, Math.PI * 2); x.fill();
+  x.fillStyle = "#fff"; x.font = "800 260px Pretendard, sans-serif"; x.textAlign = "center"; x.textBaseline = "middle"; x.fillText("밝", 300, 318);
+  return c.toDataURL("image/png");
+}
+function demoCover() {
+  const c = document.createElement("canvas"); c.width = 1200; c.height = 800; const x = c.getContext("2d");
+  const g = x.createLinearGradient(0, 0, 1200, 800); g.addColorStop(0, "#d9ecff"); g.addColorStop(1, "#7fb6ff"); x.fillStyle = g; x.fillRect(0, 0, 1200, 800);
+  x.fillStyle = "rgba(255,255,255,.85)"; x.fillRect(120, 220, 960, 360); x.fillStyle = "#0a3d80"; x.font = "800 84px Pretendard, sans-serif"; x.textAlign = "center"; x.fillText("서울밝은치과", 600, 430);
+  return c.toDataURL("image/jpeg", 0.9);
+}
+async function demoApi(p) {
+  await new Promise(r => setTimeout(r, p.action ? 700 : 1400));
+  if (p.action === "lead") return { ok: true };
+  if (p.action === "card") return { card: { name: "슈어헤어 강남점", company: "슈어헤어", ceo: "", bizNo: "", phone: "02-555-0101", mobile: "010-1234-5678", email: "hello@surehair.kr", address: "서울 강남구 테헤란로 1 2층", website: "", category: "미용실", slogan: "" } };
+  if (p.action === "messages") {
+    const n = p.brand.name, w = p.brand.website, t = p.brand.phone, topic = p.purpose || "단골 감사 인사";
+    const info = !/(할인|혜택|이벤트|출시|모집|쿠폰)/.test(topic);
+    const k = info ? "info" : "ad";
+    const at = (title, lines) => info ? { body: `[${n}] ${title}\n\n${V("고객명")}님, ${lines}\n\n■ 일시: ${V("일시")}\n■ 내용: ${V("내용")}`, button: { label: "자세히 보기", value: w } } : { body: "", button: { label: "", value: "" } };
+    return { messages: [
+      { purpose: `${topic} · 실용형`, kind: k, rcs: { title: `${topic}, 한눈에 확인하세요`, body: `${V("고객명")}님, ${n}입니다.\n${topic} 내용을 정리해 보내 드려요.\n\n자세한 내용은 아래 버튼에서 확인해 주세요.`, buttons: [{ label: "자세히 보기", type: "url", value: w }, ...(t ? [{ label: "전화 문의", type: "call", value: t }] : [])] }, at: at(topic, `${topic} 안내드립니다.`) },
+      { purpose: `${topic} · 혜택형`, kind: k, rcs: { title: `${V("고객명")}님만을 위한 소식`, body: `늘 찾아 주셔서 감사해요.\n${V("기간")} 동안 ${V("혜택")}을 준비했어요.\n\n지금 바로 확인해 보세요.`, buttons: [{ label: "혜택 확인하기", type: "url", value: w }] }, at: at(topic, `준비한 소식을 안내드려요.`) },
+      { purpose: `${topic} · 감성형`, kind: k, rcs: { title: "올해도 함께해 주셔서 고마워요", body: `${V("고객명")}님 덕분에 ${n}이 더 따뜻한 한 해를 보냈어요.\n다음에 오시면 더 편하게 모실게요.`, buttons: [{ label: "예약하기", type: "url", value: w }] }, at: at(topic, `감사의 마음을 전해요.`) },
+    ] };
+  }
+  if (/surem\.com/i.test(p.url || "") && !p.manual) { const e = new Error("이 홈페이지는 자동 접속을 막고 있어 읽지 못했어요."); e.code = "unreadable"; throw e; }
+  const d = demoResponse();
+  d.extracted.images = [{ url: demoLogo(), kind: "logo", source: "사이트 로고" }, { url: demoCover(), kind: "og", source: "대표 이미지(og:image)" }];
+  d.application.rbc.profileImage = { value: d.extracted.images[0].url, source: "사이트 로고", verified: true };
+  d.application.rbc.backgroundImage = { value: d.extracted.images[1].url, source: "대표 이미지", verified: true };
+  d.application.warnings.rbc = [];
+  if (p.manual) {
+    const m = p.manual, c = p.card || {};
+    Object.assign(d.application.rbc, { brandName: { value: m.name, source: "직접 입력", verified: true }, description: { value: m.description, source: "직접 입력", verified: true }, phone: { value: m.phone || "", source: "직접 입력", verified: !!m.phone }, email: { value: m.email || "", source: "직접 입력", verified: !!m.email }, address: { value: m.address || "", source: "직접 입력", verified: !!m.address }, category: { value: c.category || "", source: "직접 입력", verified: false }, website: { value: "", source: "" } });
+    Object.assign(d.application.kakao, { channelName: { value: m.name, source: "직접 입력", verified: true }, description: { value: m.description.slice(0, 60), source: "직접 입력", verified: true }, csPhone: { value: m.phone || "", source: "직접 입력", verified: !!m.phone }, category: { value: c.category || "", source: "직접 입력" }, searchIds: [m.name.replace(/\s/g, "").slice(0, 15)], storeAddress: { value: m.address || "", source: "직접 입력" }, website: { value: "", source: "" } });
+    Object.assign(d.application.business, { companyName: { value: c.company || "", source: c.company ? "명함" : "", verified: false }, ceo: { value: "", source: "" }, bizNo: { value: "", source: "" } });
+    d.application.rbc.quickMenu = m.phone ? [{ label: "전화 문의", type: "call", value: m.phone }] : [];
+    Object.assign(d.extracted, { siteName: [], descriptions: [], companyNames: [], ceos: [], bizNos: [], phones: [], emails: [], addresses: [], themeColors: [] });
+    d.extracted.images = []; d.application.rbc.profileImage = { value: "", source: "" }; d.application.rbc.backgroundImage = { value: "", source: "" };
+    d.application.engine = "rule"; d.steps = ["직접 입력한 정보로 작성", ...(p.card ? ["명함에서 읽은 정보도 반영"] : []), "기본 규칙으로 작성했어요 (AI 문구 다듬기는 꺼져 있어요)"];
+  }
+  return d;
+}
+if (DEMO) $("demoBar").classList.remove("hidden");
 </script>
 </body>
 </html>
